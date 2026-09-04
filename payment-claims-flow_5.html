@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Payment Claims — Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primitive-neutral-0:#FFFFFF; --primitive-neutral-50:#FAFAFA; --primitive-neutral-100:#F3F4F5;
+  --primitive-neutral-200:#DADCDE; --primitive-neutral-300:#BCBEC2; --primitive-neutral-400:#979A9F;
+  --primitive-neutral-500:#76797E; --primitive-neutral-600:#57595D; --primitive-neutral-700:#3A3C3D;
+  --primitive-neutral-750:#363636; --primitive-neutral-800:#1B1C1D; --primitive-neutral-900:#0F0F0F;
+  --primitive-blue-100:#A8C9FA; --primitive-blue-500:#1B72F3; --primitive-blue-600:#0C61DF; --primitive-blue-700:#0A52BD;
+  --primitive-green-500:#3F9C6E; --primitive-green-600:#2F7E56; --primitive-green-700:#22603F;
+  --primitive-red-500:#E73333; --primitive-red-600:#C62828; --primitive-red-700:#A11B1B;
+  --primitive-amber-500:#EF8424; --primitive-amber-600:#C96A15; --primitive-amber-700:#9C5310;
+
+  --bg-primary:var(--primitive-neutral-0); --bg-secondary:var(--primitive-neutral-50);
+  --bg-tertiary:var(--primitive-neutral-100); --bg-quaternary:var(--primitive-neutral-200);
+  --bg-inverse:var(--primitive-neutral-900); --bg-overlay:#0F0F0F73;
+  --bg-brand-subtler:#1B72F314; --bg-brand-subtle:#1B72F329;
+  --bg-brand-base:var(--primitive-blue-500); --bg-brand-bold:var(--primitive-blue-700);
+  --bg-success-subtler:#3F9C6E14; --bg-success-subtle:#3F9C6E29; --bg-success-base:var(--primitive-green-500);
+  --bg-warning-subtler:#EF842414; --bg-warning-subtle:#EF842429; --bg-warning-base:var(--primitive-amber-500);
+  --bg-danger-subtler:#E7333314; --bg-danger-subtle:#E7333329; --bg-danger-base:var(--primitive-red-500);
+  --text-primary:var(--primitive-neutral-800); --text-secondary:var(--primitive-neutral-600);
+  --text-tertiary:var(--primitive-neutral-500); --text-disabled:var(--primitive-neutral-400);
+  --text-on-fill:var(--primitive-neutral-0); --text-primary-inverse:var(--primitive-neutral-0);
+  --text-brand-base:var(--primitive-blue-600); --text-brand-bold:var(--primitive-blue-700);
+  --text-success-base:var(--primitive-green-600);
+  --text-warning-base:var(--primitive-amber-600); --text-warning-bold:var(--primitive-amber-700);
+  --text-danger-base:var(--primitive-red-600);
+  --icon-primary:var(--primitive-neutral-800); --icon-secondary:var(--primitive-neutral-600);
+  --icon-tertiary:var(--primitive-neutral-500); --icon-on-fill:var(--primitive-neutral-0);
+  --icon-brand-base:var(--primitive-blue-600); --icon-success-base:var(--primitive-green-600);
+  --icon-warning-base:var(--primitive-amber-600); --icon-danger-base:var(--primitive-red-600);
+  --border-primary:var(--primitive-neutral-200); --border-secondary:var(--primitive-neutral-300);
+  --border-tertiary:var(--primitive-neutral-400); --border-focus:var(--primitive-neutral-900);
+  --border-brand-base:var(--primitive-blue-500); --border-warning-subtle:#EF84244C;
+  --border-danger-subtle:#E733334C; --border-success-subtle:#3F9C6E4C;
+
+  --gap-4:4px; --gap-8:8px; --gap-12:12px; --gap-16:16px; --gap-20:20px;
+  --gap-24:24px; --gap-32:32px; --gap-40:40px; --gap-48:48px; --gap-64:64px;
+  --radius-sm:4px; --radius-md:8px; --radius-lg:12px; --radius-xl:20px; --radius-full:999px;
+  --stroke-regular:1px; --stroke-medium:2px;
+  --icon-size-12:12px; --icon-size-16:16px; --icon-size-20:20px; --icon-size-24:24px;
+  --shadow-subtle:0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium:0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high:0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring:0 0 0 3px #1B72F32E;
+  --font-family-primary:Inter,system-ui,-apple-system,sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg-primary:var(--primitive-neutral-900); --bg-secondary:var(--primitive-neutral-800);
+  --bg-tertiary:var(--primitive-neutral-750); --bg-quaternary:var(--primitive-neutral-700);
+  --bg-inverse:var(--primitive-neutral-100);
+  --bg-brand-base:var(--primitive-blue-600); --bg-success-base:var(--primitive-green-600);
+  --bg-warning-base:var(--primitive-amber-600); --bg-danger-base:var(--primitive-red-600);
+  --text-primary:var(--primitive-neutral-100); --text-secondary:var(--primitive-neutral-300);
+  --text-tertiary:var(--primitive-neutral-400); --text-disabled:var(--primitive-neutral-600);
+  --text-brand-base:var(--primitive-blue-100); --text-brand-bold:var(--primitive-blue-100);
+  --text-success-base:var(--primitive-green-500);
+  --text-warning-base:var(--primitive-amber-500); --text-warning-bold:var(--primitive-amber-500);
+  --text-danger-base:var(--primitive-red-500);
+  --icon-primary:var(--primitive-neutral-100); --icon-secondary:var(--primitive-neutral-300);
+  --icon-tertiary:var(--primitive-neutral-400);
+  --icon-brand-base:var(--primitive-blue-100); --icon-success-base:var(--primitive-green-500);
+  --icon-warning-base:var(--primitive-amber-500); --icon-danger-base:var(--primitive-red-500);
+  --border-primary:var(--primitive-neutral-700); --border-secondary:var(--primitive-neutral-600);
+  --border-tertiary:var(--primitive-neutral-500); --border-focus:var(--primitive-neutral-100);
+  --border-brand-base:var(--primitive-blue-600);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:var(--font-family-primary);background:var(--bg-secondary);color:var(--text-primary);height:100%}
+button{font-family:inherit;cursor:pointer;background:transparent;border:none;color:inherit}
+input{font-family:inherit;color:inherit}
+svg{display:block;flex-shrink:0}
+a{color:inherit;text-decoration:none}
+body.locked{overflow:hidden}
+
+.text-display{font-size:32px;line-height:36px;font-weight:600;letter-spacing:-0.03em}
+.text-h1{font-size:24px;line-height:30px;font-weight:600;letter-spacing:-0.025em}
+.text-h2{font-size:18px;line-height:26px;font-weight:600;letter-spacing:-0.018em}
+.text-h3{font-size:15px;line-height:22px;font-weight:600;letter-spacing:-0.012em}
+.text-h4{font-size:13px;line-height:20px;font-weight:600;letter-spacing:-0.006em}
+.text-label-lg{font-size:14px;line-height:20px;font-weight:500;letter-spacing:-0.006em}
+.text-label-md{font-size:13px;line-height:20px;font-weight:500;letter-spacing:-0.003em}
+.text-label-sm{font-size:12px;line-height:16px;font-weight:500}
+.text-body-md{font-size:14px;line-height:22px;font-weight:400;letter-spacing:-0.003em}
+.text-body-sm{font-size:13px;line-height:20px;font-weight:400}
+.text-caption-md{font-size:12px;line-height:16px;font-weight:400;letter-spacing:0.01em}
+.text-caption-sm{font-size:11px;line-height:16px;font-weight:400;letter-spacing:0.01em}
+.text-numeric-lg{font-size:24px;line-height:24px;font-weight:600;letter-spacing:-0.03em;font-variant-numeric:tabular-nums}
+.text-numeric-sm{font-size:18px;line-height:18px;font-weight:600;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+
+.hidden{display:none !important}
+
+/* App shell */
+.app{display:flex;min-height:100vh}
+.side-nav{width:56px;background:var(--bg-primary);border-right:var(--stroke-regular) solid var(--border-primary);
+  display:flex;flex-direction:column;align-items:center;padding:var(--gap-16) 0;gap:var(--gap-8);flex-shrink:0}
+.nav-logo{width:32px;height:32px;background:var(--bg-brand-base);border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;color:var(--text-on-fill);font-weight:600;font-size:14px;
+  margin-bottom:var(--gap-8)}
+.nav-item{width:36px;height:36px;border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;color:var(--icon-tertiary)}
+.nav-item:hover{background:var(--bg-tertiary);color:var(--icon-primary)}
+.nav-item.active{background:var(--bg-brand-subtle);color:var(--icon-brand-base)}
+
+.main-col{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{background:var(--bg-primary);border-bottom:var(--stroke-regular) solid var(--border-primary);
+  padding:var(--gap-12) var(--gap-24);display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10}
+.topbar-left{display:flex;align-items:center;gap:var(--gap-12);flex:1;min-width:0}
+.topbar-right{display:flex;align-items:center;gap:var(--gap-8)}
+.icon-btn{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);color:var(--icon-secondary)}
+.icon-btn:hover{background:var(--bg-tertiary)}
+.icon-btn.ghost{border-color:transparent}
+.crumb{color:var(--text-tertiary);display:flex;align-items:center;gap:var(--gap-8)}
+.crumb a{color:var(--text-brand-base);cursor:pointer}
+.crumb .sep{color:var(--text-disabled)}
+.search-input{width:360px;padding:var(--gap-8) var(--gap-12) var(--gap-8) var(--gap-32);
+  background:var(--bg-secondary);border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);font-size:13px;line-height:20px;color:var(--text-primary);outline:none}
+.search-input:focus{border-color:var(--border-focus);box-shadow:var(--shadow-focus-ring)}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:var(--gap-8);top:50%;transform:translateY(-50%);color:var(--icon-tertiary)}
+.theme-toggle{padding:var(--gap-8) var(--gap-12);background:transparent;color:var(--text-secondary);
+  border:var(--stroke-regular) solid var(--border-secondary);border-radius:var(--radius-md);
+  font-size:12px;font-weight:500}
+
+.content{flex:1;padding:var(--gap-24);max-width:1440px;margin:0 auto;width:100%;padding-bottom:var(--gap-48)}
+
+/* Common */
+.page-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:var(--gap-20);gap:var(--gap-16)}
+.title-block{display:flex;flex-direction:column;gap:var(--gap-8);min-width:0}
+.chip{display:inline-flex;align-items:center;gap:var(--gap-4);padding:var(--gap-4) var(--gap-8);
+  background:var(--bg-tertiary);color:var(--text-secondary);border-radius:var(--radius-sm);
+  font-size:12px;line-height:16px;font-weight:500}
+.chip-row{display:flex;gap:var(--gap-8);align-items:center;flex-wrap:wrap}
+.card{background:var(--bg-primary);border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);overflow:visible}
+.card.clip{overflow:hidden}
+.card-head{padding:var(--gap-12) var(--gap-20);border-bottom:var(--stroke-regular) solid var(--border-primary);
+  display:flex;justify-content:space-between;align-items:center;gap:var(--gap-16)}
+.divider{height:var(--stroke-regular);background:var(--border-primary)}
+
+.btn{padding:var(--gap-8) var(--gap-16);border-radius:var(--radius-md);
+  border:var(--stroke-regular) solid transparent;font-size:14px;line-height:20px;font-weight:500;
+  display:inline-flex;align-items:center;gap:var(--gap-8);white-space:nowrap}
+.btn-sm{padding:var(--gap-4) var(--gap-12);font-size:13px}
+.btn-primary{background:var(--bg-brand-base);color:var(--text-on-fill)}
+.btn-primary:hover{background:var(--bg-brand-bold)}
+.btn-primary:disabled{background:var(--bg-quaternary);color:var(--text-disabled);cursor:not-allowed}
+
+/* Spotlight Raise Claim buttons — persistent outline ring + big pulse */
+.row-actions .btn-primary {
+  animation: raise-claim-pulse 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  position: relative;
+  z-index: 1;
+  font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(27, 114, 243, 0.4);
+}
+.row-actions .btn-primary:hover {
+  animation: none;
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px var(--bg-brand-base), var(--shadow-medium);
+}
+@keyframes raise-claim-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(27, 114, 243, 0.75), 0 0 0 2px rgba(27, 114, 243, 0.4); }
+  70%  { box-shadow: 0 0 0 18px rgba(27, 114, 243, 0),    0 0 0 2px rgba(27, 114, 243, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(27, 114, 243, 0),       0 0 0 2px rgba(27, 114, 243, 0.4); }
+}
+.btn-secondary{background:var(--bg-primary);color:var(--text-primary);border-color:var(--border-secondary)}
+.btn-secondary:hover{background:var(--bg-tertiary)}
+.btn-danger{background:var(--bg-danger-base);color:var(--text-on-fill)}
+.btn-danger-ghost{color:var(--text-danger-base);border-color:var(--border-danger-subtle)}
+.btn-danger-ghost:hover{background:var(--bg-danger-subtler)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+th{text-align:left;padding:var(--gap-8) var(--gap-20);background:var(--bg-secondary);
+  color:var(--text-tertiary);font-size:11px;line-height:16px;font-weight:500;letter-spacing:0.01em;
+  text-transform:uppercase;border-bottom:var(--stroke-regular) solid var(--border-primary)}
+td{padding:var(--gap-12) var(--gap-20);border-bottom:var(--stroke-regular) solid var(--border-primary);
+  color:var(--text-primary);font-size:14px;line-height:22px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--bg-tertiary)}
+tbody tr.selected td{background:var(--bg-brand-subtler)}
+tbody tr.selected:hover td{background:var(--bg-brand-subtle)}
+tbody tr.clickable{cursor:pointer}
+.amt{font-variant-numeric:tabular-nums;font-weight:500}
+.amt-muted{color:var(--text-tertiary);font-weight:400}
+.row-actions{display:flex;gap:var(--gap-4);justify-content:flex-end}
+
+.checkbox{width:16px;height:16px;border:var(--stroke-regular) solid var(--border-tertiary);
+  border-radius:var(--radius-sm);background:var(--bg-primary);display:inline-block;
+  position:relative;vertical-align:middle;cursor:pointer}
+.checkbox.checked{background:var(--bg-brand-base);border-color:var(--bg-brand-base)}
+.checkbox.checked::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;
+  border:solid var(--text-on-fill);border-width:0 var(--stroke-medium) var(--stroke-medium) 0;transform:rotate(45deg)}
+
+/* Badge (unified — replaces status-pill, days-pill, row-status per DS) */
+.badge{display:inline-flex;align-items:center;gap:var(--gap-4);padding:var(--gap-4) var(--gap-8);
+  border-radius:var(--radius-full);font-size:12px;line-height:16px;font-weight:500}
+.badge-lg{padding:var(--gap-4) var(--gap-12);font-size:13px;line-height:20px}
+.badge-neutral{background:var(--bg-tertiary);color:var(--text-tertiary)}
+.badge-info{background:var(--bg-brand-subtle);color:var(--text-brand-base)}
+.badge-success{background:var(--bg-success-subtler);color:var(--text-success-base)}
+.badge-warning{background:var(--bg-warning-subtler);color:var(--text-warning-base)}
+.badge-danger{background:var(--bg-danger-subtler);color:var(--text-danger-base)}
+.badge-lg.badge-warning{background:var(--bg-warning-subtle);color:var(--text-warning-bold)}
+.badge-lg.badge-success{background:var(--bg-success-subtle);color:var(--text-success-base)}
+.badge-lg.badge-danger{background:var(--bg-danger-subtle);color:var(--text-danger-base)}
+.badge-dot{width:6px;height:6px;border-radius:var(--radius-full);background:currentColor}
+
+/* Tabs */
+.tabs{display:flex;gap:var(--gap-4);border-bottom:var(--stroke-regular) solid var(--border-primary);
+  margin-bottom:var(--gap-20)}
+.tab{padding:var(--gap-12) var(--gap-16);border-bottom:2px solid transparent;
+  color:var(--text-tertiary);font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:var(--gap-8);
+  margin-bottom:-1px}
+.tab:hover{color:var(--text-primary)}
+.tab.active{color:var(--text-primary);border-bottom-color:var(--border-focus)}
+.tab .count{padding:var(--gap-4) var(--gap-8);background:var(--bg-tertiary);border-radius:var(--radius-full);
+  font-size:11px;line-height:12px;color:var(--text-secondary)}
+.tab.active .count{background:var(--bg-brand-subtle);color:var(--text-brand-base)}
+
+/* Compose */
+.filters{display:flex;gap:var(--gap-8);flex-wrap:wrap;padding:var(--gap-12) var(--gap-16);
+  background:var(--bg-primary);border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);margin-bottom:var(--gap-16);align-items:center}
+.filter-chip{display:inline-flex;align-items:center;gap:var(--gap-8);padding:var(--gap-4) var(--gap-12);
+  background:var(--bg-primary);border:var(--stroke-regular) solid var(--border-secondary);
+  border-radius:var(--radius-full);color:var(--text-secondary);font-size:13px;line-height:20px;font-weight:500}
+.filter-chip:hover{border-color:var(--border-tertiary)}
+.filter-chip.active{background:var(--bg-brand-subtle);border-color:var(--border-brand-base);color:var(--text-brand-base)}
+.filter-chip.required.set{background:var(--bg-brand-subtle);border-color:var(--border-brand-base);color:var(--text-brand-base)}
+.filter-chip-input{cursor:text}
+.filter-chip-input input{width:64px;border:none;background:transparent;outline:none;
+  font-family:inherit;font-size:13px;line-height:20px;font-weight:500;color:inherit;
+  font-variant-numeric:tabular-nums;padding:0}
+.filter-chip-input input::-webkit-outer-spin-button,
+.filter-chip-input input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.filter-chip-input input[type=number]{-moz-appearance:textfield}
+.filter-chip-input input::placeholder{color:var(--text-disabled)}
+.filter-chip-input:focus-within{border-color:var(--border-focus);box-shadow:var(--shadow-focus-ring)}
+.filter-sep{width:var(--stroke-regular);height:20px;background:var(--border-primary);margin:0 var(--gap-4)}
+
+/* Dropdown */
+.dropdown{position:relative;display:inline-block}
+.dropdown-menu{position:absolute;top:calc(100% + 4px);left:0;
+  background:var(--bg-primary);border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);box-shadow:var(--shadow-medium);
+  min-width:240px;padding:var(--gap-4);z-index:20;display:none}
+.dropdown.open .dropdown-menu{display:block}
+.dropdown-item{padding:var(--gap-8) var(--gap-12);border-radius:var(--radius-sm);cursor:pointer;
+  color:var(--text-primary);font-size:13px;line-height:20px;
+  display:flex;justify-content:space-between;align-items:center;gap:var(--gap-8)}
+.dropdown-item:hover{background:var(--bg-tertiary)}
+.dropdown-item.selected{background:var(--bg-brand-subtle);color:var(--text-brand-base)}
+.dropdown-item .meta{color:var(--text-tertiary);font-size:12px}
+
+.compose-grid{display:grid;grid-template-columns:1fr 320px;gap:var(--gap-20)}
+.insight-card{padding:var(--gap-20);display:flex;flex-direction:column;gap:var(--gap-16)}
+.insight-block{display:flex;flex-direction:column;gap:var(--gap-4)}
+.insight-block .label{color:var(--text-tertiary)}
+/* Alert (unified — replaces insight-hint and info-banner per DS) */
+.alert{padding:var(--gap-12);border-radius:var(--radius-sm);
+  display:flex;gap:var(--gap-8);align-items:flex-start}
+.alert-md{padding:var(--gap-12) var(--gap-16);border-radius:var(--radius-md)}
+.alert-info{background:var(--bg-brand-subtler)}
+.alert-info > svg{color:var(--icon-brand-base)}
+.alert-warning{background:var(--bg-warning-subtler)}
+.alert-warning > svg{color:var(--icon-warning-base)}
+.alert > svg{margin-top:2px;flex-shrink:0}
+.alert .link{color:var(--text-brand-base);cursor:pointer;font-weight:500}
+.empty-state{padding:var(--gap-48);text-align:center;color:var(--text-tertiary)}
+
+/* Numbered steps list — filing instructions */
+.steps-list{padding:var(--gap-16) var(--gap-20);margin:0;list-style:none;counter-reset:step;
+  display:flex;flex-direction:column;gap:var(--gap-12)}
+.steps-list li{counter-increment:step;padding-left:var(--gap-32);position:relative;
+  color:var(--text-primary);font-size:14px;line-height:22px;min-height:20px}
+.steps-list li::before{content:counter(step);position:absolute;left:0;top:0;
+  width:20px;height:20px;border-radius:var(--radius-full);
+  background:var(--bg-brand-subtle);color:var(--text-brand-base);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.btn-icon-sm{width:24px;height:24px;padding:0;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-sm);color:var(--icon-tertiary)}
+.btn-icon-sm:hover{background:var(--bg-tertiary);color:var(--icon-secondary)}
+
+/* ============ COMPOSE SLIDE-OVER (wide) ============ */
+.compose-slide{position:fixed;inset:0;z-index:100;pointer-events:none}
+.compose-slide.open{pointer-events:auto}
+.compose-slide-backdrop{position:absolute;inset:0;background:var(--bg-overlay);
+  opacity:0;transition:opacity 250ms}
+.compose-slide.open .compose-slide-backdrop{opacity:1}
+.compose-slide-panel{position:absolute;top:0;right:0;bottom:0;
+  width:min(1150px,92vw);background:var(--bg-secondary);
+  border-left:var(--stroke-regular) solid var(--border-primary);
+  transform:translateX(100%);transition:transform 250ms cubic-bezier(0,0,0.2,1);
+  display:flex;flex-direction:column;box-shadow:var(--shadow-high)}
+.compose-slide.open .compose-slide-panel{transform:translateX(0)}
+.compose-head{padding:var(--gap-16) var(--gap-24);background:var(--bg-primary);
+  border-bottom:var(--stroke-regular) solid var(--border-primary);
+  display:flex;justify-content:space-between;align-items:flex-start;gap:var(--gap-16)}
+.compose-body{flex:1;overflow-y:auto;padding:var(--gap-20) var(--gap-24)}
+.compose-foot{background:var(--bg-primary);border-top:var(--stroke-regular) solid var(--border-primary);
+  padding:var(--gap-12) var(--gap-24);
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.summary-item{display:flex;flex-direction:column;gap:var(--gap-4)}
+.summary-item .label{color:var(--text-tertiary)}
+.actions{display:flex;gap:var(--gap-8)}
+
+/* Raised detail */
+.metrics-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap-16);margin-bottom:var(--gap-20)}
+.metric-card{background:var(--bg-primary);border:var(--stroke-regular) solid var(--border-primary);
+  border-radius:var(--radius-md);padding:var(--gap-16) var(--gap-20);
+  display:flex;flex-direction:column;gap:var(--gap-8)}
+.metric-label{color:var(--text-tertiary);display:flex;align-items:center;gap:var(--gap-4)}
+.metric-value{color:var(--text-primary);display:flex;align-items:baseline;gap:var(--gap-8)}
+.metric-hint{color:var(--text-tertiary)}
+.timeline{padding:var(--gap-24) var(--gap-20) var(--gap-20);display:flex;align-items:flex-start;gap:0;position:relative}
+.tl-step{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-8);position:relative}
+.tl-step:not(:last-child)::after{content:'';position:absolute;top:9px;left:20px;right:-4px;height:2px;background:var(--border-primary)}
+.tl-step.done:not(:last-child)::after{background:var(--bg-success-base)}
+.tl-step.current:not(:last-child)::after{background:linear-gradient(to right,var(--bg-success-base) 40%,var(--border-primary) 40%)}
+.tl-dot{width:20px;height:20px;border-radius:var(--radius-full);
+  background:var(--bg-tertiary);border:var(--stroke-medium) solid var(--border-secondary);z-index:1;
+  display:flex;align-items:center;justify-content:center}
+.tl-step.done .tl-dot{background:var(--bg-success-base);border-color:var(--bg-success-base);color:var(--text-on-fill)}
+.tl-step.current .tl-dot{background:var(--bg-warning-base);border-color:var(--bg-warning-base)}
+.tl-step.pending .tl-dot{background:var(--bg-primary);border-style:dashed}
+.tl-label{color:var(--text-primary);font-size:13px;font-weight:600;line-height:20px}
+.tl-step.pending .tl-label{color:var(--text-tertiary);font-weight:500}
+.tl-date{color:var(--text-tertiary);font-size:12px;line-height:16px}
+.recovery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+.recovery-cell{padding:var(--gap-16) var(--gap-20);border-right:var(--stroke-regular) solid var(--border-primary);
+  display:flex;flex-direction:column;gap:var(--gap-4)}
+.recovery-cell:last-child{border-right:none}
+
+
+/* Narrow slide-over (Ticket ID) */
+.slide-over{position:fixed;inset:0;z-index:100;pointer-events:none}
+.slide-over.open{pointer-events:auto}
+.slide-over-backdrop{position:absolute;inset:0;background:var(--bg-overlay);opacity:0;transition:opacity 200ms}
+.slide-over.open .slide-over-backdrop{opacity:1}
+.slide-over-panel{position:absolute;top:0;right:0;bottom:0;width:440px;background:var(--bg-primary);
+  border-left:var(--stroke-regular) solid var(--border-primary);
+  transform:translateX(100%);transition:transform 200ms cubic-bezier(0,0,0.2,1);
+  display:flex;flex-direction:column;box-shadow:var(--shadow-high)}
+.slide-over.open .slide-over-panel{transform:translateX(0)}
+.slide-over-head{padding:var(--gap-16) var(--gap-20);border-bottom:var(--stroke-regular) solid var(--border-primary);
+  display:flex;justify-content:space-between;align-items:center}
+.slide-over-body{flex:1;padding:var(--gap-20);overflow-y:auto;display:flex;flex-direction:column;gap:var(--gap-16)}
+.slide-over-foot{padding:var(--gap-12) var(--gap-20);border-top:var(--stroke-regular) solid var(--border-primary);
+  display:flex;justify-content:flex-end;gap:var(--gap-8)}
+.field{display:flex;flex-direction:column;gap:var(--gap-8)}
+.field label{color:var(--text-secondary);font-size:13px;font-weight:500;line-height:20px}
+.field input{padding:var(--gap-8) var(--gap-12);background:var(--bg-primary);
+  border:var(--stroke-regular) solid var(--border-secondary);border-radius:var(--radius-md);
+  font-size:14px;line-height:22px;outline:none;color:var(--text-primary)}
+.field input:hover{border-color:var(--border-tertiary)}
+.field input:focus{border-color:var(--border-focus);box-shadow:var(--shadow-focus-ring)}
+.field .helper{color:var(--text-tertiary);font-size:12px;line-height:16px;display:flex;align-items:center;gap:var(--gap-4)}
+.field .helper.success{color:var(--text-success-base)}
+.field .helper.error{color:var(--text-danger-base)}
+.claim-summary{padding:var(--gap-12) var(--gap-16);background:var(--bg-secondary);border-radius:var(--radius-md);
+  display:flex;flex-direction:column;gap:var(--gap-4)}
+
+/* Modal */
+.modal{position:fixed;inset:0;z-index:110;display:flex;align-items:center;justify-content:center;
+  background:var(--bg-overlay);pointer-events:none;opacity:0;transition:opacity 200ms}
+.modal.open{pointer-events:auto;opacity:1}
+.modal-panel{background:var(--bg-primary);border-radius:var(--radius-md);width:440px;max-width:90vw;
+  box-shadow:var(--shadow-high);display:flex;flex-direction:column}
+.modal-head{padding:var(--gap-16) var(--gap-20);border-bottom:var(--stroke-regular) solid var(--border-primary)}
+.modal-body{padding:var(--gap-20);display:flex;flex-direction:column;gap:var(--gap-12)}
+.modal-foot{padding:var(--gap-12) var(--gap-20);border-top:var(--stroke-regular) solid var(--border-primary);
+  display:flex;justify-content:flex-end;gap:var(--gap-8)}
+
+/* Toast */
+.toast-stack{position:fixed;bottom:var(--gap-24);right:var(--gap-24);z-index:200;display:flex;flex-direction:column;gap:var(--gap-8)}
+.toast{padding:var(--gap-12) var(--gap-16);background:var(--bg-inverse);color:var(--text-primary-inverse);
+  border-radius:var(--radius-md);display:flex;align-items:center;gap:var(--gap-8);box-shadow:var(--shadow-high);
+  animation:slide-in 200ms cubic-bezier(0,0,0.2,1)}
+@keyframes slide-in{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side-nav">
+    <div class="nav-logo">U</div>
+    <button class="nav-item" title="Alerts"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></button>
+    <button class="nav-item" title="Analytics"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></button>
+    <button class="nav-item active" title="Payment Claims"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></button>
+    <button class="nav-item" title="Reconciliation"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>
+  </aside>
+
+  <div class="main-col">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="icon-btn ghost" id="backBtn" onclick="back()" style="display:none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <div class="crumb text-body-sm" id="crumb"></div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input class="search-input" placeholder="Search Order Code" />
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">Toggle theme</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <!-- ================ PAYMENT CLAIMS ================ -->
+      <section id="view-claims" class="view">
+        <div class="page-head">
+          <div class="title-block">
+            <h1 class="text-h1">Payment Claims</h1>
+          </div>
+        </div>
+
+        <nav class="tabs">
+          <button class="tab active" data-tab="eligible" onclick="switchTab('eligible')">Eligible <span class="count">93</span></button>
+          <button class="tab" data-tab="draft" onclick="switchTab('draft')">Draft <span class="count">3</span></button>
+          <button class="tab" data-tab="raised" onclick="switchTab('raised')">Raised <span class="count">4</span></button>
+          <button class="tab" data-tab="resolved" onclick="switchTab('resolved')">Resolved <span class="count">12</span></button>
+          <button class="tab" data-tab="missed" onclick="switchTab('missed')">Missed <span class="count">2</span></button>
+        </nav>
+
+        <div id="tab-eligible" class="tab-content">
+          <div class="card clip">
+            <div class="card-head">
+              <span class="text-h3">93 orders across 4 channels</span>
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Grouped per channel × type</span>
+            </div>
+            <table>
+              <colgroup><col><col style="width:110px"><col style="width:80px"><col style="width:80px"><col style="width:130px"><col style="width:150px"><col style="width:150px"></colgroup>
+              <thead>
+                <tr><th>Channel</th><th>Type</th><th style="text-align:right">Reasons</th><th style="text-align:right">Orders</th><th style="text-align:right">Discrepancy</th><th style="text-align:right">Nearest expiry</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="text-body-md">MEESHO</td><td><span class="badge badge-neutral">Disputed</span></td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">30</td><td class="amt" style="text-align:right">9,847</td><td style="text-align:right"><span class="badge badge-danger">2 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('MEESHO','disputed')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">MEESHO</td><td><span class="badge badge-neutral">Overdue</span></td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">12</td><td class="amt" style="text-align:right">3,000</td><td style="text-align:right"><span class="badge badge-warning">6 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('MEESHO','overdue')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">FLIPKART_KEDARFAB</td><td><span class="badge badge-neutral">Disputed</span></td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">20</td><td class="amt" style="text-align:right">4,000</td><td style="text-align:right"><span class="badge badge-warning">6 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('FLIPKART_KEDARFAB','disputed')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">FLIPKART_KEDARFAB</td><td><span class="badge badge-neutral">Overdue</span></td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">8</td><td class="amt" style="text-align:right">5,240</td><td style="text-align:right"><span class="badge badge-success">11 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('FLIPKART_KEDARFAB','overdue')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">MYNTRAPPMP_ONEFRIDAY</td><td><span class="badge badge-neutral">Disputed</span></td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">10</td><td class="amt" style="text-align:right">2,850</td><td style="text-align:right"><span class="badge badge-success">11 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('MYNTRAPPMP_ONEFRIDAY','disputed')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">MYNTRAPPMP_ONEFRIDAY</td><td><span class="badge badge-neutral">Overdue</span></td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">5</td><td class="amt" style="text-align:right">1,270</td><td style="text-align:right"><span class="badge badge-success">13 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('MYNTRAPPMP_ONEFRIDAY','overdue')">Raise Claim</button></div></td></tr>
+                <tr><td class="text-body-md">AMAZON_SELLERFLEX</td><td><span class="badge badge-neutral">Disputed</span></td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">8</td><td class="amt" style="text-align:right">1,890</td><td style="text-align:right"><span class="badge badge-success">13 days</span></td><td><div class="row-actions"><button class="btn btn-primary btn-sm" onclick="openCompose('AMAZON_SELLERFLEX','disputed')">Raise Claim</button></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="tab-draft" class="tab-content hidden">
+          <div class="card clip">
+            <div class="card-head">
+              <span class="text-h3">3 drafts · ticket ID pending</span>
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Tracking starts once ticket ID is added</span>
+            </div>
+            <table>
+              <colgroup><col><col><col style="width:70px"><col style="width:110px"><col style="width:100px"><col style="width:120px"><col style="width:270px"></colgroup>
+              <thead>
+                <tr><th>Channel</th><th>Reason</th><th style="text-align:right">Orders</th><th style="text-align:right">Discrepancy</th><th style="text-align:right">Created</th><th style="text-align:right">Window closes</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr class="clickable" onclick="openCompose('MEESHO','disputed')"><td class="text-body-md">MEESHO</td><td class="text-body-md">Commission Overcharge <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Disputed</span></td><td class="amt" style="text-align:right">4</td><td class="amt" style="text-align:right">2,156</td><td class="text-body-sm" style="text-align:right;color:var(--text-tertiary)">2d ago</td><td style="text-align:right"><span class="badge badge-danger">2 days</span></td><td onclick="event.stopPropagation()"><div class="row-actions">
+                  <button class="btn-icon-sm" title="Filing steps" onclick="showFilingSteps('MEESHO','disputed')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+                  <button class="btn btn-secondary btn-sm" onclick="openCompose('MEESHO','disputed')">Edit</button>
+                  <button class="btn btn-primary btn-sm" onclick="openTicketId('MEESHO · Commission Overcharge','4 orders · ₹2,156')">Start tracking</button>
+                </div></td></tr>
+                <tr class="clickable" onclick="openCompose('FLIPKART_KEDARFAB','overdue')"><td class="text-body-md">FLIPKART_KEDARFAB</td><td class="text-body-md">Missing Payout <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Overdue</span></td><td class="amt" style="text-align:right">8</td><td class="amt" style="text-align:right">5,240</td><td class="text-body-sm" style="text-align:right;color:var(--text-tertiary)">1d ago</td><td style="text-align:right"><span class="badge badge-warning">6 days</span></td><td onclick="event.stopPropagation()"><div class="row-actions">
+                  <button class="btn-icon-sm" title="Filing steps" onclick="showFilingSteps('FLIPKART_KEDARFAB','overdue')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+                  <button class="btn btn-secondary btn-sm" onclick="openCompose('FLIPKART_KEDARFAB','overdue')">Edit</button>
+                  <button class="btn btn-primary btn-sm" onclick="openTicketId('FLIPKART_KEDARFAB · Missing Payout','8 orders · ₹5,240')">Start tracking</button>
+                </div></td></tr>
+                <tr class="clickable" onclick="openCompose('MEESHO','disputed')"><td class="text-body-md">MEESHO</td><td class="text-body-md">Wrong Return Fee <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Disputed</span></td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">890</td><td class="text-body-sm" style="text-align:right;color:var(--text-tertiary)">Today</td><td style="text-align:right"><span class="badge badge-success">9 days</span></td><td onclick="event.stopPropagation()"><div class="row-actions">
+                  <button class="btn-icon-sm" title="Filing steps" onclick="showFilingSteps('MEESHO','disputed')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></button>
+                  <button class="btn btn-secondary btn-sm" onclick="openCompose('MEESHO','disputed')">Edit</button>
+                  <button class="btn btn-primary btn-sm" onclick="openTicketId('MEESHO · Wrong Return Fee','3 orders · ₹890')">Start tracking</button>
+                </div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="tab-raised" class="tab-content hidden">
+          <div class="card clip">
+            <div class="card-head">
+              <span class="text-h3">4 claims tracking</span>
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Auto-synced from portal · money-movement wins</span>
+            </div>
+            <table>
+              <colgroup><col style="width:140px"><col><col><col style="width:70px"><col style="width:110px"><col style="width:160px"><col style="width:130px"></colgroup>
+              <thead>
+                <tr><th>Ticket</th><th>Channel</th><th>Reason</th><th style="text-align:right">Orders</th><th style="text-align:right">Claimed</th><th>Portal status</th><th style="text-align:right">Recovered</th></tr>
+              </thead>
+              <tbody>
+                <tr class="clickable" onclick="go('raised')"><td class="text-body-md">#MSO-98421</td><td class="text-body-md">MEESHO</td><td class="text-body-md">Commission Overcharge <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Disputed</span></td><td class="amt" style="text-align:right">12</td><td class="amt" style="text-align:right">12,847</td><td><span class="badge badge-lg badge-warning"><span class="badge-dot"></span>Closed · awaiting</span></td><td class="amt" style="text-align:right;color:var(--text-success-base)">3,240</td></tr>
+                <tr class="clickable" onclick="go('raised')"><td class="text-body-md">#FKR-77201</td><td class="text-body-md">FLIPKART_KEDARFAB</td><td class="text-body-md">Missing Payout <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Overdue</span></td><td class="amt" style="text-align:right">6</td><td class="amt" style="text-align:right">4,120</td><td><span class="badge badge-lg badge-info"><span class="badge-dot"></span>In review</span></td><td class="amt amt-muted" style="text-align:right">—</td></tr>
+                <tr class="clickable" onclick="go('raised')"><td class="text-body-md">#AMZ-1188</td><td class="text-body-md">AMAZON_SELLERFLEX</td><td class="text-body-md">Short-paid <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Disputed</span></td><td class="amt" style="text-align:right">5</td><td class="amt" style="text-align:right">1,240</td><td><span class="badge badge-lg badge-success"><span class="badge-dot"></span>Recovered</span></td><td class="amt" style="text-align:right;color:var(--text-success-base)">1,240</td></tr>
+                <tr class="clickable" onclick="go('raised')"><td class="text-body-md">#MSO-8890</td><td class="text-body-md">MEESHO</td><td class="text-body-md">Shipping Fee <span class="badge badge-neutral" style="margin-left:var(--gap-4)">Disputed</span></td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">560</td><td><span class="badge badge-lg badge-danger"><span class="badge-dot"></span>Unrecovered</span></td><td class="amt amt-muted" style="text-align:right">0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="tab-resolved" class="tab-content hidden">
+          <div class="card empty-state"><span class="text-body-md">12 resolved · placeholder</span></div>
+        </div>
+        <div id="tab-missed" class="tab-content hidden">
+          <div class="card empty-state"><span class="text-body-md">2 missed · filing window closed without ticket ID</span></div>
+        </div>
+      </section>
+
+      <!-- ================ RAISED DETAIL ================ -->
+      <section id="view-raised" class="view hidden">
+        <div class="page-head">
+          <div class="title-block">
+            <span class="text-caption-md" style="color:var(--text-tertiary)">Ticket #MSO-98421 · Filed Sep 1</span>
+            <h1 class="text-h1">₹12,847 claimed · 12 orders</h1>
+            <div class="chip-row">
+              <span class="chip">MEESHO</span><span class="chip">Payment Disputed</span><span class="chip">Commission Overcharge</span>
+            </div>
+          </div>
+          <span class="badge badge-lg badge-warning"><span class="badge-dot"></span>Awaiting settlement</span>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <span class="metric-label text-caption-md">Portal status
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+            <span class="metric-value text-numeric-sm">Closed</span>
+            <span class="metric-hint text-caption-md">Scraped · Sep 10</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label text-caption-md">Settlement match</span>
+            <span class="metric-value">
+              <span class="text-numeric-sm" style="color:var(--text-success-base)">₹3,240</span>
+              <span class="text-body-sm" style="color:var(--text-tertiary)">/ ₹12,847</span>
+            </span>
+            <span class="metric-hint text-caption-md">25% · from Payment Reco</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label text-caption-md">Auto-close in</span>
+            <span class="metric-value"><span class="text-numeric-sm" style="color:var(--text-warning-base)">8 days</span></span>
+            <span class="metric-hint text-caption-md">No further settlement → Unrecovered</span>
+          </div>
+        </div>
+
+        <div class="card clip" style="margin-bottom:var(--gap-16)">
+          <div class="card-head"><span class="text-h3">Lifecycle</span></div>
+          <div class="timeline">
+            <div class="tl-step done"><div class="tl-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="tl-label">Filed</span><span class="tl-date">Sep 1</span></div>
+            <div class="tl-step done"><div class="tl-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span class="tl-label">In review</span><span class="tl-date">Sep 3 · portal</span></div>
+            <div class="tl-step current"><div class="tl-dot"></div><span class="tl-label">Closed · awaiting settlement</span><span class="tl-date">Sep 10 · portal</span></div>
+            <div class="tl-step pending"><div class="tl-dot"></div><span class="tl-label">Recovered / Unrecovered</span><span class="tl-date">By Sep 19</span></div>
+          </div>
+        </div>
+
+        <div class="card clip" style="margin-bottom:var(--gap-16)">
+          <div class="card-head"><span class="text-h3">Recovery breakdown</span></div>
+          <div class="recovery-grid">
+            <div class="recovery-cell">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Attributed to orders</span>
+              <span class="text-numeric-sm" style="color:var(--text-success-base);font-variant-numeric:tabular-nums">₹1,240</span>
+              <span class="text-caption-md" style="color:var(--text-secondary)">3 orders matched via settlement stream</span>
+            </div>
+            <div class="recovery-cell">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Unattributed lump-sum</span>
+              <span class="text-numeric-sm" style="color:var(--text-success-base);font-variant-numeric:tabular-nums">₹2,000</span>
+              <span class="text-caption-md" style="color:var(--text-secondary)">Credited to claim, cannot split to orders</span>
+            </div>
+            <div class="recovery-cell">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Pending</span>
+              <span class="text-numeric-sm" style="font-variant-numeric:tabular-nums">₹9,607</span>
+              <span class="text-caption-md" style="color:var(--text-secondary)">9 orders · watching settlement stream</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card clip">
+          <div class="card-head">
+            <span class="text-h3">Orders in this claim</span>
+            <span class="text-caption-md" style="color:var(--text-tertiary)">12 orders · immutable</span>
+          </div>
+          <table>
+            <colgroup><col><col style="width:70px"><col style="width:130px"><col style="width:130px"><col style="width:140px"></colgroup>
+            <thead>
+              <tr><th>Order</th><th style="text-align:right">SOIs</th><th style="text-align:right">Discrepancy claimed</th><th style="text-align:right">Settlement match</th><th style="text-align:right">Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="text-body-md">MSO-8471-K</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">312.40</td><td class="amt" style="text-align:right;color:var(--text-success-base)">312.40</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
+              <tr><td class="text-body-md">MSO-9012-P</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">687.15</td><td class="amt" style="text-align:right;color:var(--text-success-base)">687.15</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
+              <tr><td class="text-body-md">MSO-7746-Q</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">241.20</td><td class="amt" style="text-align:right;color:var(--text-success-base)">241.20</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
+              <tr><td class="text-body-md">MSO-3320-A</td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">915.60</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
+              <tr><td class="text-body-md">MSO-5501-R</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">128.45</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
+              <tr><td class="text-body-md">MSO-4488-B</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">423.90</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
+              <tr><td class="text-body-md">MSO-2299-J</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">88.30</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-md alert-info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          <span class="text-body-sm">Claim-level recovery ₹ may exceed sum of per-order matches when marketplace credits are lump-sum. Order-level recovery % in Reports counts attributed only.</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- ============ COMPOSE SLIDE-OVER (wide) ============ -->
+<div id="overlay-compose" class="compose-slide">
+  <div class="compose-slide-backdrop" onclick="closeCompose()"></div>
+  <aside class="compose-slide-panel">
+    <div class="compose-head">
+      <div class="title-block">
+        <h2 class="text-h2"><span style="color:var(--text-tertiary);font-weight:500">Step 1 —</span> Compose Draft</h2>
+        <div class="chip-row">
+          <span class="chip" id="composeChannel">MEESHO</span>
+          <span class="chip" id="composeType">Payment Disputed</span>
+        </div>
+      </div>
+      <button class="icon-btn ghost" onclick="closeCompose()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="compose-body">
+      <div id="composeMode">
+      <div class="filters">
+        <div class="dropdown" id="reasonDropdown">
+          <button class="filter-chip required set" onclick="toggleDropdown('reasonDropdown', event)">
+            <span id="reasonLabel">Reason · Commission Overcharge</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item selected" onclick="selectReason('commission','Commission Overcharge')">
+              <span>Commission Overcharge</span><span class="meta">7 orders</span>
+            </div>
+            <div class="dropdown-item" onclick="selectReason('return_fee','Wrong Return Fee')">
+              <span>Wrong Return Fee</span><span class="meta">4 orders</span>
+            </div>
+            <div class="dropdown-item" onclick="selectReason('shipping','Shipping Fee Mismatch')">
+              <span>Shipping Fee Mismatch</span><span class="meta">3 orders</span>
+            </div>
+            <div class="dropdown-item" onclick="selectReason('missing_payout','Missing Payout')">
+              <span>Missing Payout</span><span class="meta">1 order</span>
+            </div>
+          </div>
+        </div>
+        <div class="filter-sep"></div>
+        <div class="filter-chip filter-chip-input" id="filterDiscChip">
+          <span>Discrepancy &gt;</span>
+          <span>₹</span>
+          <input type="number" id="discInput" placeholder="0" oninput="applyDiscFilter(this)" min="0" step="100" />
+        </div>
+        <button class="filter-chip" id="filterWindow" onclick="toggleFilter('window',this)">Filing window ≤ 7 days</button>
+        <div class="dropdown" id="soiDropdown">
+          <button class="filter-chip" onclick="toggleDropdown('soiDropdown', event)">
+            SOI count <span id="soiLabel"></span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item" onclick="selectSoi(null,'Any')">Any</div>
+            <div class="dropdown-item" onclick="selectSoi(1,'1 only')">1 only</div>
+            <div class="dropdown-item" onclick="selectSoi(2,'2+')">2+</div>
+            <div class="dropdown-item" onclick="selectSoi(3,'3+')">3+</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="compose-grid">
+        <div class="card clip">
+          <div class="card-head">
+            <div style="display:flex;gap:var(--gap-12);align-items:center">
+              <span class="checkbox" id="selectAllBox" onclick="toggleSelectAll()"></span>
+              <span class="text-label-md"><span id="selectedCount">0</span> of <span id="visibleCount">7</span> selected</span>
+            </div>
+            <span class="text-caption-md" style="color:var(--text-tertiary)">Sorted by filing window</span>
+          </div>
+          <table id="composeTable">
+            <colgroup><col style="width:44px"><col><col style="width:70px"><col style="width:110px"><col style="width:120px"><col style="width:130px"></colgroup>
+            <thead>
+              <tr><th></th><th>Order</th><th style="text-align:right">SOIs</th><th style="text-align:right">Order value</th><th style="text-align:right">Discrepancy</th><th style="text-align:right">Filing window</th></tr>
+            </thead>
+            <tbody>
+              <tr data-reason="commission" data-disc="312.40" data-value="1374" data-days="2" data-soi="2"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-8471-K</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">1,374</td><td class="amt" style="text-align:right">312.40</td><td style="text-align:right"><span class="badge badge-danger">2 days</span></td></tr>
+              <tr data-reason="commission" data-disc="687.15" data-value="2899" data-days="3" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-9012-P</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">2,899</td><td class="amt" style="text-align:right">687.15</td><td style="text-align:right"><span class="badge badge-danger">3 days</span></td></tr>
+              <tr data-reason="commission" data-disc="241.20" data-value="1558" data-days="5" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-7746-Q</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">1,558</td><td class="amt" style="text-align:right">241.20</td><td style="text-align:right"><span class="badge badge-warning">5 days</span></td></tr>
+              <tr data-reason="commission" data-disc="915.60" data-value="4120" data-days="6" data-soi="3"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-3320-A</td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">4,120</td><td class="amt" style="text-align:right">915.60</td><td style="text-align:right"><span class="badge badge-warning">6 days</span></td></tr>
+              <tr data-reason="commission" data-disc="128.45" data-value="899" data-days="11" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-5501-R</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">899</td><td class="amt" style="text-align:right">128.45</td><td style="text-align:right"><span class="badge badge-success">11 days</span></td></tr>
+              <tr data-reason="commission" data-disc="423.90" data-value="2110" data-days="14" data-soi="2"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-4488-B</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">2,110</td><td class="amt" style="text-align:right">423.90</td><td style="text-align:right"><span class="badge badge-success">14 days</span></td></tr>
+              <tr data-reason="commission" data-disc="88.30" data-value="560" data-days="14" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-2299-J</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">560</td><td class="amt" style="text-align:right">88.30</td><td style="text-align:right"><span class="badge badge-success">14 days</span></td></tr>
+              <tr data-reason="return_fee" data-disc="180.00" data-value="720" data-days="4" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-6612-M</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">720</td><td class="amt" style="text-align:right">180.00</td><td style="text-align:right"><span class="badge badge-warning">4 days</span></td></tr>
+              <tr data-reason="return_fee" data-disc="340.00" data-value="1240" data-days="8" data-soi="2"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-7020-N</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">1,240</td><td class="amt" style="text-align:right">340.00</td><td style="text-align:right"><span class="badge badge-success">8 days</span></td></tr>
+              <tr data-reason="return_fee" data-disc="220.00" data-value="690" data-days="10" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-7133-N</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">690</td><td class="amt" style="text-align:right">220.00</td><td style="text-align:right"><span class="badge badge-success">10 days</span></td></tr>
+              <tr data-reason="return_fee" data-disc="150.00" data-value="500" data-days="12" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-7891-X</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">500</td><td class="amt" style="text-align:right">150.00</td><td style="text-align:right"><span class="badge badge-success">12 days</span></td></tr>
+              <tr data-reason="shipping" data-disc="420.00" data-value="1890" data-days="7" data-soi="2"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-5580-S</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">1,890</td><td class="amt" style="text-align:right">420.00</td><td style="text-align:right"><span class="badge badge-warning">7 days</span></td></tr>
+              <tr data-reason="shipping" data-disc="290.00" data-value="1120" data-days="9" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-5601-S</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">1,120</td><td class="amt" style="text-align:right">290.00</td><td style="text-align:right"><span class="badge badge-success">9 days</span></td></tr>
+              <tr data-reason="shipping" data-disc="180.00" data-value="780" data-days="13" data-soi="1"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-5990-T</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">780</td><td class="amt" style="text-align:right">180.00</td><td style="text-align:right"><span class="badge badge-success">13 days</span></td></tr>
+              <tr data-reason="missing_payout" data-disc="1240.00" data-value="4890" data-days="6" data-soi="3"><td><span class="checkbox" onclick="toggleRow(this)"></span></td><td class="text-body-md">MSO-4102-Z</td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">4,890</td><td class="amt" style="text-align:right">1,240.00</td><td style="text-align:right"><span class="badge badge-warning">6 days</span></td></tr>
+            </tbody>
+            <tbody id="emptyState" style="display:none">
+              <tr><td colspan="6" class="empty-state">No orders match these filters</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card insight-card">
+          <div class="insight-block" style="gap:var(--gap-4)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">SOIs</span>
+              <span class="text-caption-md" style="color:var(--text-brand-base);font-weight:500;font-variant-numeric:tabular-nums" id="pctSois">0%</span>
+            </div>
+            <span class="text-label-md" style="font-variant-numeric:tabular-nums"><span id="selectedSois">0</span> of <span id="totalSois">0</span></span>
+          </div>
+          <div class="insight-block" style="gap:var(--gap-4)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Order value</span>
+              <span class="text-caption-md" style="color:var(--text-brand-base);font-weight:500;font-variant-numeric:tabular-nums" id="pctValue">0%</span>
+            </div>
+            <span class="text-label-md" style="font-variant-numeric:tabular-nums"><span id="selectedValue">₹0</span> of <span id="totalValue">₹0</span></span>
+          </div>
+          <div class="insight-block" style="gap:var(--gap-4)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span class="text-caption-md" style="color:var(--text-tertiary)">Discrepancy</span>
+              <span class="text-caption-md" style="color:var(--text-brand-base);font-weight:500;font-variant-numeric:tabular-nums" id="pctDisc">0%</span>
+            </div>
+            <span class="text-label-md" style="font-variant-numeric:tabular-nums"><span id="selectedDisc">₹0</span> of <span id="totalDisc">₹0</span></span>
+          </div>
+          <div class="divider"></div>
+          <div class="insight-block">
+            <span class="text-caption-md label">Filing window</span>
+            <span class="text-label-md">15 days from payment date</span>
+          </div>
+        </div>
+      </div>
+      </div><!-- /composeMode -->
+
+      <div id="postDownloadMode" class="hidden">
+        <div style="margin-bottom:var(--gap-16)">
+          <h2 class="text-h2"><span style="color:var(--text-tertiary);font-weight:500">Step 2 —</span> Raise Claim</h2>
+        </div>
+
+        <div class="alert" style="background:var(--bg-success-subtler);margin-bottom:var(--gap-20);padding:var(--gap-8) var(--gap-12)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--icon-success-base);margin-top:2px"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="text-body-sm"><span id="pdSummary">4 orders · ₹2,156</span> saved to Draft · CSV downloaded</span>
+        </div>
+
+        <div class="card clip" style="margin-bottom:var(--gap-16)">
+          <div class="card-head">
+            <span class="text-h3">Filing steps</span>
+            <span class="text-caption-md" style="color:var(--text-tertiary)"><span id="pdChannel">MEESHO</span> · <span id="pdType">Payment Disputed</span></span>
+          </div>
+          <ol class="steps-list" id="pdStepsList"></ol>
+        </div>
+
+        <a class="btn btn-primary" id="pdPortalLink" href="#" target="_blank" rel="noopener" style="text-decoration:none;align-self:flex-start;display:inline-flex;margin-bottom:var(--gap-24)">
+          <span id="pdPortalLabel">Open portal</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+
+        <div class="card clip">
+          <div class="card-head">
+            <span class="text-h3">Have the ticket ID?</span>
+            <span class="text-caption-md" style="color:var(--text-tertiary)">Optional · add later from Draft tab</span>
+          </div>
+          <div style="padding:var(--gap-16) var(--gap-20);display:flex;flex-direction:column;gap:var(--gap-12)">
+            <div class="field">
+              <label for="pdTicketId">Ticket ID</label>
+              <input id="pdTicketId" type="text" placeholder="e.g. MSO-98421" oninput="validatePdTicket()" />
+              <span class="helper" id="pdTicketHelper">Enter to start auto-tracking immediately</span>
+            </div>
+            <div class="field">
+              <label for="pdFiledDate">Filed date</label>
+              <input id="pdFiledDate" type="date" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="compose-foot" style="justify-content:flex-end">
+      <div class="actions" id="composeModeActions">
+        <button class="btn btn-danger-ghost" onclick="openDecline()">Decline selected</button>
+        <button class="btn btn-primary" id="createDraftBtn" onclick="createDraft()" disabled>
+          Create draft &amp; download CSV
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </button>
+      </div>
+      <div class="actions hidden" id="postDownloadActions">
+        <button class="btn btn-secondary" onclick="closeCompose()">Close</button>
+        <button class="btn btn-primary" id="pdPrimaryBtn" onclick="pdPrimaryAction()">
+          <span id="pdPrimaryLabel">Go to Draft tab</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ TICKET ID SLIDE-OVER ============ -->
+<div id="overlay-ticket-id" class="slide-over">
+  <div class="slide-over-backdrop" onclick="closeTicketId()"></div>
+  <aside class="slide-over-panel">
+    <header class="slide-over-head">
+      <span class="text-h2">Start tracking</span>
+      <button class="icon-btn ghost" onclick="closeTicketId()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+    <div class="slide-over-body">
+      <div class="claim-summary">
+        <span class="text-caption-md" style="color:var(--text-tertiary)">Draft</span>
+        <span class="text-label-lg" id="ticketDraftName">MEESHO · Commission Overcharge</span>
+        <span class="text-caption-md" style="color:var(--text-secondary)" id="ticketDraftMeta">4 orders · ₹2,156</span>
+      </div>
+      <div class="field">
+        <label for="ticketId">Ticket ID</label>
+        <input id="ticketId" type="text" placeholder="e.g. MSO-98421" oninput="validateTicket()" />
+        <span class="helper" id="ticketHelper">We'll verify with the channel portal before saving</span>
+      </div>
+      <div class="field">
+        <label for="filedDate">Filed date</label>
+        <input id="filedDate" type="date" />
+      </div>
+      <div class="alert alert-md alert-info" style="margin-top:0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span class="text-body-sm">Once saved, the claim moves to <b>Raised</b> and auto-tracks. Orders are locked.</span>
+      </div>
+    </div>
+    <footer class="slide-over-foot">
+      <button class="btn btn-secondary" onclick="closeTicketId()">Cancel</button>
+      <button class="btn btn-primary" id="saveTicketBtn" onclick="saveTicket()" disabled>Save &amp; track</button>
+    </footer>
+  </aside>
+</div>
+
+<!-- ============ MODAL: DECLINE ============ -->
+<div id="overlay-decline" class="modal">
+  <div class="modal-panel">
+    <div class="modal-head"><span class="text-h2" id="declineTitle">Decline 0 orders?</span></div>
+    <div class="modal-body">
+      <span class="text-body-md">These orders won't reappear in Eligible for the current filing window. Reports will still count them under "eligible but declined".</span>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeDecline()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDecline()">Decline</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: FILING STEPS ============ -->
+<div id="overlay-steps" class="modal">
+  <div class="modal-panel" style="width:520px;max-width:92vw">
+    <div class="modal-head" style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--gap-16)">
+      <div style="display:flex;flex-direction:column;gap:var(--gap-4)">
+        <span class="text-h2">Filing steps</span>
+        <span class="text-caption-md" style="color:var(--text-tertiary)"><span id="stepsChannel">MEESHO</span> · <span id="stepsType">Payment Disputed</span></span>
+      </div>
+      <button class="icon-btn ghost" onclick="closeSteps()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <ol class="steps-list" id="stepsModalList" style="padding:0"></ol>
+      <a class="btn btn-primary" id="stepsModalPortal" href="#" target="_blank" rel="noopener" style="text-decoration:none;align-self:flex-start;display:inline-flex;margin-top:var(--gap-4)">
+        <span id="stepsModalPortalLabel">Open portal</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-secondary" onclick="closeSteps()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
+<script>
+// ============ FILING STEPS (per marketplace × type) ============
+// NOTE: placeholder steps + URLs. KAM needs to validate and maintain.
+const filingSteps = {
+  'MEESHO': {
+    disputed: {
+      portalLabel: 'Open Meesho Supplier Panel',
+      portal: 'https://supplier.meeshosupply.com/panel/v3/reactions/payments/disputes',
+      steps: [
+        'Log in to Meesho Supplier Panel',
+        'Go to Payments → Payment Disputes',
+        'Click "Raise new dispute" and pick the fee category matching this claim',
+        'Attach the downloaded CSV as evidence',
+        'Submit and copy the Ticket ID Meesho generates'
+      ]
+    },
+    overdue: {
+      portalLabel: 'Open Meesho Supplier Panel',
+      portal: 'https://supplier.meeshosupply.com/panel/v3/reactions/payments/overdue',
+      steps: [
+        'Log in to Meesho Supplier Panel',
+        'Go to Payments → Overdue Payouts',
+        'Click "Report overdue payout"',
+        'Attach the downloaded CSV listing overdue orders',
+        'Submit and copy the Ticket ID'
+      ]
+    }
+  },
+  'FLIPKART_KEDARFAB': {
+    disputed: {
+      portalLabel: 'Open Flipkart Seller Hub',
+      portal: 'https://seller.flipkart.com/index.html#dashboard/support/newTicket',
+      steps: [
+        'Log in to Flipkart Seller Hub',
+        'Go to Growth → Help Center → Contact us',
+        'Pick Payments → Incorrect payout, then the fee category',
+        'Attach the downloaded CSV as evidence',
+        'Submit and copy the Ticket ID'
+      ]
+    },
+    overdue: {
+      portalLabel: 'Open Flipkart Seller Hub',
+      portal: 'https://seller.flipkart.com/index.html#dashboard/support/newTicket',
+      steps: [
+        'Log in to Flipkart Seller Hub',
+        'Go to Growth → Help Center → Contact us',
+        'Pick Payments → Missing payout',
+        'Attach the downloaded CSV listing overdue orders',
+        'Submit and copy the Ticket ID'
+      ]
+    }
+  },
+  'MYNTRAPPMP_ONEFRIDAY': {
+    disputed: {
+      portalLabel: 'Open Myntra Seller Support',
+      portal: 'https://myntrasellersupport.freshdesk.com/support/tickets/new',
+      steps: [
+        'Log in to Myntra Seller Support (Freshdesk)',
+        'Click "New ticket" → Payments → Dispute category',
+        'Attach the downloaded CSV as evidence',
+        'Submit and copy the Ticket ID from the confirmation'
+      ]
+    },
+    overdue: {
+      portalLabel: 'Open Myntra Seller Support',
+      portal: 'https://myntrasellersupport.freshdesk.com/support/tickets/new',
+      steps: [
+        'Log in to Myntra Seller Support (Freshdesk)',
+        'Click "New ticket" → Payments → Overdue payout',
+        'Attach the downloaded CSV listing overdue orders',
+        'Submit and copy the Ticket ID'
+      ]
+    }
+  },
+  'AMAZON_SELLERFLEX': {
+    disputed: {
+      portalLabel: 'Open Amazon Seller Central',
+      portal: 'https://sellercentral.amazon.in/reportcenter/payments',
+      steps: [
+        'Log in to Amazon Seller Central',
+        'Go to Reports → Payments → Reimbursements',
+        'Raise a SAFE-T claim for each order using the downloaded CSV',
+        'Submit within the 15-day filing window',
+        'Copy the SAFE-T claim ID Amazon generates'
+      ]
+    },
+    overdue: {
+      portalLabel: 'Open Amazon Seller Central',
+      portal: 'https://sellercentral.amazon.in/help/hub/contact',
+      steps: [
+        'Log in to Amazon Seller Central',
+        'Go to Help → Get Support → Payments',
+        'Pick "Payment not received"',
+        'Attach the downloaded CSV listing overdue orders',
+        'Submit and copy the Case ID'
+      ]
+    }
+  }
+};
+
+function currentPostDownloadContext() {
+  const typeLabel = document.getElementById('composeType').textContent;
+  return {
+    channel: document.getElementById('composeChannel').textContent,
+    type: typeLabel.toLowerCase().includes('overdue') ? 'overdue' : 'disputed',
+    count: document.getElementById('selectedCount').textContent,
+    total: document.getElementById('selectedDisc').textContent
+  };
+}
+
+function renderSteps(listEl, portalLinkEl, portalLabelEl, channel, type) {
+  const info = filingSteps[channel]?.[type];
+  if (!info) {
+    listEl.innerHTML = '<li>Steps not yet configured for this channel</li>';
+    portalLinkEl.href = '#';
+    portalLabelEl.textContent = 'Portal link unavailable';
+    return;
+  }
+  listEl.innerHTML = info.steps.map(s => '<li>' + s + '</li>').join('');
+  portalLinkEl.href = info.portal;
+  portalLabelEl.textContent = info.portalLabel;
+}
+
+function showFilingSteps(channel, type) {
+  document.getElementById('stepsChannel').textContent = channel;
+  document.getElementById('stepsType').textContent = type === 'overdue' ? 'Payment Overdue' : 'Payment Disputed';
+  renderSteps(
+    document.getElementById('stepsModalList'),
+    document.getElementById('stepsModalPortal'),
+    document.getElementById('stepsModalPortalLabel'),
+    channel, type
+  );
+  document.getElementById('overlay-steps').classList.add('open');
+}
+
+function closeSteps() { document.getElementById('overlay-steps').classList.remove('open'); }
+
+function resetComposeMode() {
+  document.getElementById('composeMode').classList.remove('hidden');
+  document.getElementById('postDownloadMode').classList.add('hidden');
+  document.getElementById('composeModeActions').classList.remove('hidden');
+  document.getElementById('postDownloadActions').classList.add('hidden');
+  const t = document.getElementById('pdTicketId'); if (t) t.value = '';
+  const d = document.getElementById('pdFiledDate'); if (d) d.value = '';
+  const lbl = document.getElementById('pdPrimaryLabel'); if (lbl) lbl.textContent = 'Go to Draft tab';
+  const hlp = document.getElementById('pdTicketHelper'); if (hlp) { hlp.className = 'helper'; hlp.textContent = 'Enter to start auto-tracking immediately'; }
+}
+
+// ============ NAV ============
+let activeView = 'claims';
+let activeTab = 'eligible';
+
+const crumbs = {
+  'claims:eligible': ['Payment Claims', 'Eligible'],
+  'claims:draft': ['Payment Claims', 'Draft'],
+  'claims:raised': ['Payment Claims', 'Raised'],
+  'claims:resolved': ['Payment Claims', 'Resolved'],
+  'claims:missed': ['Payment Claims', 'Missed'],
+  'raised:': [['Payment Claims','claims:raised'], '#MSO-98421'],
+};
+
+function go(view, tab) {
+  document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+  document.getElementById('view-' + view).classList.remove('hidden');
+  activeView = view;
+  if (view === 'claims' && tab) switchTab(tab, false);
+  updateChrome();
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+  document.getElementById('tab-' + tab).classList.remove('hidden');
+  updateChrome();
+}
+
+function back() {
+  go('claims', 'raised');
+}
+
+function updateChrome() {
+  const backBtn = document.getElementById('backBtn');
+  backBtn.style.display = (activeView === 'raised') ? 'inline-flex' : 'none';
+  const crumb = document.getElementById('crumb');
+  const key = activeView === 'raised' ? 'raised:' : 'claims:' + activeTab;
+  const entries = crumbs[key] || crumbs['claims:eligible'];
+  const parts = entries.map(e => {
+    if (Array.isArray(e)) return '<a onclick="go(\'claims\',\'raised\')">'+e[0]+'</a>';
+    return '<span>'+e+'</span>';
+  });
+  crumb.innerHTML = parts.join('<span class="sep">/</span>');
+}
+
+// ============ COMPOSE SLIDE-OVER ============
+const filters = { reason: 'commission', minDisc: 0, maxDays: null, minSoi: null };
+
+function openCompose(channel, type = 'disputed') {
+  document.getElementById('composeChannel').textContent = channel;
+  document.getElementById('composeType').textContent = type === 'overdue' ? 'Payment Overdue' : 'Payment Disputed';
+  filters.reason = 'commission'; filters.minDisc = 0; filters.maxDays = null; filters.minSoi = null;
+  document.querySelectorAll('#composeTable tbody tr').forEach(r => r.classList.remove('selected'));
+  document.querySelectorAll('#composeTable .checkbox').forEach(c => c.classList.remove('checked'));
+  document.getElementById('discInput').value = '';
+  document.getElementById('filterDiscChip').classList.remove('active');
+  document.getElementById('filterWindow').classList.remove('active');
+  document.getElementById('soiLabel').textContent = '';
+  document.getElementById('reasonLabel').textContent = 'Reason · Commission Overcharge';
+  document.querySelectorAll('#reasonDropdown .dropdown-item').forEach((item,i) => item.classList.toggle('selected', i===0));
+  document.querySelectorAll('#soiDropdown .dropdown-item').forEach((item,i) => item.classList.toggle('selected', i===0));
+  applyFilters();
+  document.getElementById('overlay-compose').classList.add('open');
+  document.body.classList.add('locked');
+}
+function closeCompose() {
+  document.getElementById('overlay-compose').classList.remove('open');
+  document.body.classList.remove('locked');
+  setTimeout(resetComposeMode, 300);
+}
+
+function toggleDropdown(id, e) {
+  e.stopPropagation();
+  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== id) d.classList.remove('open'); });
+  document.getElementById(id).classList.toggle('open');
+}
+document.addEventListener('click', () => document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')));
+
+function selectReason(key, label) {
+  filters.reason = key;
+  document.getElementById('reasonLabel').textContent = 'Reason · ' + label;
+  document.querySelectorAll('#reasonDropdown .dropdown-item').forEach(item => {
+    item.classList.toggle('selected', item.textContent.includes(label));
+  });
+  document.getElementById('reasonDropdown').classList.remove('open');
+  document.querySelectorAll('#composeTable tbody tr').forEach(r => r.classList.remove('selected'));
+  document.querySelectorAll('#composeTable .checkbox').forEach(c => c.classList.remove('checked'));
+  applyFilters();
+}
+
+function selectSoi(min, label) {
+  filters.minSoi = min;
+  document.getElementById('soiLabel').textContent = min ? ' · ' + label : '';
+  document.querySelectorAll('#soiDropdown .dropdown-item').forEach(item => {
+    item.classList.toggle('selected', item.textContent === label);
+  });
+  document.getElementById('soiDropdown').classList.remove('open');
+  applyFilters();
+}
+
+function toggleFilter(type, chip) {
+  chip.classList.toggle('active');
+  const on = chip.classList.contains('active');
+  if (type === 'window') filters.maxDays = on ? 7 : null;
+  applyFilters();
+}
+
+function applyDiscFilter(input) {
+  const val = parseFloat(input.value) || 0;
+  filters.minDisc = val;
+  document.getElementById('filterDiscChip').classList.toggle('active', val > 0);
+  applyFilters();
+}
+
+function applyFilters() {
+  const rows = document.querySelectorAll('#composeTable tbody:first-of-type tr');
+  let visible = 0;
+  rows.forEach(row => {
+    const disc = parseFloat(row.dataset.disc);
+    const days = parseInt(row.dataset.days);
+    const soi = parseInt(row.dataset.soi);
+    const reason = row.dataset.reason;
+    let show = true;
+    if (filters.reason && reason !== filters.reason) show = false;
+    if (disc < filters.minDisc) show = false;
+    if (filters.maxDays !== null && days > filters.maxDays) show = false;
+    if (filters.minSoi !== null && soi < filters.minSoi) show = false;
+    row.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('emptyState').style.display = visible === 0 ? '' : 'none';
+  updateCounts();
+}
+
+function toggleRow(el) {
+  const row = el.closest('tr');
+  row.classList.toggle('selected');
+  el.classList.toggle('checked');
+  updateCounts();
+}
+
+function toggleSelectAll() {
+  const box = document.getElementById('selectAllBox');
+  const shouldCheck = !box.classList.contains('checked');
+  box.classList.toggle('checked', shouldCheck);
+  document.querySelectorAll('#composeTable tbody:first-of-type tr').forEach(row => {
+    if (row.style.display === 'none') return;
+    row.classList.toggle('selected', shouldCheck);
+    row.querySelector('.checkbox').classList.toggle('checked', shouldCheck);
+  });
+  updateCounts();
+}
+
+function updateCounts() {
+  const visibleRows = [...document.querySelectorAll('#composeTable tbody:first-of-type tr')].filter(r => r.style.display !== 'none');
+  const selectedRows = visibleRows.filter(r => r.classList.contains('selected'));
+
+  const sumSoi = arr => arr.reduce((s,r) => s + parseInt(r.dataset.soi), 0);
+  const sumVal = arr => arr.reduce((s,r) => s + parseFloat(r.dataset.value), 0);
+  const sumDisc = arr => arr.reduce((s,r) => s + parseFloat(r.dataset.disc), 0);
+  const pct = (a,b) => b === 0 ? 0 : Math.round((a/b) * 100);
+  const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+
+  const totSoi = sumSoi(visibleRows), selSoi = sumSoi(selectedRows);
+  const totVal = sumVal(visibleRows), selVal = sumVal(selectedRows);
+  const totDisc = sumDisc(visibleRows), selDisc = sumDisc(selectedRows);
+
+  document.getElementById('selectedCount').textContent = selectedRows.length;
+  document.getElementById('visibleCount').textContent = visibleRows.length;
+  document.getElementById('selectedSois').textContent = selSoi;
+  document.getElementById('totalSois').textContent = totSoi;
+  document.getElementById('pctSois').textContent = pct(selSoi, totSoi) + '%';
+  document.getElementById('selectedValue').textContent = fmt(selVal);
+  document.getElementById('totalValue').textContent = fmt(totVal);
+  document.getElementById('pctValue').textContent = pct(selVal, totVal) + '%';
+  document.getElementById('selectedDisc').textContent = fmt(selDisc);
+  document.getElementById('totalDisc').textContent = fmt(totDisc);
+  document.getElementById('pctDisc').textContent = pct(selDisc, totDisc) + '%';
+
+  document.getElementById('createDraftBtn').disabled = selectedRows.length === 0;
+  const allSelected = visibleRows.length > 0 && selectedRows.length === visibleRows.length;
+  document.getElementById('selectAllBox').classList.toggle('checked', allSelected);
+}
+
+// ============ TICKET ID SLIDE-OVER ============
+function openTicketId(draftName, draftMeta) {
+  document.getElementById('ticketDraftName').textContent = draftName;
+  document.getElementById('ticketDraftMeta').textContent = draftMeta;
+  document.getElementById('ticketId').value = '';
+  document.getElementById('ticketHelper').className = 'helper';
+  document.getElementById('ticketHelper').textContent = "We'll verify with the channel portal before saving";
+  document.getElementById('saveTicketBtn').disabled = true;
+  document.getElementById('overlay-ticket-id').classList.add('open');
+  document.body.classList.add('locked');
+}
+function closeTicketId() {
+  document.getElementById('overlay-ticket-id').classList.remove('open');
+  document.body.classList.remove('locked');
+}
+
+let validateTimer;
+function validateTicket() {
+  const val = document.getElementById('ticketId').value.trim();
+  const helper = document.getElementById('ticketHelper');
+  const btn = document.getElementById('saveTicketBtn');
+  clearTimeout(validateTimer);
+  if (!val) {
+    helper.className = 'helper';
+    helper.textContent = "We'll verify with the channel portal before saving";
+    btn.disabled = true;
+    return;
+  }
+  helper.className = 'helper';
+  helper.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Verifying with portal…';
+  btn.disabled = true;
+  validateTimer = setTimeout(() => {
+    helper.className = 'helper success';
+    helper.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Ticket found · matches Commission Overcharge';
+    btn.disabled = false;
+  }, 800);
+}
+
+function saveTicket() {
+  closeTicketId();
+  toast('Draft moved to Raised · tracking started');
+  setTimeout(() => go('claims', 'raised'), 300);
+}
+
+// ============ MODAL ============
+function openDecline() {
+  const count = document.getElementById('selectedCount').textContent;
+  if (count === '0') return;
+  document.getElementById('declineTitle').textContent = `Decline ${count} orders?`;
+  document.getElementById('overlay-decline').classList.add('open');
+}
+function closeDecline() { document.getElementById('overlay-decline').classList.remove('open'); }
+function confirmDecline() {
+  const count = document.getElementById('selectedCount').textContent;
+  closeDecline();
+  closeCompose();
+  toast(`${count} orders declined`);
+}
+
+function createDraft() {
+  const ctx = currentPostDownloadContext();
+  toast('Draft created · CSV downloaded');
+
+  // Swap to post-download mode
+  document.getElementById('composeMode').classList.add('hidden');
+  document.getElementById('postDownloadMode').classList.remove('hidden');
+  document.getElementById('composeModeActions').classList.add('hidden');
+  document.getElementById('postDownloadActions').classList.remove('hidden');
+
+  document.getElementById('pdSummary').textContent = ctx.count + ' orders · ' + ctx.total;
+  document.getElementById('pdChannel').textContent = ctx.channel;
+  document.getElementById('pdType').textContent = ctx.type === 'overdue' ? 'Payment Overdue' : 'Payment Disputed';
+  renderSteps(
+    document.getElementById('pdStepsList'),
+    document.getElementById('pdPortalLink'),
+    document.getElementById('pdPortalLabel'),
+    ctx.channel, ctx.type
+  );
+
+  // Scroll body to top so user sees the success confirmation
+  document.querySelector('.compose-body').scrollTop = 0;
+}
+
+function validatePdTicket() {
+  const val = document.getElementById('pdTicketId').value.trim();
+  const label = document.getElementById('pdPrimaryLabel');
+  const helper = document.getElementById('pdTicketHelper');
+  if (val) {
+    label.textContent = 'Start tracking now';
+    helper.className = 'helper success';
+    helper.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Ready to track — click Start tracking';
+  } else {
+    label.textContent = 'Go to Draft tab';
+    helper.className = 'helper';
+    helper.textContent = 'Enter to start auto-tracking immediately';
+  }
+}
+
+function pdPrimaryAction() {
+  const val = document.getElementById('pdTicketId').value.trim();
+  closeCompose();
+  setTimeout(resetComposeMode, 300);
+  if (val) {
+    toast('Ticket ID linked · tracking started');
+    setTimeout(() => go('claims', 'raised'), 300);
+  } else {
+    go('claims', 'draft');
+  }
+}
+
+// ============ TOAST ============
+function toast(msg) {
+  const stack = document.getElementById('toastStack');
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><span class="text-body-sm">' + msg + '</span>';
+  stack.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// ============ THEME ============
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur === 'dark' ? '' : 'dark');
+}
+
+// Init
+updateChrome();
+</script>
+</body>
+</html>

@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UniReco PLG · Cohort-Anchored Strategy</title>
+<style>
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FAFAFA;
+    --bg-tertiary: #F3F4F5;
+    --bg-quaternary: #E5E7EA;
+    --bg-brand-subtler: #EEF3FA;
+    --bg-brand-subtle: #DBE7F8;
+    --bg-brand-base: #1B72F3;
+    --bg-brand-bold: #0A52BD;
+    --bg-success-subtler: #EAF4EE;
+    --bg-success-subtle: #C9E4D5;
+    --bg-success-base: #3F9C6E;
+    --bg-warning-subtler: #FDF3D5;
+    --bg-warning-base: #EF8424;
+    --bg-danger-subtler: #FBE9E9;
+    --bg-danger-base: #E73333;
+    --text-primary: #1B1C1D;
+    --text-secondary: #57595D;
+    --text-tertiary: #76797E;
+    --text-brand-base: #0C61DF;
+    --text-brand-bold: #0A52BD;
+    --text-success-base: #2F7E56;
+    --text-success-bold: #22603F;
+    --text-warning-base: #C96A15;
+    --text-danger-base: #C62828;
+    --border-primary: #DADCDE;
+    --border-secondary: #BCBEC2;
+    --border-brand-subtle: #B4CFF6;
+    --border-brand-base: #1B72F3;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --shadow-low: 0 1px 2px rgba(20,33,61,0.06), 0 1px 3px rgba(20,33,61,0.04);
+    --shadow-medium: 0 4px 12px rgba(20,33,61,0.08);
+    --font: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; line-height: 1.5; }
+
+  /* Topbar */
+  .app-topbar {
+    background: #14213D; color: #fff; padding: 12px 32px;
+    display: flex; align-items: center; gap: 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .app-title { font-weight: 700; font-size: 15px; }
+  .app-title small { display: block; font-weight: 400; font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+  .container { max-width: 1440px; margin: 0 auto; padding: 24px 32px; }
+
+  /* View switching */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Section */
+  .section-hdr { margin-bottom: 12px; display: flex; align-items: baseline; gap: 16px; }
+  .section-hdr h2 { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+  .section-hdr .sub { font-size: 12px; color: var(--text-tertiary); }
+
+  /* ═══════════════════════════════════════════════ */
+  /* TOP TABLE: Cohort × Funnel                       */
+  /* ═══════════════════════════════════════════════ */
+  .funnel-panel {
+    background: var(--bg-primary); border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-low);
+    padding: 20px 24px; margin-bottom: 24px;
+  }
+  .funnel-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 12px; }
+  .funnel-table th {
+    background: #14213D; color: #fff;
+    padding: 12px 14px; text-align: center;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-right: 1px solid rgba(255,255,255,0.15);
+  }
+  .funnel-table th:first-child { text-align: left; border-top-left-radius: var(--radius-sm); }
+  .funnel-table th:last-child { border-top-right-radius: var(--radius-sm); border-right: none; background: #C62828; }
+  .funnel-table th.paid { background: #22603F; }
+  .funnel-table th.used-group { background: #6B4A9E; }
+
+  .funnel-table td {
+    padding: 0;
+    border-bottom: 1px solid var(--border-primary);
+    border-right: 1px solid var(--border-primary);
+    text-align: center;
+    font-weight: 600;
+    background: var(--bg-primary);
+    transition: background 120ms ease, box-shadow 120ms ease;
+  }
+  .funnel-table td:first-child { text-align: left; padding: 14px 16px; border-right: 2px solid var(--border-primary); }
+  .funnel-table td:last-child { border-right: none; }
+  .funnel-table tr:last-child td { border-bottom: none; }
+  .funnel-table tr:last-child td { background: var(--bg-tertiary); font-weight: 700; }
+  .funnel-table tr:last-child td:first-child { color: var(--text-primary); }
+
+  .cohort-name {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .cohort-name .code {
+    font-size: 11px; font-weight: 700;
+    color: var(--text-brand-base); letter-spacing: 0.06em;
+  }
+  .cohort-name .label {
+    font-size: 13px; color: var(--text-primary); font-weight: 600;
+  }
+
+  .cell-btn {
+    display: block; width: 100%; padding: 16px 12px;
+    background: transparent; border: none; font-family: inherit;
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+    cursor: pointer;
+  }
+  .cell-btn:hover { background: var(--bg-brand-subtler); }
+  .cell-btn.selected {
+    background: var(--bg-brand-subtler);
+    box-shadow: inset 0 0 0 2px var(--border-brand-base);
+    color: var(--text-brand-bold);
+  }
+  .cell-btn .drop {
+    display: block; font-size: 10px; font-weight: 500;
+    color: var(--text-tertiary); margin-top: 2px;
+  }
+  .cell-btn.paid-cell { color: var(--text-success-bold); }
+  .cell-btn.total-cell { color: var(--text-primary); font-weight: 700; }
+  .cell-btn.placeholder-cell { color: var(--text-tertiary); font-weight: 500; }
+  .cell-btn.placeholder-cell:hover { color: var(--text-brand-base); background: var(--bg-brand-subtler); }
+
+  .funnel-table tr.active-row td { background: var(--bg-brand-subtler); }
+  .funnel-table tr.active-row td .cohort-name .label { color: var(--text-brand-bold); }
+  .funnel-table tr.active-row td .cell-btn { color: var(--text-brand-bold); }
+
+  /* ═══════════════════════════════════════════════ */
+  /* BOTTOM TABLE: Friction × Solution                */
+  /* ═══════════════════════════════════════════════ */
+  .friction-panel {
+    background: var(--bg-primary); border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md); box-shadow: var(--shadow-low);
+    padding: 20px 24px;
+  }
+  .friction-empty {
+    padding: 60px 24px; text-align: center; color: var(--text-tertiary);
+    font-size: 13px; background: var(--bg-secondary);
+    border: 1px dashed var(--border-primary); border-radius: var(--radius-sm);
+    margin-top: 12px;
+  }
+  .friction-empty .arrow { font-size: 20px; display: block; margin-bottom: 8px; opacity: 0.5; }
+
+  .friction-hdr {
+    background: var(--bg-brand-subtler); border: 1px solid var(--border-brand-subtle);
+    border-radius: var(--radius-sm); padding: 14px 18px; margin-top: 12px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .friction-hdr .fh-cohort {
+    font-size: 15px; font-weight: 700; color: var(--text-brand-bold);
+  }
+  .friction-hdr .fh-cohort .code {
+    font-size: 12px; color: var(--text-brand-base);
+    letter-spacing: 0.06em; margin-right: 8px;
+  }
+  .friction-hdr .fh-stats {
+    display: flex; gap: 20px; margin-left: auto; font-size: 12px;
+  }
+  .friction-hdr .fh-stats .stat {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .friction-hdr .fh-stats .lbl { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; }
+  .friction-hdr .fh-stats .val { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+
+  .friction-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .friction-table thead th {
+    background: var(--bg-tertiary); padding: 10px 14px; text-align: left;
+    font-size: 10px; font-weight: 700; color: var(--text-tertiary);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border-primary);
+    border-top: 1px solid var(--border-primary);
+  }
+  .friction-table thead th:first-child { border-left: 1px solid var(--border-primary); border-top-left-radius: var(--radius-sm); }
+  .friction-table thead th:last-child { border-right: 1px solid var(--border-primary); border-top-right-radius: var(--radius-sm); }
+  .friction-table tbody td {
+    padding: 14px; vertical-align: top; font-size: 13px;
+    border-bottom: 1px solid var(--border-primary);
+    border-right: 1px solid var(--border-primary);
+  }
+  .friction-table tbody td:first-child {
+    border-left: 1px solid var(--border-primary);
+    font-weight: 600;
+    background: var(--bg-secondary);
+    width: 130px;
+  }
+  .friction-table tbody tr.stage-highlight td { background: var(--bg-warning-subtler); }
+  .friction-table tbody tr.stage-highlight td:first-child { background: var(--bg-warning-base); color: #fff; }
+
+  .stage-lbl {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .stage-lbl .transition {
+    font-size: 11px; color: var(--text-tertiary);
+    font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .stage-lbl .to-stage { color: var(--text-primary); font-weight: 700; }
+
+  .surface-pill {
+    display: inline-block; padding: 3px 10px;
+    background: var(--bg-brand-subtler); color: var(--text-brand-bold);
+    border-radius: 12px; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .friction-body {
+    color: var(--text-primary); line-height: 1.5;
+  }
+  .solution-list { display: flex; flex-direction: column; gap: 8px; }
+  .solution-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 12px; background: var(--bg-secondary);
+    border-radius: var(--radius-sm); border-left: 3px solid var(--border-brand-base);
+  }
+  .solution-item .content {
+    flex: 1; font-size: 12px; color: var(--text-primary); line-height: 1.5;
+  }
+  .solution-item .content strong { display: block; color: var(--text-brand-bold); margin-bottom: 2px; }
+  .solution-item .mock-ctas { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .solution-item .mock-cta {
+    background: var(--bg-brand-base); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    padding: 6px 12px; font-size: 11px; font-weight: 600;
+    font-family: inherit; cursor: pointer; white-space: nowrap;
+    text-decoration: none; display: inline-block;
+  }
+  .solution-item .mock-cta:hover { background: var(--bg-brand-bold); color: #fff; text-decoration: none; }
+  .solution-item .mock-cta-secondary {
+    background: transparent; color: var(--text-brand-base);
+    border: 1px solid var(--border-brand-subtle); border-radius: var(--radius-sm);
+    padding: 5px 10px; font-size: 10px; font-weight: 600;
+    font-family: inherit; cursor: pointer; white-space: nowrap;
+  }
+  .solution-item .mock-cta-secondary:hover { background: var(--bg-brand-subtler); border-color: var(--border-brand-base); }
+  .solution-item .mock-tbd {
+    color: var(--text-tertiary); font-size: 11px;
+    font-style: italic; white-space: nowrap; padding-top: 4px;
+  }
+
+  /* ═══════════════════════════════════════════════ */
+  /* SOLUTION MOCK VIEW                               */
+  /* ═══════════════════════════════════════════════ */
+  .back-bar {
+    background: var(--bg-primary); padding: 14px 32px;
+    border-bottom: 1px solid var(--border-primary);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 14px; background: var(--bg-brand-subtler);
+    color: var(--text-brand-base); border: 1px solid var(--border-brand-subtle);
+    border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+    font-family: inherit; cursor: pointer;
+  }
+  .back-btn:hover { background: var(--bg-brand-subtle); }
+  .solution-context {
+    font-size: 12px; color: var(--text-tertiary);
+  }
+  .solution-context strong { color: var(--text-primary); }
+
+  .solution-hero {
+    background: var(--bg-primary); border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md); padding: 24px 28px; margin-bottom: 20px;
+  }
+  .solution-hero .type-pill {
+    display: inline-block; padding: 4px 10px;
+    background: var(--bg-brand-subtler); color: var(--text-brand-bold);
+    border-radius: 12px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .solution-hero .type-pill.email { background: #FDF3D5; color: var(--text-warning-base); }
+  .solution-hero .type-pill.in-app { background: var(--bg-brand-subtler); color: var(--text-brand-bold); }
+  .solution-hero .type-pill.process { background: #E5D5F8; color: #6D3BC9; }
+  .solution-hero h1 {
+    font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .solution-hero p { color: var(--text-secondary); font-size: 14px; }
+
+  .mock-container {
+    background: var(--bg-primary); border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md); padding: 24px; margin-bottom: 20px;
+  }
+  .mock-title { font-size: 12px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 12px; }
+
+  /* Email mock */
+  .email-mock {
+    max-width: 560px; margin: 0 auto;
+    border: 1px solid var(--border-primary); border-radius: var(--radius-md);
+    overflow: hidden; box-shadow: var(--shadow-medium);
+  }
+  .email-mock-header {
+    background: var(--bg-tertiary); padding: 12px 16px;
+    border-bottom: 1px solid var(--border-primary);
+    font-size: 12px;
+  }
+  .email-mock-header .row { display: flex; gap: 8px; margin-bottom: 4px; }
+  .email-mock-header .row:last-child { margin-bottom: 0; }
+  .email-mock-header .label { width: 55px; color: var(--text-tertiary); font-weight: 600; }
+  .email-mock-header .val { flex: 1; color: var(--text-primary); }
+  .email-mock-body { padding: 24px; background: #fff; }
+  .email-mock-body h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; line-height: 1.3; }
+  .email-mock-body p { color: var(--text-secondary); font-size: 13px; margin-bottom: 12px; line-height: 1.6; }
+  .email-mock-body p strong { color: var(--text-primary); }
+  .email-mock-body .email-cta {
+    display: inline-block; padding: 10px 18px; background: var(--bg-brand-base);
+    color: #fff; border-radius: var(--radius-sm); font-weight: 500; font-size: 13px;
+    text-decoration: none; margin-top: 4px;
+  }
+  .email-mock-body ul { margin: 8px 0 12px 20px; }
+  .email-mock-body li { color: var(--text-secondary); font-size: 13px; margin-bottom: 4px; }
+
+  /* In-app popup mock */
+  .popup-mock {
+    background: rgba(20,33,61,0.6); padding: 40px 32px;
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .popup-mock-inner {
+    background: #fff; border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%; max-width: 480px; padding: 24px 26px;
+  }
+  .popup-mock-eyebrow {
+    font-size: 11px; font-weight: 700; color: var(--text-brand-base);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .popup-mock-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .popup-mock-desc { color: var(--text-secondary); font-size: 13px; margin-bottom: 16px; line-height: 1.55; }
+  .popup-mock-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+  .popup-mock-btn {
+    padding: 8px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+    border: none; cursor: pointer; font-family: inherit;
+  }
+  .popup-mock-btn.primary { background: var(--bg-brand-base); color: #fff; }
+  .popup-mock-btn.secondary { background: #fff; color: var(--text-primary); border: 1px solid var(--border-primary); }
+
+  /* Process spec mock */
+  .process-mock {
+    background: var(--bg-secondary); border-radius: var(--radius-md);
+    padding: 20px 24px;
+  }
+  .process-step {
+    display: flex; gap: 14px; padding: 12px 0;
+    border-bottom: 1px solid var(--border-primary);
+  }
+  .process-step:last-child { border-bottom: none; }
+  .process-step-num {
+    width: 28px; height: 28px; background: var(--bg-brand-base); color: #fff;
+    border-radius: 50%; display: grid; place-items: center;
+    font-weight: 700; font-size: 13px; flex-shrink: 0;
+  }
+  .process-step-content { flex: 1; }
+  .process-step-content strong {
+    display: block; font-size: 13px; color: var(--text-primary); margin-bottom: 3px;
+  }
+  .process-step-content .step-body { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+
+  /* Solution details grid */
+  .solution-details {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
+    margin-bottom: 20px;
+  }
+  .detail-tile {
+    background: var(--bg-primary); border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+  }
+  .detail-tile .lbl { font-size: 10px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
+  .detail-tile .val { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+
+  .intro-panel {
+    background: var(--bg-brand-subtler); border: 1px solid var(--border-brand-subtle);
+    border-radius: var(--radius-md); padding: 14px 18px; margin-bottom: 20px;
+    font-size: 13px; color: var(--text-brand-bold);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .intro-panel .icon { font-size: 16px; }
+  .intro-panel strong { display: block; margin-bottom: 2px; font-size: 13px; color: var(--text-brand-bold); }
+
+  /* Persona toggle above cohort funnel */
+  .persona-toggle {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: var(--bg-secondary);
+    border: 1px solid var(--border-primary); border-radius: var(--radius-md);
+    margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .persona-toggle .toggle-label {
+    font-size: 11px; font-weight: 700; color: var(--text-tertiary);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px;
+  }
+  .persona-toggle .toggle-btn {
+    padding: 5px 12px; background: transparent; color: var(--text-secondary);
+    border: 1px solid var(--border-primary); border-radius: 16px;
+    font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .persona-toggle .toggle-btn:hover { background: #fff; color: var(--text-primary); }
+  .persona-toggle .toggle-btn.active {
+    background: var(--bg-brand-base); color: #fff; border-color: var(--bg-brand-base);
+  }
+  .persona-toggle .toggle-hint {
+    margin-left: auto; font-size: 11px; color: var(--text-tertiary); font-style: italic;
+  }
+
+  /* Persona badge on friction rows */
+  .persona-badge {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 10px; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-left: 8px; vertical-align: middle;
+  }
+  .persona-badge.WH { background: #FFF4E6; color: #B75F00; border: 1px solid #FFD9A8; }
+  .persona-badge.HQ { background: #E6F2FF; color: #1560BD; border: 1px solid #A8CFFF; }
+  .persona-badge.Both { background: #F0EBFF; color: #5B3EBB; border: 1px solid #D0BFFF; }
+
+  /* Solution type badge */
+  .type-badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em;
+    text-transform: uppercase; margin-right: 6px; vertical-align: middle;
+  }
+  .type-badge.in { background: #E6F7EE; color: #0A7D3A; }
+  .type-badge.out { background: #FFF0E6; color: #B34700; }
+  .type-badge.inout { background: #EEF0FF; color: #3D3FBB; }
+
+  /* Teammate-reach template tabs (in sol_teammate_reach mock) */
+  .tm-tab {
+    padding: 6px 12px; background: #fff; color: var(--text-secondary);
+    border: 1px solid var(--border-primary); border-radius: 16px;
+    font-family: inherit; font-size: 12px; font-weight: 500; cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .tm-tab:hover { background: var(--bg-secondary); color: var(--text-primary); }
+  .tm-tab-active {
+    background: var(--bg-brand-base) !important; color: #fff !important;
+    border-color: var(--bg-brand-base) !important;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-topbar">
+  <div class="app-title">
+    UniReco PLG · Cohort-Anchored Strategy
+    <small>Cohort × Funnel · Friction × Solution · Solution Mocks · Interactive</small>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- MAIN VIEW                                        -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="main-view" class="view active">
+  <div class="container">
+
+    <div class="intro-panel">
+      <span class="icon">💡</span>
+      <div>
+        <strong>How to use this</strong>
+        Click any cell in the funnel table below. The friction/solution matrix appears for that cohort. Click any solution to see its mock (email preview, in-product change, or process spec).
+      </div>
+    </div>
+
+    <div class="funnel-panel">
+      <div class="section-hdr">
+        <h2>Cohort × Trial Funnel</h2>
+        <span class="sub">All 3 modules in trial · dummy numbers · click any cell</span>
+      </div>
+      <div class="persona-toggle">
+        <span class="toggle-label">User type</span>
+        <button class="toggle-btn active" data-persona="all" onclick="setPersona('all')">All Users</button>
+        <button class="toggle-btn" data-persona="WH" onclick="setPersona('WH')">Warehouse User</button>
+        <button class="toggle-btn" data-persona="HQ" onclick="setPersona('HQ')">HQ User</button>
+        <span class="toggle-hint">Filters friction rows below · HQ is the primary target</span>
+      </div>
+      <table class="funnel-table">
+        <thead>
+          <tr>
+            <th style="width: 180px;">Cohort</th>
+            <th>Total</th>
+            <th>Aware</th>
+            <th>Landed</th>
+            <th class="used-group">Used · Returns</th>
+            <th class="used-group">Used · SPF</th>
+            <th class="used-group">Used · Payout</th>
+            <th class="paid">Paid</th>
+          </tr>
+        </thead>
+        <tbody id="funnel-body"></tbody>
+      </table>
+    </div>
+
+    <div class="friction-panel">
+      <div class="section-hdr">
+        <h2>Friction × Solution Matrix</h2>
+        <span class="sub" id="matrix-sub">Select a cohort above to see the details</span>
+      </div>
+      <div id="friction-content">
+        <div class="friction-empty">
+          <span class="arrow">↑</span>
+          Click any cell in the funnel table to see friction points and solutions for that cohort.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SOLUTION MOCK VIEW                               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="solution-view" class="view">
+  <div class="back-bar">
+    <button class="back-btn" onclick="backToMain()">← Back to strategy</button>
+    <div class="solution-context" id="solution-context"></div>
+  </div>
+  <div class="container">
+    <div id="solution-content"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// MASTER MOCK ANCHOR MAP
+// ═══════════════════════════════════════════════
+// Anchor IDs live in unireco_c2_journey_mocks_5.html (b1 + b2 wiring complete).
+const MASTER_MOCK_FILE = 'unireco_c2_journey_mocks_5.html';
+// Solutions in PLACEHOLDER_ONLY additionally expose a "See placeholder →"
+// secondary CTA that opens the inline placeholder preview in this file.
+const ANCHOR_MAP = {
+  // Solutions that map to a real surface in the master mock
+  sol_spf_csm_popup:   'sol-spf-csm-popup',
+  sol_returns_pain:    'sol-returns-pain',
+  sol_leakage_reveal:  'sol-leakage-reveal',
+  sol_payment_claims_flow: 'sol-payment-claims-flow',
+  // Solutions where the master-mock surface does NOT exist yet (needs transplant).
+  // Anchors listed here for consistency; clicking still lands at master-mock top
+  // until the surface is transplanted.
+  sol_teammate_reach:            'sol-teammate-reach',
+  sol_payout_action_guide:       'sol-payout-action-guide',
+  sol_c2_payout_whats_changed:   'sol-c2-payout-whats-changed',
+};
+// Solutions with placeholder mocks in THIS file but no corresponding surface
+// in the master mock. Show a "See placeholder →" secondary CTA so Gaurav can
+// still see what these surfaces look like during the demo.
+const PLACEHOLDER_ONLY = new Set([
+  'sol_dm_email',
+  'sol_winback_email',
+  'sol_r2s_feedback',
+  'sol_c2_paid_csm_popup',
+  'sol_c3_paid_extension_popup',
+  'sol_c4_paid_csm_popup',
+  'sol_teammate_reach',
+  'sol_payout_action_guide',
+  'sol_c2_payout_whats_changed',
+]);
+
+function anchorForSolution(solId, variant){
+  const base = ANCHOR_MAP[solId];
+  if (!base) return null;
+  // Teammate-reach has 5 variants (dm/admin/creds/hq_spf/finance) — each gets its own anchor
+  if (solId === 'sol_teammate_reach' && variant) return base + '-' + variant;
+  return base;
+}
+
+function renderMockCTAs(s, cKey, transition){
+  if (s.noCta) return '';
+  if (PLACEHOLDER_ONLY.has(s.id)) {
+    const variant = s.variant || '';
+    return '<button class="mock-cta" onclick="showSolution(\'' + s.id + '\',\'' + cKey + '\',\'' + transition + '\',\'' + variant + '\')">View Sample →</button>';
+  }
+  const anchor = anchorForSolution(s.id, s.variant);
+  const href = anchor ? (MASTER_MOCK_FILE + '#' + anchor) : MASTER_MOCK_FILE;
+  return '<a class="mock-cta" href="' + href + '" target="_blank" rel="noopener">View Sample →</a>';
+}
+
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+
+const cohorts = {
+  C1: {
+    code: 'C1',
+    name: 'UniCapture Active',
+    desc: 'Actively using UniCapture, no UniReco yet',
+    funnel: { total: 28, aware: 150, landed: 100, usedR: 60, usedSPF: 20, usedPay: 10, paid: 5 },
+    frictions: [
+      {
+        transition: 'To Aware', stage: 'aware', persona: 'WH',
+        surface: 'Uniware · Smart Dashboard + 2 more screens',
+        friction: 'Non-relevant users seeing triggers (ops/warehouse staff, not DMs)',
+        solutions: [
+          { id: 'sol_dm_email', label: 'Bi-weekly Marketing email to Decision Makers', hasMock: true, type: 'out' },
+          { id: 'sol_teammate_reach', label: 'In-product "Forward to DM" button on trigger banner', hasMock: true, type: 'in+out', variant: 'dm' }
+        ]
+      },
+      {
+        transition: 'To Landed', stage: 'landed', persona: 'WH',
+        surface: 'Login · Trial provisioning',
+        friction: 'Trial user role not provisioned in Uniware · user must request access from Uniware Admin',
+        solutions: [
+          { id: 'sol_teammate_reach', label: 'In-product "Ask your Uniware Admin" email template', hasMock: true, type: 'in+out', variant: 'admin' }
+        ]
+      },
+      {
+        transition: 'To Used · Returns', stage: 'usedR', persona: 'Both',
+        surface: 'Trial Leakage Dashboard · R2S card',
+        friction: 'No perceived value — user glances at ₹94k and closes tab',
+        solutions: [
+          { id: 'sol_r2s_feedback', label: 'Feedback popup asking why user isn\'t engaging · offers teammate-share or CSM callback for "not relevant" responses', hasMock: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Used · SPF', stage: 'usedSPF', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · SPF card + popup',
+        friction: 'No marketplace credentials handy',
+        solutions: [
+          { id: 'sol_spf_csm_popup', label: 'Contact form popup → CSM callback within 24h', hasMock: true, type: 'in' },
+          { id: 'sol_teammate_reach', label: 'In-product "Ask teammate for credentials" email template', hasMock: true, type: 'in+out', variant: 'creds' }
+        ]
+      },
+      {
+        transition: 'To Used · Payout', stage: 'usedPay', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · Payment Reco card',
+        friction: 'Creds are added (via SPF flow), rate card is auto-fetched, discrepancy ₹ appears · but user unclear what to do — dispute marketplace? adjust internal expectations? escalate to finance?',
+        solutions: [
+          { id: 'sol_payment_claims_flow', label: 'Payment Reco flow surfaces the eligible-claim queue with a one-click "Raise Claim" action per row (drafts marketplace dispute)', hasMock: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Paid', stage: 'paid', persona: 'HQ',
+        surface: 'CSM outbound',
+        friction: 'Recovered ₹ but doesn\'t convert (budget/timing)',
+        solutions: [
+          { id: 'sol_c1_paid_csm', label: 'CSM outbound call to convert · no in-product intervention', hasMock: false, noCta: true, type: 'out' }
+        ]
+      }
+    ]
+  },
+
+  C2: {
+    code: 'C2',
+    name: 'Terminated ex-UniReco',
+    desc: 'Used UniReco previously, terminated',
+    funnel: { total: 99, aware: 180, landed: 120, usedR: 80, usedSPF: 50, usedPay: 20, paid: 15 },
+    frictions: [
+      {
+        transition: 'To Aware', stage: 'aware', persona: 'HQ',
+        surface: 'Uniware · Smart Dashboard (warm re-approach)',
+        friction: 'Left before — needs re-engagement + reason to return',
+        solutions: [
+          { id: 'sol_winback_email', label: 'Win-back email: "What\'s new since you left"', hasMock: true, type: 'out' }
+        ]
+      },
+      {
+        transition: 'To Used · SPF', stage: 'usedSPF', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · SPF card + popup',
+        friction: 'Same as C1 — creds friction',
+        solutions: [
+          { id: 'sol_spf_csm_popup', label: 'Contact form popup → CSM callback within 24h', hasMock: true, type: 'in' },
+          { id: 'sol_teammate_reach', label: 'In-product "Ask teammate for credentials" email template', hasMock: true, type: 'in+out', variant: 'creds' }
+        ]
+      },
+      {
+        transition: 'To Used · Payout', stage: 'usedPay', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · Payment Reco card',
+        friction: 'Same post-creds action ambiguity as C1 · plus C2 may compare against pre-termination Payment Reco behavior and expect different discrepancy numbers or view',
+        solutions: [
+          { id: 'sol_payout_action_guide', label: 'In-product action guide: "What to do with your discrepancy ₹" + one-click marketplace dispute drafting', hasMock: true, type: 'in' },
+          { id: 'sol_c2_payout_whats_changed', label: 'C2 tooltip on Payment Reco view: "What has changed since you left"', hasMock: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Paid', stage: 'paid', persona: 'HQ',
+        surface: 'In-product popup · Paid stage · no conversion after 14d',
+        friction: 'Left last time due to pricing — need better offer',
+        solutions: [
+          { id: 'sol_c2_paid_csm_popup', label: 'Popup acknowledging pricing concern → CSM callback for tailored offer (reuses shared CSM callback popup)', hasMock: true, type: 'in' }
+        ]
+      }
+    ]
+  },
+
+  C3: {
+    code: 'C3',
+    name: 'High Return Rate',
+    desc: 'RTO/CIR > 15% · high leakage potential',
+    funnel: { total: 65, aware: 85, landed: 70, usedR: 60, usedSPF: 40, usedPay: 15, paid: 12 },
+    frictions: [
+      {
+        transition: 'To Aware', stage: 'aware', persona: 'Both',
+        surface: 'Uniware · Smart Dashboard (Returns tab specifically)',
+        friction: 'Users see returns pain daily but don\'t connect UniReco as solution',
+        solutions: [
+          { id: 'sol_returns_pain', label: 'Trigger copy anchored to their actual ₹ leakage', hasMock: true, type: 'in' },
+          { id: 'sol_dm_email', label: 'Bi-weekly Marketing email to Decision Makers', hasMock: true, type: 'out' }
+        ]
+      },
+      {
+        transition: 'To Landed', stage: 'landed', persona: 'WH',
+        surface: 'Login · Trial provisioning',
+        friction: 'Trial user role not provisioned in Uniware · user must request access from Uniware Admin',
+        solutions: [
+          { id: 'sol_teammate_reach', label: 'In-product "Ask your Uniware Admin" email template', hasMock: true, type: 'in+out', variant: 'admin' }
+        ]
+      },
+      {
+        transition: 'To Used · Returns', stage: 'usedR', persona: 'Both',
+        surface: 'Trial Leakage Dashboard · R2S card',
+        friction: 'Returns not QC-checked in Uniware — data quality concern',
+        solutions: [
+          { id: 'sol_r2s_qc_note', label: 'Show data-source transparency: "Based on GRN receive events"', hasMock: false, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Used · SPF', stage: 'usedSPF', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · SPF card + popup',
+        friction: 'No marketplace credentials handy',
+        solutions: [
+          { id: 'sol_spf_csm_popup', label: 'Contact form popup → CSM callback within 24h', hasMock: true, type: 'in' },
+          { id: 'sol_teammate_reach', label: 'In-product "Ask teammate for credentials" email template', hasMock: true, type: 'in+out', variant: 'creds' }
+        ]
+      },
+      {
+        transition: 'To Used · Payout', stage: 'usedPay', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · Payment Reco card',
+        friction: 'C3 leakage is return-driven, not commission-driven — Payment Reco engagement is naturally lower',
+        solutions: [
+          { id: 'sol_c3_module_reorder', label: 'Landing dashboard prioritises R2S and SPF Claims for C3 · Payment Reco surfaced last (optional exploration, not the primary value driver)', hasMock: false, noCta: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Paid', stage: 'paid', persona: 'HQ',
+        surface: 'In-product popup · Trial ending soon',
+        friction: 'Aha achieved (Returns) but budget cycle mismatch · needs more time to align internally',
+        solutions: [
+          { id: 'sol_c3_paid_extension_popup', label: 'Popup: "Want to extend the trial?" → CSM callback to process extension request (reuses shared CSM callback popup)', hasMock: true, type: 'in' }
+        ]
+      }
+    ]
+  },
+
+  C4: {
+    code: 'C4',
+    name: 'Top Marketplace SOI',
+    desc: 'Top-tier sellers · already getting paid regularly',
+    funnel: { total: 51, aware: 40, landed: 32, usedR: 25, usedSPF: 20, usedPay: 15, paid: 10 },
+    frictions: [
+      {
+        transition: 'To Aware', stage: 'aware', persona: 'HQ',
+        surface: 'Uniware · Smart Dashboard',
+        friction: 'Complacency — "we\'re already getting paid"',
+        solutions: [
+          { id: 'sol_leakage_reveal', label: 'Trigger shows THEIR leakage: "You\'re missing ₹2.4L/mo"', hasMock: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Landed', stage: 'landed', persona: 'WH',
+        surface: 'Login · Trial provisioning',
+        friction: 'WH users at C4 hit access-denied · not all C4 users are senior (mid-level ops staff also see triggers)',
+        solutions: [
+          { id: 'sol_teammate_reach', label: 'In-product "Ask your Uniware Admin" email template', hasMock: true, type: 'in+out', variant: 'admin' }
+        ]
+      },
+      {
+        transition: 'To Used · Returns', stage: 'usedR', persona: 'Both',
+        surface: 'Trial Leakage Dashboard · R2S card',
+        friction: 'No perceived value — user glances at ₹94k and closes tab',
+        solutions: [
+          { id: 'sol_r2s_feedback', label: 'Feedback popup asking why user isn\'t engaging · offers teammate-share or CSM callback for "not relevant" responses', hasMock: true, type: 'in' }
+        ]
+      },
+      {
+        transition: 'To Used · SPF', stage: 'usedSPF', persona: 'WH',
+        surface: 'Trial Leakage Dashboard · SPF card + popup',
+        friction: 'WH user opens R2S but SPF Claims is out of their scope · needs handoff to HQ teammate who owns marketplace claims',
+        solutions: [
+          { id: 'sol_teammate_reach', label: 'In-product "Forward SPF Claims to HQ teammate" email template', hasMock: true, type: 'in+out', variant: 'hq_spf' }
+        ]
+      },
+      {
+        transition: 'To Used · Payout', stage: 'usedPay', persona: 'HQ',
+        surface: 'Trial Leakage Dashboard · Payment Reco card',
+        friction: 'HIGH interest — but C4 discrepancy ₹ tends to be large (lakhs+/month) → user needs to loop in finance/procurement before disputing marketplace, delays action past trial window',
+        solutions: [
+          { id: 'sol_teammate_reach', label: 'In-product "Share with Finance" email template with discrepancy report attached', hasMock: true, type: 'in+out', variant: 'finance' }
+        ]
+      },
+      {
+        transition: 'To Paid', stage: 'paid', persona: 'HQ',
+        surface: 'In-product popup · Trial ending · procurement cycle needed',
+        friction: 'Higher ARR expectations · procurement cycle · annual pricing conversation needed',
+        solutions: [
+          { id: 'sol_c4_paid_csm_popup', label: 'Popup: "Ready to move ahead?" → CSM callback for procurement + annual pricing conversation (reuses shared CSM callback popup)', hasMock: true, type: 'in' }
+        ]
+      }
+    ]
+  }
+};
+
+// ═══════════════════════════════════════════════
+// SOLUTION MOCKS
+// ═══════════════════════════════════════════════
+
+const solutions = {
+  sol_dm_email: {
+    title: 'Bi-weekly Marketing Email to Decision Makers',
+    type: 'email',
+    typeLabel: 'Out-Product Email Template',
+    description: 'Marketing sends a bi-weekly email to identified Decision Makers (CFO / Head of Finance / Head of Ecommerce) explaining the leakage problem and pointing them to UniReco. Bypasses the "wrong user sees trigger" issue.',
+    details: [
+      { lbl: 'Owner', val: 'Marketing team' },
+      { lbl: 'Cadence', val: 'Bi-weekly · Tue 10am' },
+      { lbl: 'Segment', val: 'DMs at C1/C3 tenants' },
+      { lbl: 'Est. reach', val: '~2,400 DMs/month' }
+    ],
+    mock: `
+      <div class="email-mock">
+        <div class="email-mock-header">
+          <div class="row"><div class="label">FROM</div><div class="val">Priya Menon &lt;priya@unicommerce.com&gt;</div></div>
+          <div class="row"><div class="label">TO</div><div class="val">rahul.sharma@accessoriesmasters.com</div></div>
+          <div class="row"><div class="label">SUBJECT</div><div class="val">You're leaving ₹2-5L/month on the table (based on your GMV)</div></div>
+        </div>
+        <div class="email-mock-body">
+          <h3>Hi Rahul,</h3>
+          <p>Quick data point that most Ecommerce Heads at your scale miss:</p>
+          <p><strong>Sellers with your monthly GMV (~₹9Cr) typically lose 2-5% to unstocked returns, unfiled marketplace claims, and payment discrepancies.</strong> That's ₹18L–₹45L/month sitting untouched.</p>
+          <p>Our recovery-ops platform, <strong>UniReco</strong>, plugs into your existing Uniware setup and identifies this leakage automatically. <strong>85 active Enterprise clients</strong> recovered <strong>₹47L in the last 30 days</strong> combined.</p>
+          <p>30-day free trial · no credit card · Payment Reco + Returns + Claims all included:</p>
+          <a href="#" class="email-cta">See your leakage number →</a>
+          <p style="margin-top: 20px; font-size: 11px; color: #999;">
+            You're getting this because AccessoriesMasters is an active Uniware customer. Manage preferences.
+          </p>
+        </div>
+      </div>
+    `
+  },
+
+  sol_r2s_feedback: {
+    title: 'Feedback Popup on R2S Card · Why aren\'t you engaging?',
+    type: 'in-app',
+    typeLabel: 'In-Product · Feedback Popup',
+    description: 'A user who glances at the R2S leakage number and closes the tab is unlikely to convert via more content — pushing them into a top-10 list assumes intent they don\'t have. Instead, ask them WHY. If they say "not relevant", offer a share-with-teammate path or CSM callback. This preserves the interaction and captures learning even when the user disengages.',
+    details: [
+      { lbl: 'Trigger', val: 'User idle on R2S card for 20s OR clicks close/back' },
+      { lbl: 'Step 1', val: 'Reason picker (single-select)' },
+      { lbl: 'Step 2 (conditional)', val: '"Not relevant" → share teammate OR request CSM callback' },
+      { lbl: 'Owner', val: 'R2S team · shared instrumentation with Product Analytics' }
+    ],
+    mock: `
+      <div style="max-width: 720px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: start;">
+
+        <div class="popup-mock" style="padding: 20px;">
+          <div class="popup-mock-inner" style="max-width: 320px;">
+            <div class="popup-mock-eyebrow">Quick question</div>
+            <div class="popup-mock-title" style="margin-bottom: 8px;">What's stopping you from exploring further?</div>
+            <div class="popup-mock-desc" style="margin-bottom: 16px;">We noticed you're about to close. One-click answer helps us improve.</div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;">
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-primary); border-radius: 6px; cursor: pointer; font-size: 13px;">
+                <input type="radio" name="r2s-reason" /> I don't see enough value in the ₹ number
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-brand-base); background: var(--bg-brand-subtler); border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text-brand-bold); font-weight: 500;">
+                <input type="radio" name="r2s-reason" checked /> Not relevant for me / my role
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-primary); border-radius: 6px; cursor: pointer; font-size: 13px;">
+                <input type="radio" name="r2s-reason" /> Numbers seem too small to act on
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-primary); border-radius: 6px; cursor: pointer; font-size: 13px;">
+                <input type="radio" name="r2s-reason" /> I don't trust the data
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border: 1px solid var(--border-primary); border-radius: 6px; cursor: pointer; font-size: 13px;">
+                <input type="radio" name="r2s-reason" /> I'll come back later
+              </label>
+            </div>
+            <div class="popup-mock-footer">
+              <button class="popup-mock-btn secondary">Close anyway</button>
+              <button class="popup-mock-btn primary">Continue →</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; padding-top: 120px; color: var(--text-tertiary); font-size: 12px; font-weight: 500;">
+          <span>If "not<br/>relevant"<br/>→</span>
+        </div>
+
+        <div class="popup-mock" style="padding: 20px;">
+          <div class="popup-mock-inner" style="max-width: 320px;">
+            <div class="popup-mock-eyebrow">Not the right person?</div>
+            <div class="popup-mock-title" style="margin-bottom: 8px;">Two ways to help without staying</div>
+            <div class="popup-mock-desc" style="margin-bottom: 16px;">Neither option keeps you here — pick what fits.</div>
+
+            <div style="padding: 12px; background: var(--bg-brand-subtler); border-left: 3px solid var(--bg-brand-base); border-radius: 4px; margin-bottom: 10px;">
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Share with a teammate who'd find this useful</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Pick from your Uniware directory · pre-filled context</div>
+              <button style="font-size: 11px; padding: 5px 10px; background: var(--bg-brand-base); color: #fff; border: none; border-radius: 4px; font-weight: 500; cursor: pointer;">Pick teammate →</button>
+            </div>
+
+            <div style="padding: 12px; background: var(--bg-secondary); border-left: 3px solid var(--border-tertiary); border-radius: 4px; margin-bottom: 12px;">
+              <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Request a CSM callback</div>
+              <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 8px;">Someone will walk you through it in 24hrs</div>
+              <button style="font-size: 11px; padding: 5px 10px; background: #fff; color: var(--text-brand-bold); border: 1px solid var(--border-brand-subtle); border-radius: 4px; font-weight: 500; cursor: pointer;">Book callback →</button>
+            </div>
+
+            <div class="popup-mock-footer">
+              <button class="popup-mock-btn secondary">Skip</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px;">Two-step flow · Step 2 only shown if "Not relevant" selected</p>
+    `
+  },
+
+  sol_c2_paid_csm_popup: {
+    title: 'C2 Paid · Pricing-Concern Popup → CSM Callback',
+    type: 'in-app',
+    typeLabel: 'In-Product · Popup',
+    description: 'When a C2 (returning ex-UniReco) user reaches the Paid stage without converting, surface a popup that acknowledges the previous pricing objection and offers a CSM callback for a tailored offer. Reuses the same CSM callback contact-form popup pattern already built for SPF credentials setup — same mechanism, different intro copy.',
+    details: [
+      { lbl: 'Trigger', val: 'C2 user in Paid stage · no conversion after 14 days' },
+      { lbl: 'Framing', val: 'Acknowledge previous pricing objection' },
+      { lbl: 'Underlying mechanism', val: 'Same as SPF CSM callback popup (contact form + 24h callback SLA)' },
+      { lbl: 'CSM prep', val: 'CSM sees "C2 · left previously due to pricing" tag before callback' },
+      { lbl: 'Status', val: 'Placeholder surface · reuses sol_spf_csm_popup pattern' }
+    ],
+    mock: `
+      <div class="popup-mock">
+        <div class="popup-mock-inner">
+          <div class="popup-mock-eyebrow">We noticed you're back</div>
+          <div class="popup-mock-title">Left last time due to pricing?</div>
+          <div class="popup-mock-desc">Let's find you a better offer. Book a callback with a CSM — we'll come prepared with your pricing history and options tailored to your current usage.</div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Full Name</label>
+            <input type="text" value="Rahul Sharma" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Phone Number</label>
+            <input type="tel" value="+91 98765 43210" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Best Time To Call</label>
+            <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;">
+              <option>Weekdays · 10:00 AM – 1:00 PM</option>
+            </select>
+          </div>
+          <div class="popup-mock-footer">
+            <button class="popup-mock-btn secondary">Not now</button>
+            <button class="popup-mock-btn primary">Book callback →</button>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px;">Same CSM callback mechanism as SPF credentials popup · different intro framing for C2 pricing context</p>
+    `
+  },
+
+  sol_c3_paid_extension_popup: {
+    title: 'C3 Paid · Trial-Extension Popup → CSM Callback',
+    type: 'in-app',
+    typeLabel: 'In-Product · Popup',
+    description: 'When a C3 (High Return Rate) user reaches the Paid stage — Returns Aha achieved but budget cycle not yet aligned — surface a popup offering to extend the trial. Routes to a CSM callback that processes the extension request. Reuses the same CSM callback contact-form popup pattern used for SPF credentials and C2 pricing concern — same mechanism, different intro framing.',
+    details: [
+      { lbl: 'Trigger', val: 'C3 user in Paid stage · trial ending in <7 days · no conversion' },
+      { lbl: 'Framing', val: 'Acknowledge budget-cycle mismatch, offer extension via CSM' },
+      { lbl: 'Underlying mechanism', val: 'Same as SPF CSM callback popup (contact form + 24h callback SLA)' },
+      { lbl: 'CSM prep', val: 'CSM sees "C3 · trial extension requested · budget cycle mismatch" tag before callback' },
+      { lbl: 'Status', val: 'Placeholder surface · reuses sol_spf_csm_popup pattern' }
+    ],
+    mock: `
+      <div class="popup-mock">
+        <div class="popup-mock-inner">
+          <div class="popup-mock-eyebrow">Your trial ends in 5 days</div>
+          <div class="popup-mock-title">Need more time to evaluate?</div>
+          <div class="popup-mock-desc">You've seen the returns leakage recovery. If your budget cycle doesn't align with the trial window, request an extension — a CSM will call back within 24 hours to process it.</div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Full Name</label>
+            <input type="text" value="Rahul Sharma" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Phone Number</label>
+            <input type="tel" value="+91 98765 43210" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Extension Reason (optional)</label>
+            <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;">
+              <option>Budget cycle mismatch — need to align internally</option>
+              <option>Still evaluating — need more data</option>
+              <option>Waiting on decision-maker sign-off</option>
+              <option>Other (CSM will ask)</option>
+            </select>
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Best Time To Call</label>
+            <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;">
+              <option>Weekdays · 10:00 AM – 1:00 PM</option>
+            </select>
+          </div>
+          <div class="popup-mock-footer">
+            <button class="popup-mock-btn secondary">Not now</button>
+            <button class="popup-mock-btn primary">Request extension →</button>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px;">Same CSM callback mechanism as SPF credentials + C2 pricing popup · extension-focused framing for C3 budget-cycle context</p>
+    `
+  },
+
+  sol_c4_paid_csm_popup: {
+    title: 'C4 Paid · Procurement Popup → CSM Callback',
+    type: 'in-app',
+    typeLabel: 'In-Product · Popup',
+    description: 'When a C4 (Top Marketplace SOI) user reaches the Paid stage, higher ARR expectations and a formal procurement cycle typically block a self-serve conversion. Surface a popup that acknowledges this and routes to a CSM callback for a procurement + annual pricing conversation. Reuses the same CSM callback contact-form popup pattern used for SPF credentials, C2 pricing concern, and C3 trial extension.',
+    details: [
+      { lbl: 'Trigger', val: 'C4 user in Paid stage · no conversion after 14 days OR user clicks upgrade CTA' },
+      { lbl: 'Framing', val: 'Acknowledge procurement cycle · offer annual pricing conversation' },
+      { lbl: 'Underlying mechanism', val: 'Same as SPF CSM callback popup (contact form + 24h callback SLA)' },
+      { lbl: 'CSM prep', val: 'CSM sees "C4 · Top SOI · procurement + annual pricing" tag before callback' },
+      { lbl: 'Status', val: 'Placeholder surface · reuses sol_spf_csm_popup pattern' }
+    ],
+    mock: `
+      <div class="popup-mock">
+        <div class="popup-mock-inner">
+          <div class="popup-mock-eyebrow">You've seen ~₹18L/mo in leakage</div>
+          <div class="popup-mock-title">Ready to move ahead?</div>
+          <div class="popup-mock-desc">At your scale, this usually means a procurement conversation. Book a callback with a CSM — we'll come prepared with annual pricing options, MSA templates, and volume terms tailored to your tenant.</div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Full Name</label>
+            <input type="text" value="Rahul Sharma" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Phone Number</label>
+            <input type="tel" value="+91 98765 43210" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Who should be on the call</label>
+            <input type="text" placeholder="Finance / Procurement contact (optional)" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Best Time To Call</label>
+            <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;">
+              <option>Weekdays · 10:00 AM – 1:00 PM</option>
+            </select>
+          </div>
+          <div class="popup-mock-footer">
+            <button class="popup-mock-btn secondary">Not now</button>
+            <button class="popup-mock-btn primary">Book procurement call →</button>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px;">Same CSM callback mechanism as SPF credentials + C2 pricing + C3 extension popups · procurement-focused framing for C4</p>
+    `
+  },
+
+  sol_spf_csm_popup: {
+    title: 'Marketplace Credentials Popup with CSM Callback Form',
+    type: 'in-app',
+    typeLabel: 'In-Product · Popup',
+    description: 'When user clicks Add credentials on the SPF Claims card (or Payment Reco card — same creds), if they don\'t have marketplace credentials handy, they can request a CSM callback via a contact form. Adding creds unlocks both SPF Claims and Payment Reco modules simultaneously (both gate on the same marketplace API credentials).',
+    details: [
+      { lbl: 'Trigger', val: 'Click "Add credentials" on SPF Claims or Payment Reco card' },
+      { lbl: 'Unlocks', val: 'SPF Claims + Payment Reco (shared creds)' },
+      { lbl: 'States', val: '3 (initial · form · confirmation)' },
+      { lbl: 'Callback SLA', val: '24 hours during selected time slot' },
+      { lbl: 'Status', val: 'Mock built · see C2 journey Screen 4 (needs update to reflect shared-creds unlock)' }
+    ],
+    mock: `
+      <div class="popup-mock">
+        <div class="popup-mock-inner">
+          <div class="popup-mock-eyebrow">Request CSM Callback</div>
+          <div class="popup-mock-title">Share your contact</div>
+          <div class="popup-mock-desc">A Customer Success Manager will call you within 24 hours to help set up marketplace credentials. Adding creds unlocks both SPF Claims and Payment Reco.</div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Full Name</label>
+            <input type="text" value="Rahul Sharma" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Phone Number</label>
+            <input type="tel" value="+91 98765 43210" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+          </div>
+          <div style="margin-bottom: 12px;">
+            <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Best Time To Call</label>
+            <select style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;">
+              <option>Weekdays · 10:00 AM – 1:00 PM</option>
+            </select>
+          </div>
+          <div class="popup-mock-footer">
+            <button class="popup-mock-btn secondary">← Back</button>
+            <button class="popup-mock-btn primary">Submit request →</button>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px;">Full 3-state flow available in c2_journey_mocks.html · Screen 4</p>
+    `
+  },
+
+  sol_teammate_reach: {
+    title: 'Reach a Teammate · In-Product Email Template',
+    type: 'in-app',
+    typeLabel: 'In-Product Email Template',
+    description: 'One reusable in-product mechanism with contextual entry points throughout the trial journey. User picks internal teammate(s) from the tenant\'s Uniware user directory (multi-select, role-filtered), gets a pre-filled template based on context, edits if needed, and sends from their Uniware account. Each variant has its own entry point, recipient source, and send-from configuration — switch tabs below to compare.',
+    details: [
+      { lbl: 'Templates', val: '5 contextual variants (see tabs in mock)' },
+      { lbl: 'Common mechanism', val: 'Uniware directory pick · role-filter · edit · send' },
+      { lbl: 'Status', val: 'Placeholder surface · to be transplanted into each in-product entry point' }
+    ],
+    mock: `
+      <div style="max-width: 640px; margin: 0 auto;">
+        <div style="display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;">
+          <button class="tm-tab tm-tab-active" onclick="tmSwitchTab('admin', event)">Ask Admin</button>
+          <button class="tm-tab" onclick="tmSwitchTab('creds', event)">Ask for Creds</button>
+          <button class="tm-tab" onclick="tmSwitchTab('finance', event)">Share with Finance</button>
+          <button class="tm-tab" onclick="tmSwitchTab('dm', event)">Forward to DM</button>
+          <button class="tm-tab" onclick="tmSwitchTab('hq_spf', event)">Forward SPF to HQ</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 6px;">
+          <div>
+            <div style="font-size: 10px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Entry Point</div>
+            <div style="font-size: 12px; color: var(--text-primary);" id="tm-entrypoint">Trigger banner · access-denied state</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Recipient Source</div>
+            <div style="font-size: 12px; color: var(--text-primary);" id="tm-recipient-source">Uniware directory · Admin role</div>
+          </div>
+          <div>
+            <div style="font-size: 10px; font-weight: 700; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Send From</div>
+            <div style="font-size: 12px; color: var(--text-primary);" id="tm-send-from">Trial user's Uniware account</div>
+          </div>
+        </div>
+
+        <div class="popup-mock" style="padding: 20px;">
+          <div class="popup-mock-inner" style="max-width: 560px;">
+            <div class="popup-mock-eyebrow" id="tm-eyebrow">Reach a Teammate · Ask Admin</div>
+            <div class="popup-mock-title" id="tm-title">Ask your Uniware Admin for access</div>
+            <div class="popup-mock-desc" id="tm-desc">Your Uniware admin can grant UniReco trial access in one click. Pick a teammate below — we'll pre-fill the request.</div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">To (from your Uniware user directory)</label>
+              <div style="border: 1px solid var(--border-primary); border-radius: 6px; padding: 8px 10px; min-height: 38px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+                <span style="background: var(--bg-brand-subtler); color: var(--text-brand-bold); font-size: 12px; padding: 3px 8px; border-radius: 12px; font-weight: 500;">Priya Kapoor (Admin) ✕</span>
+                <span style="color: var(--text-tertiary); font-size: 12px;">+ Add teammate...</span>
+              </div>
+              <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;" id="tm-filter">Filtered to role: <strong>Admin</strong></div>
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Subject</label>
+              <input type="text" id="tm-subject" value="Need Uniware access for UniReco trial (2 min)" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px;" />
+            </div>
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 4px;">Body (editable)</label>
+              <textarea id="tm-body" rows="5" style="width: 100%; padding: 8px 12px; border: 1px solid var(--border-primary); border-radius: 6px; font-family: inherit; font-size: 13px; resize: vertical;">Hi Priya,
+
+I'm trying to start a UniReco trial (Return To Stock + SPF Claims + Payment Reco — all included). It needs Uniware trial role provisioning. Can you grant me access? Takes ~30 seconds from Users &gt; Roles.
+
+The trial is estimating ₹85k/month in recoverable leakage for us. Would help to evaluate before month-end.
+
+Thanks!</textarea>
+            </div>
+            <div style="font-size: 11px; color: var(--text-tertiary); margin-bottom: 12px; padding: 8px 10px; background: var(--bg-secondary); border-radius: 4px;">
+              Sent from your Uniware account · UniReco branded footer will be appended
+            </div>
+            <div class="popup-mock-footer">
+              <button class="popup-mock-btn secondary">Cancel</button>
+              <button class="popup-mock-btn primary">Send request →</button>
+            </div>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: 12px; color: var(--text-tertiary); font-size: 12px;">Placeholder surface · will move to master C2 journey mock as contextual entry points</p>
+      </div>
+    `
+  },
+
+  sol_payout_action_guide: {
+    title: 'Payment Reco Action Guide · What to do with your discrepancy ₹',
+    type: 'in-app',
+    typeLabel: 'In-Product · Side Panel',
+    description: 'When user opens Payment Reco module for the first time and sees discrepancy ₹, a side panel guides them through three action paths: dispute with marketplace (one-click template), adjust internal expectations, or escalate to finance team. Removes the "what do I do with this number" ambiguity that kills conversion at UsedPay.',
+    details: [
+      { lbl: 'Trigger', val: 'First Payment Reco module open post-Aha' },
+      { lbl: 'Placement', val: 'Right side panel · dismissible · pinned' },
+      { lbl: 'Persistence', val: 'Appears until user takes any action, then collapses to icon' },
+      { lbl: 'Status', val: 'Placeholder surface · to be added to master C2 journey mock' }
+    ],
+    mock: `
+      <div style="max-width: 720px; margin: 0 auto; background: #fff; border: 1px solid var(--border-primary); border-radius: 8px; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 1fr 300px; min-height: 400px;">
+          <div style="padding: 20px; border-right: 1px solid var(--border-primary); background: var(--bg-secondary);">
+            <div style="font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Payment Reco · This month</div>
+            <div style="font-size: 24px; font-weight: 700; color: var(--text-danger-base); margin-bottom: 2px;">₹2,47,320</div>
+            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 20px;">discrepancy identified across Amazon, Flipkart, Myntra</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Amazon</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹1,42,180</span></div>
+                <div style="color: var(--text-tertiary); font-size: 11px;">Commission over-charged on 234 orders</div>
+              </div>
+              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Flipkart</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹68,940</span></div>
+                <div style="color: var(--text-tertiary); font-size: 11px;">Missing settlement on 89 orders</div>
+              </div>
+              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Myntra</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹36,200</span></div>
+                <div style="color: var(--text-tertiary); font-size: 11px;">Rate mismatch on 47 orders</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 16px; background: var(--bg-brand-subtler); border-left: 3px solid var(--bg-brand-base);">
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-brand-bold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">What to do next</div>
+            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">3 ways to recover this ₹2.4L</div>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
+                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">① Dispute with marketplace</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">One-click generates a formatted dispute email for each channel with SKU-level backup.</div>
+                <button style="font-size: 11px; padding: 4px 10px; background: var(--bg-brand-base); color: #fff; border: none; border-radius: 4px; font-weight: 500; cursor: pointer;">Draft dispute →</button>
+              </div>
+              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
+                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">② Adjust rate card expectations</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">If marketplace changed commission rate, update expectation baseline to stop future flags.</div>
+                <button style="font-size: 11px; padding: 4px 10px; background: #fff; color: var(--text-brand-bold); border: 1px solid var(--border-brand-subtle); border-radius: 4px; font-weight: 500; cursor: pointer;">Review rate card</button>
+              </div>
+              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
+                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">③ Share with your finance team</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Export CSV + PDF summary and send to internal finance via in-product email.</div>
+                <button style="font-size: 11px; padding: 4px 10px; background: #fff; color: var(--text-brand-bold); border: 1px solid var(--border-brand-subtle); border-radius: 4px; font-weight: 500; cursor: pointer;">Share with Finance →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 12px; color: var(--text-tertiary); font-size: 12px;">Placeholder surface · to be added to master C2 journey mock at first Payment Reco module open</p>
+    `
+  },
+
+  sol_c2_payout_whats_changed: {
+    title: 'C2 Tooltip · What has changed in Payment Reco since you left',
+    type: 'in-app',
+    typeLabel: 'In-Product · Contextual Tooltip',
+    description: 'For C2 (Terminated ex-UniReco) users only. On first Payment Reco module open, a dismissible tooltip highlights the key changes since their pre-termination version — new auto rate-card, shared credentials with SPF Claims, one-click dispute drafting. Addresses the expectation mismatch friction.',
+    details: [
+      { lbl: 'Trigger', val: 'C2 tenant · first Payment Reco module open' },
+      { lbl: 'Persistence', val: 'Once per user · dismissible' },
+      { lbl: 'Placement', val: 'Anchored to Payment Reco header' },
+      { lbl: 'Status', val: 'Placeholder surface · to be added to master C2 journey mock' }
+    ],
+    mock: `
+      <div style="max-width: 720px; margin: 0 auto; background: #fff; border: 1px solid var(--border-primary); border-radius: 8px; padding: 24px; position: relative;">
+        <div style="opacity: 0.4;">
+          <div style="font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Payment Reco · This month</div>
+          <div style="font-size: 24px; font-weight: 700; color: var(--text-danger-base);">₹2,47,320</div>
+          <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 20px;">discrepancy identified across Amazon, Flipkart, Myntra</div>
+          <div style="height: 180px; background: var(--bg-secondary); border-radius: 6px; display: grid; place-items: center; color: var(--text-tertiary); font-size: 12px;">Discrepancy chart</div>
+        </div>
+        <div style="position: absolute; top: 60px; right: 40px; width: 320px; background: var(--bg-brand-base); color: #fff; padding: 16px 18px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+          <div style="position: absolute; left: -8px; top: 20px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 8px solid var(--bg-brand-base);"></div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; opacity: 0.85;">Welcome back</div>
+          <div style="font-size: 15px; font-weight: 700; margin-bottom: 8px;">A lot has changed in Payment Reco</div>
+          <div style="font-size: 12px; line-height: 1.5; margin-bottom: 10px;">
+            <div style="margin-bottom: 6px;"><strong>✓</strong> Rate card is now auto-fetched — no manual upload</div>
+            <div style="margin-bottom: 6px;"><strong>✓</strong> Same creds as SPF Claims — one setup unlocks both</div>
+            <div style="margin-bottom: 6px;"><strong>✓</strong> One-click marketplace dispute drafting</div>
+            <div><strong>✓</strong> Included in trial — no separate onboarding</div>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button style="flex: 1; padding: 6px 10px; background: #fff; color: var(--text-brand-bold); border: none; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer;">Show me what's new</button>
+            <button style="padding: 6px 10px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; font-size: 11px; font-weight: 500; cursor: pointer;">Dismiss</button>
+          </div>
+        </div>
+      </div>
+      <p style="text-align: center; margin-top: 12px; color: var(--text-tertiary); font-size: 12px;">Placeholder surface · to be added to master C2 journey mock (C2-only, first Payment Reco open)</p>
+    `
+  },
+
+  sol_winback_email: {
+    title: 'Win-Back Email · What\'s New Since You Left',
+    type: 'email',
+    typeLabel: 'Out-Product Email Template',
+    description: 'For terminated ex-UniReco tenants (C2). Sent 15 days after re-eligibility. Highlights product improvements + preserved account data + no-commitment trial.',
+    details: [
+      { lbl: 'Segment', val: 'C2 · terminated 90+ days ago' },
+      { lbl: 'Cadence', val: 'One-off (per cohort refresh)' },
+      { lbl: 'Owner', val: 'Marketing + CSM (for high-value)' },
+      { lbl: 'CTA', val: '"See what\'s new" → landing page' }
+    ],
+    mock: `
+      <div class="email-mock">
+        <div class="email-mock-header">
+          <div class="row"><div class="label">FROM</div><div class="val">Rahul Jain &lt;rahul@unicommerce.com&gt;</div></div>
+          <div class="row"><div class="label">TO</div><div class="val">finance-head@accessoriesmasters.com</div></div>
+          <div class="row"><div class="label">SUBJECT</div><div class="val">A lot has changed since 2024 · take another look?</div></div>
+        </div>
+        <div class="email-mock-body">
+          <h3>Hi,</h3>
+          <p>You tried UniReco in Q2 2024. A few things have changed since then:</p>
+          <ul>
+            <li><strong>Payment Reco is now included in trial</strong> — auto rate card, no separate setup fee</li>
+            <li><strong>Return To Stock works from Day 1</strong> using your Uniware data — no credentials needed</li>
+            <li><strong>SPF Claims are auto-filed</strong> — we file first 10 on your behalf during trial</li>
+            <li><strong>85 active Enterprise clients</strong> recovered ₹47L in the last 30 days</li>
+          </ul>
+          <p><strong>Your account and previous settings are preserved.</strong> Reactivate in 1 click — no re-onboarding.</p>
+          <a href="#" class="email-cta">See what's new (30-day trial) →</a>
+          <p style="margin-top: 16px; font-size: 12px; color: var(--text-tertiary);">Or reply to this email if you'd prefer a 15-min call.</p>
+        </div>
+      </div>
+    `
+  },
+
+  sol_returns_pain: {
+    title: 'Trigger Copy Anchored to Their Actual ₹ Leakage',
+    type: 'in-app',
+    typeLabel: 'In-Product · Copy Change',
+    description: 'For C3 (High Return Rate) tenants, the trigger banner shows THEIR specific return leakage number instead of a generic message. Uses live Uniware data.',
+    details: [
+      { lbl: 'Segment', val: 'C3 · RTO/CIR > 15%' },
+      { lbl: 'Data source', val: 'Live from Uniware returns pipeline' },
+      { lbl: 'Placement', val: 'Smart Dashboard · Returns tab · top' },
+      { lbl: 'Owner', val: 'Product · trigger copy' }
+    ],
+    mock: `
+      <div style="max-width: 640px; margin: 0 auto;">
+        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px; letter-spacing: 0.06em; text-transform: uppercase;">Trigger Banner · C3 variant</div>
+        <div style="background: linear-gradient(135deg, #FBE9E9, #F5C5C5); border: 1.5px solid var(--border-primary); border-left: 4px solid var(--bg-danger-base); border-radius: 8px; padding: 18px 20px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span style="font-size: 20px;">⚠</span>
+            <span style="padding: 3px 8px; background: var(--bg-danger-base); color: #fff; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;">UNIRECO · YOUR LEAKAGE</span>
+          </div>
+          <div style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; line-height: 1.4;">
+            You have <span style="color: var(--text-danger-base);">₹1.4L</span> in returns stuck past your restock SLA right now.
+          </div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
+            (Based on 87 returns in your warehouse past 2 days · updated 4 hours ago from your Uniware data)
+          </div>
+          <button style="padding: 10px 18px; background: var(--bg-danger-base); color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer;">See your recovery queue →</button>
+          <button style="padding: 10px 14px; background: transparent; color: var(--text-tertiary); border: none; font-size: 13px; cursor: pointer;">Dismiss</button>
+        </div>
+        <p style="text-align: center; margin-top: 16px; color: var(--text-tertiary); font-size: 12px; font-style: italic;">Compared to generic copy "Bad returns typically cost 3–5% of GMV" — C3 variant shows the actual ₹ from live data.</p>
+      </div>
+    `
+  },
+
+  sol_leakage_reveal: {
+    title: 'Trigger Reveals Their Payout Leakage · C4 Variant',
+    type: 'in-app',
+    typeLabel: 'In-Product · Copy Change',
+    description: 'For C4 (Top Marketplace SOI) tenants who feel complacent. Shows the specific ₹ they\'re missing from unfiled claims and payment discrepancies — hits their pride.',
+    details: [
+      { lbl: 'Segment', val: 'C4 · Top marketplace SOI' },
+      { lbl: 'Anchor', val: 'Their payout number vs peer benchmark' },
+      { lbl: 'Placement', val: 'Smart Dashboard · Sales tab · top' },
+      { lbl: 'Owner', val: 'Product · trigger copy' }
+    ],
+    mock: `
+      <div style="max-width: 640px; margin: 0 auto;">
+        <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px; letter-spacing: 0.06em; text-transform: uppercase;">Trigger Banner · C4 variant</div>
+        <div style="background: linear-gradient(135deg, #FDF3D5, #F5D890); border: 1.5px solid var(--border-primary); border-left: 4px solid var(--bg-warning-base); border-radius: 8px; padding: 18px 20px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span style="font-size: 20px;">💰</span>
+            <span style="padding: 3px 8px; background: var(--bg-warning-base); color: #fff; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;">UNIRECO · TOP SELLER INSIGHT</span>
+          </div>
+          <div style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; line-height: 1.4;">
+            You're a top seller · but you're missing <span style="color: var(--text-warning-base);">₹2.4L/mo</span> from payout leakage.
+          </div>
+          <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">
+            (Peers at your GMV recover this via Payment Reco · you don't yet · UniReco identifies rate card + claim discrepancies automatically.)
+          </div>
+          <button style="padding: 10px 18px; background: var(--bg-warning-base); color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer;">See where the leakage is →</button>
+          <button style="padding: 10px 14px; background: transparent; color: var(--text-tertiary); border: none; font-size: 13px; cursor: pointer;">Dismiss</button>
+        </div>
+      </div>
+    `
+  }
+};
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
+
+function inr(n) { return n.toLocaleString('en-IN'); }
+
+// Persona state — 'all' | 'WH' | 'HQ'
+let currentPersona = 'all';
+let lastSelectedCell = null; // remember last click so we can re-render on toggle
+
+function setPersona(p) {
+  currentPersona = p;
+  document.querySelectorAll('.persona-toggle .toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-persona') === p);
+  });
+  if (lastSelectedCell) {
+    selectCell(lastSelectedCell.cKey, lastSelectedCell.stage);
+  }
+}
+
+function typeBadge(type) {
+  if (!type) return '';
+  if (type === 'in') return `<span class="type-badge in">In-Product</span>`;
+  if (type === 'out') return `<span class="type-badge out">Out-Product</span>`;
+  if (type === 'in+out') return `<span class="type-badge inout">In + Out</span>`;
+  return '';
+}
+
+function tmSwitchTab(variant, ev) {
+  const templates = {
+    admin: {
+      eyebrow: 'Reach a Teammate · Ask Admin',
+      title: 'Ask your Uniware Admin for access',
+      desc: 'Your Uniware admin can grant UniReco trial access in one click. Pick a teammate below — we\'ll pre-fill the request.',
+      filter: 'Filtered to role: <strong>Admin</strong>',
+      subject: 'Need Uniware access for UniReco trial (2 min)',
+      body: 'Hi Priya,\n\nI\'m trying to start a UniReco trial (Return To Stock + SPF Claims + Payment Reco — all included). It needs Uniware trial role provisioning. Can you grant me access? Takes ~30 seconds from Users > Roles.\n\nThe trial is estimating ₹85k/month in recoverable leakage for us. Would help to evaluate before month-end.\n\nThanks!',
+      entryPoint: 'Login · access-denied state on trial provisioning',
+      recipientSource: 'Uniware directory · Admin role only',
+      sendFrom: 'Trial user\'s Uniware account'
+    },
+    creds: {
+      eyebrow: 'Reach a Teammate · Ask for Credentials',
+      title: 'Ask a teammate for marketplace credentials',
+      desc: 'SPF Claims + Payment Reco both need the same marketplace API credentials. Pick a teammate who has them.',
+      filter: 'Filtered to role: <strong>Finance / Ops / Admin</strong>',
+      subject: 'Need marketplace API credentials for UniReco trial',
+      body: 'Hi,\n\nSetting up a UniReco trial. Need marketplace API credentials for our channels (Amazon, Flipkart, Myntra) to unlock SPF Claims + Payment Reco. Same creds unlock both modules.\n\nSteps: (1) Log into Seller Portal → Settings → API Access. (2) Share the credentials with me on this thread or via password manager.\n\nWill help us evaluate ~₹1.3L/mo in recoverable claims.\n\nThanks.',
+      entryPoint: '"Add credentials" popup on SPF Claims / Payment Reco card',
+      recipientSource: 'Uniware directory · Finance, Ops, or Admin roles',
+      sendFrom: 'Trial user\'s Uniware account'
+    },
+    finance: {
+      eyebrow: 'Reach a Teammate · Share with Finance',
+      title: 'Share discrepancy report with your finance team',
+      desc: 'The Payment Reco discrepancy report (CSV + PDF summary) will be attached to this email. Pick your finance teammate.',
+      filter: 'Filtered to role: <strong>Finance</strong>',
+      subject: 'Marketplace discrepancy report · ₹18.4L flagged for Aug',
+      body: 'Hi,\n\nUniReco (our recovery-ops trial) has flagged ₹18,42,780 in marketplace discrepancies for August across Amazon, Flipkart, and Myntra. Attaching the SKU-level CSV and an aggregate PDF summary for review.\n\nMost of this appears dispute-eligible per marketplace T&C. Can you look at it and let me know if we should raise disputes? Trial ends Sep 15.\n\nThanks.',
+      entryPoint: 'Payment Reco module · "Share with Finance" action',
+      recipientSource: 'Uniware directory · Finance role only',
+      sendFrom: 'Trial user\'s Uniware account · CSV + PDF auto-attached'
+    },
+    dm: {
+      eyebrow: 'Reach a Teammate · Forward to DM',
+      title: 'Forward this to your decision-maker',
+      desc: 'The trigger banner suggests you might not be the right person to evaluate this. Forward to the teammate who owns recovery/reconciliation decisions.',
+      filter: 'Filtered to role: <strong>Head of Finance / Ops Lead</strong>',
+      subject: 'Might be worth a look · UniReco flagged ₹85k/mo for us',
+      body: 'Hi,\n\nI keep seeing this on our Uniware dashboard — UniReco (an internal Unicommerce recovery tool) is flagging ~₹85,000/month in recoverable leakage across returns, marketplace claims, and payment discrepancies for us. Free 30-day trial, no credentials needed to start.\n\nMight be worth your review — I\'m not the right person to decide but this seems material.\n\nLink to start: [in-product]',
+      entryPoint: 'Trigger banner · "Not the right person?" secondary CTA',
+      recipientSource: 'Uniware directory · Head-of-Finance / Ops-Lead roles',
+      sendFrom: 'Non-DM Uniware account · UniReco context prepended'
+    },
+    hq_spf: {
+      eyebrow: 'Reach a Teammate · Forward SPF to HQ',
+      title: 'Forward SPF Claims to your HQ teammate',
+      desc: 'SPF Claims is typically owned by HQ finance/ops, not warehouse. Forward the module details to the right person.',
+      filter: 'Filtered to role: <strong>Finance / Marketplace Ops</strong>',
+      subject: 'SPF Claims module in UniReco trial · worth ₹1.3L/mo?',
+      body: 'Hi,\n\nI\'m running a UniReco trial from the warehouse side (Return To Stock module). Noticed SPF Claims is also included — peers file ₹1.3L/mo in claims on average, 78% approval rate.\n\nThis is your area, not mine. Can you take a look and decide if we should set it up? Trial ends Sep 15.\n\nLink: [in-product]',
+      entryPoint: 'SPF Claims card · "Not your area?" secondary CTA',
+      recipientSource: 'Uniware directory · Finance / Marketplace Ops',
+      sendFrom: 'Warehouse Uniware account · HQ-context intro prepended'
+    }
+  };
+  const t = templates[variant] || templates.admin;
+  document.getElementById('tm-eyebrow').textContent = t.eyebrow;
+  document.getElementById('tm-title').textContent = t.title;
+  document.getElementById('tm-desc').textContent = t.desc;
+  document.getElementById('tm-filter').innerHTML = t.filter;
+  document.getElementById('tm-subject').value = t.subject;
+  document.getElementById('tm-body').value = t.body;
+  const ep = document.getElementById('tm-entrypoint');    if (ep) ep.textContent = t.entryPoint;
+  const rs = document.getElementById('tm-recipient-source'); if (rs) rs.textContent = t.recipientSource;
+  const sf = document.getElementById('tm-send-from');     if (sf) sf.textContent = t.sendFrom;
+  document.querySelectorAll('.tm-tab').forEach(el => el.classList.remove('tm-tab-active'));
+  if (ev && ev.currentTarget) ev.currentTarget.classList.add('tm-tab-active');
+}
+
+function renderFunnel() {
+  const body = document.getElementById('funnel-body');
+  const stages = ['total', 'aware', 'landed', 'usedR', 'usedSPF', 'usedPay', 'paid'];
+  let totalSum = 0;
+
+  let html = '';
+  Object.keys(cohorts).forEach(cKey => {
+    const c = cohorts[cKey];
+    totalSum += c.funnel.total;
+    html += `<tr id="row-${cKey}">
+      <td>
+        <div class="cohort-name">
+          <span class="code">${c.code}</span>
+          <span class="label">${c.name}</span>
+        </div>
+      </td>`;
+    stages.forEach(s => {
+      if (s === 'total') {
+        html += `<td><button class="cell-btn total-cell" data-cohort="${cKey}" data-stage="${s}" onclick="selectCell('${cKey}','${s}')">${inr(c.funnel[s])}</button></td>`;
+      } else {
+        html += `<td><button class="cell-btn placeholder-cell" data-cohort="${cKey}" data-stage="${s}" onclick="selectCell('${cKey}','${s}')" title="Click to see more">—</button></td>`;
+      }
+    });
+    html += `</tr>`;
+  });
+  // Totals row
+  html += `<tr><td><div class="cohort-name"><span class="label" style="font-weight: 700; color: var(--text-primary);">Total</span></div></td>`;
+  stages.forEach(s => {
+    if (s === 'total') {
+      html += `<td><div style="padding: 14px 12px; font-weight: 700; color: var(--text-primary);">${inr(totalSum)}</div></td>`;
+    } else {
+      html += `<td><div style="padding: 14px 12px; font-weight: 700; color: var(--text-tertiary);">—</div></td>`;
+    }
+  });
+  html += `</tr>`;
+  body.innerHTML = html;
+}
+
+function selectCell(cKey, stage) {
+  lastSelectedCell = { cKey, stage };
+  // Highlight selected cell
+  document.querySelectorAll('.cell-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.funnel-table tr').forEach(r => r.classList.remove('active-row'));
+  document.querySelector(`.cell-btn[data-cohort="${cKey}"][data-stage="${stage}"]`).classList.add('selected');
+  document.getElementById(`row-${cKey}`).classList.add('active-row');
+
+  const c = cohorts[cKey];
+  const personaLabel = currentPersona === 'all' ? 'All Users' : (currentPersona === 'WH' ? 'Warehouse User' : 'HQ User');
+  document.getElementById('matrix-sub').textContent = `Cohort ${c.code} · ${c.name} · ${personaLabel} · click any solution to see mock`;
+
+  // Filter frictions by persona: 'all' shows everything · 'WH' shows WH or Both · 'HQ' shows HQ or Both
+  const filteredFrictions = c.frictions.filter(f => {
+    if (currentPersona === 'all') return true;
+    return f.persona === currentPersona || f.persona === 'Both';
+  });
+
+  // Render friction matrix
+  let html = `
+    <div class="friction-hdr">
+      <div class="fh-cohort"><span class="code">${c.code}</span>${c.name}</div>
+      <div class="fh-stats">
+        <div class="stat"><span class="lbl">Total</span><span class="val">${inr(c.funnel.total)}</span></div>
+        <div class="stat"><span class="lbl">Aware</span><span class="val">—</span></div>
+        <div class="stat"><span class="lbl">Landed</span><span class="val">—</span></div>
+        <div class="stat"><span class="lbl">Used·R</span><span class="val">—</span></div>
+        <div class="stat"><span class="lbl">Used·SPF</span><span class="val">—</span></div>
+        <div class="stat"><span class="lbl">Used·Pay</span><span class="val">—</span></div>
+        <div class="stat"><span class="lbl">Paid</span><span class="val">—</span></div>
+      </div>
+    </div>
+    <table class="friction-table">
+      <thead>
+        <tr>
+          <th>Stage transition</th>
+          <th>Surface</th>
+          <th>Friction</th>
+          <th>Solution</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  if (filteredFrictions.length === 0) {
+    html += `<tr><td colspan="4" style="text-align: center; padding: 24px; color: var(--text-tertiary); font-style: italic;">No frictions for <strong>${personaLabel}</strong> in this cohort. Try All Users or the other persona.</td></tr>`;
+  } else {
+    filteredFrictions.forEach(f => {
+      const highlight = (f.stage === stage) ? ' class="stage-highlight"' : '';
+      const personaBadge = f.persona ? `<span class="persona-badge ${f.persona}">${f.persona}</span>` : '';
+      html += `<tr${highlight}>
+        <td>
+          <div class="stage-lbl">
+            <span class="transition">${f.transition.split(' ')[0]}</span>
+            <span class="to-stage">${f.transition.split(' ').slice(1).join(' ')}</span>
+            ${personaBadge}
+          </div>
+        </td>
+        <td><span class="surface-pill">${f.surface}</span></td>
+        <td class="friction-body">${f.friction}</td>
+        <td>
+          <div class="solution-list">
+            ${f.solutions.map(s => `
+              <div class="solution-item">
+                <div class="content">${typeBadge(s.type)}${s.label}</div>
+                ${s.noCta ? '' : (s.hasMock ? renderMockCTAs(s, cKey, f.transition) : `<span class="mock-tbd">Mock TBD</span>`)}
+              </div>
+            `).join('')}
+          </div>
+        </td>
+      </tr>`;
+    });
+  }
+
+  html += `</tbody></table>`;
+  document.getElementById('friction-content').innerHTML = html;
+}
+
+function showSolution(solId, cKey, transition, variant) {
+  const sol = solutions[solId];
+  const c = cohorts[cKey];
+  if (!sol) return;
+
+  document.getElementById('solution-context').innerHTML = `From <strong>${c.code} · ${c.name}</strong> · ${transition}`;
+  document.getElementById('solution-content').innerHTML = `
+    <div class="solution-hero">
+      <span class="type-pill ${sol.type}">${sol.typeLabel}</span>
+      <h1>${sol.title}</h1>
+      <p>${sol.description}</p>
+    </div>
+    <div class="solution-details">
+      ${sol.details.map(d => `<div class="detail-tile"><div class="lbl">${d.lbl}</div><div class="val">${d.val}</div></div>`).join('')}
+    </div>
+    <div class="mock-container">
+      <div class="mock-title">Mock / Preview</div>
+      ${sol.mock}
+    </div>
+  `;
+
+  document.getElementById('main-view').classList.remove('active');
+  document.getElementById('solution-view').classList.add('active');
+  window.scrollTo(0, 0);
+
+  // If this is the teammate-reach solution, auto-switch to the correct template tab
+  if (solId === 'sol_teammate_reach' && variant) {
+    setTimeout(() => {
+      const targetTab = document.querySelector(`.tm-tab[onclick*="'${variant}'"]`);
+      if (targetTab) {
+        targetTab.click();
+      }
+    }, 50);
+  }
+}
+
+function backToMain() {
+  document.getElementById('solution-view').classList.remove('active');
+  document.getElementById('main-view').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+renderFunnel();
+</script>
+
+</body>
+</html>

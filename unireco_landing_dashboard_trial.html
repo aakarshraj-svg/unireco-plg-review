@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniReco — Overview · Trial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ──  PRIMITIVES (Collection 1) — never used directly by components  ── */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+
+  --primitive-green-50: #EBF7F1;
+  --primitive-green-100: #C4E5D4;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+
+  --primitive-red-50: #FDECEC;
+  --primitive-red-100: #F8C9C9;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-red-700: #A11B1B;
+
+  --primitive-amber-50: #FEF3E7;
+  --primitive-amber-100: #FBDDBB;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+  --primitive-amber-700: #9C5310;
+
+  --primitive-chart-1: #1B72F3;
+  --primitive-chart-2: #8B5CF6;
+  --primitive-chart-3: #0E9AA7;
+  --primitive-chart-4: #B58900;
+  --primitive-chart-5: #C2508A;
+
+  /* ──  SCALES (Collection 3) — single mode  ── */
+  --gap-none: 0;
+  --gap-4: 4px;
+  --gap-8: 8px;
+  --gap-12: 12px;
+  --gap-16: 16px;
+  --gap-20: 20px;
+  --gap-24: 24px;
+  --gap-32: 32px;
+  --gap-40: 40px;
+  --gap-48: 48px;
+  --gap-64: 64px;
+
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-full: 999px;
+
+  --icon-size-12: 12px;
+  --icon-size-16: 16px;
+  --icon-size-20: 20px;
+  --icon-size-24: 24px;
+
+  --stroke-none: 0;
+  --stroke-thin: 0.5px;
+  --stroke-regular: 1px;
+  --stroke-medium: 2px;
+
+  --opacity-40: 0.4;
+  --opacity-60: 0.6;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --duration-fast: 150ms;
+  --duration-default: 200ms;
+  --easing-out: cubic-bezier(0, 0, 0.2, 1);
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* ──  SEMANTIC (Collection 2) — Light mode  ── */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-info-bold: var(--primitive-blue-700);
+
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-success-bold: var(--primitive-green-700);
+
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-warning-bold: var(--primitive-amber-700);
+
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-secondary-inverse: var(--primitive-neutral-400);
+
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-info-base: var(--primitive-blue-600);
+  --text-info-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-success-bold: var(--primitive-green-700);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-warning-bold: var(--primitive-amber-700);
+  --text-danger-base: var(--primitive-red-600);
+  --text-danger-bold: var(--primitive-red-700);
+
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-disabled: var(--primitive-neutral-400);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-success-base: var(--primitive-green-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-info-base: var(--primitive-blue-500);
+  --border-success-base: var(--primitive-green-500);
+  --border-success-subtle: #3F9C6E4C;
+  --border-warning-base: var(--primitive-amber-500);
+  --border-warning-subtle: #EF84244C;
+  --border-danger-base: var(--primitive-red-500);
+  --border-danger-subtle: #E733334C;
+
+  --chart-1: var(--primitive-chart-1);
+  --chart-2: var(--primitive-chart-2);
+  --chart-3: var(--primitive-chart-3);
+  --chart-4: var(--primitive-chart-4);
+  --chart-5: var(--primitive-chart-5);
+  --chart-gridlines: var(--primitive-neutral-200);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-info-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-disabled: var(--primitive-neutral-600);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-secondary-inverse: var(--primitive-neutral-600);
+
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-info-base: var(--primitive-blue-100);
+  --text-info-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-success-bold: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-warning-bold: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --text-danger-bold: var(--primitive-red-500);
+
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-disabled: var(--primitive-neutral-600);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-success-base: var(--primitive-green-500);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-tertiary: var(--primitive-neutral-500);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+  --border-info-base: var(--primitive-blue-600);
+  --border-success-base: var(--primitive-green-600);
+  --border-warning-base: var(--primitive-amber-600);
+  --border-danger-base: var(--primitive-red-600);
+
+  --chart-gridlines: var(--primitive-neutral-700);
+}
+
+/* ═══════  TYPOGRAPHY CLASSES  ═══════ */
+.text-display     { font: var(--font-weight-semibold) 32px/36px var(--font-family-primary); letter-spacing: -0.03em; }
+.text-h1          { font: var(--font-weight-semibold) 24px/30px var(--font-family-primary); letter-spacing: -0.025em; }
+.text-h2          { font: var(--font-weight-semibold) 18px/26px var(--font-family-primary); letter-spacing: -0.018em; }
+.text-h3          { font: var(--font-weight-semibold) 15px/22px var(--font-family-primary); letter-spacing: -0.012em; }
+.text-h4          { font: var(--font-weight-semibold) 13px/20px var(--font-family-primary); letter-spacing: -0.006em; }
+.text-label-lg    { font: var(--font-weight-medium) 14px/20px var(--font-family-primary); letter-spacing: -0.006em; }
+.text-label-md    { font: var(--font-weight-medium) 13px/20px var(--font-family-primary); letter-spacing: -0.003em; }
+.text-label-sm    { font: var(--font-weight-medium) 12px/16px var(--font-family-primary); }
+.text-body-lg     { font: var(--font-weight-regular) 15px/24px var(--font-family-primary); letter-spacing: -0.004em; }
+.text-body-md     { font: var(--font-weight-regular) 14px/22px var(--font-family-primary); letter-spacing: -0.003em; }
+.text-body-sm     { font: var(--font-weight-regular) 13px/20px var(--font-family-primary); }
+.text-body-fine   { font: var(--font-weight-regular) 11px/16px var(--font-family-primary); letter-spacing: 0.01em; }
+.text-caption-md  { font: var(--font-weight-regular) 12px/16px var(--font-family-primary); letter-spacing: 0.01em; }
+.text-caption-sm  { font: var(--font-weight-regular) 11px/16px var(--font-family-primary); letter-spacing: 0.01em; }
+.text-numeric-lg  { font: var(--font-weight-semibold) 24px/24px var(--font-family-primary); letter-spacing: -0.03em; }
+.text-numeric-sm  { font: var(--font-weight-semibold) 18px/18px var(--font-family-primary); letter-spacing: -0.02em; }
+
+/* ═══════  RESET & BASE  ═══════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-family: var(--font-family-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; background: transparent; border: none; cursor: pointer; }
+a { color: var(--text-brand-base); text-decoration: none; }
+.shell { display: flex; height: 100dvh; }
+
+/* ═══════  SIDEBAR  ═══════ */
+.sidebar {
+  width: 56px;
+  background: var(--bg-secondary);
+  border-right: var(--stroke-regular) solid var(--border-primary);
+  display: flex; flex-direction: column;
+  flex-shrink: 0; overflow-y: auto;
+}
+.sidebar-brand {
+  padding-top: var(--gap-16); padding-bottom: var(--gap-16);
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  display: flex; align-items: center; justify-content: center;
+}
+.brand-mark {
+  width: var(--gap-32); height: var(--gap-32);
+  border-radius: var(--radius-md);
+  background: var(--bg-brand-base);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-on-fill);
+}
+.sidebar-section { padding: var(--gap-8) var(--gap-8) var(--gap-none); }
+.sidebar-section + .sidebar-section {
+  border-top: var(--stroke-regular) solid var(--border-primary);
+  margin-top: var(--gap-8);
+  padding-top: var(--gap-8);
+}
+.sidebar-item {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: var(--gap-40); height: var(--gap-32);
+  margin: var(--gap-4) auto;
+  border-radius: var(--radius-sm);
+  color: var(--icon-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-out), color var(--duration-fast) var(--easing-out);
+}
+.sidebar-item:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.sidebar-item.active { background: var(--bg-tertiary); color: var(--icon-primary); }
+.sidebar-item.active::before {
+  content: "";
+  position: absolute; left: calc(var(--gap-8) * -1); top: var(--gap-4); bottom: var(--gap-4);
+  width: var(--stroke-medium);
+  border-radius: var(--radius-none) var(--radius-sm) var(--radius-sm) var(--radius-none);
+  background: var(--bg-brand-base);
+}
+.sidebar-item svg { width: var(--icon-size-20); height: var(--icon-size-20); }
+.sidebar-item[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: calc(100% + var(--gap-12)); top: 50%; transform: translateY(-50%);
+  background: var(--bg-inverse); color: var(--text-primary-inverse);
+  font: var(--font-weight-medium) 12px/16px var(--font-family-primary);
+  padding: var(--gap-4) var(--gap-8);
+  border-radius: var(--radius-sm);
+  white-space: nowrap; z-index: 100; pointer-events: none;
+  box-shadow: var(--shadow-medium);
+}
+
+/* ═══════  MAIN & TOPBAR  ═══════ */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.topbar {
+  height: var(--gap-48); background: var(--bg-primary);
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  display: flex; align-items: center;
+  padding: var(--gap-none) var(--gap-24);
+  gap: var(--gap-12); flex-shrink: 0;
+}
+.crumbs { display: flex; align-items: center; gap: var(--gap-8); color: var(--text-secondary); }
+.crumbs strong { color: var(--text-primary); font-weight: var(--font-weight-semibold); }
+.crumbs .sep { color: var(--text-tertiary); opacity: var(--opacity-60); }
+.spacer { flex: 1; }
+.icon-btn {
+  width: var(--gap-32); height: var(--gap-32);
+  display: inline-flex; align-items: center; justify-content: center;
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--icon-secondary);
+  transition: background var(--duration-fast) var(--easing-out);
+}
+.icon-btn:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.icon-btn svg { width: var(--icon-size-16); height: var(--icon-size-16); }
+.avatar {
+  width: var(--gap-32); height: var(--gap-32);
+  border-radius: var(--radius-full);
+  background: var(--bg-brand-base); color: var(--text-on-fill);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+
+/* ═══════  PANE HEADER  ═══════ */
+.pane-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--gap-16) var(--gap-24);
+  background: var(--bg-primary);
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  flex-shrink: 0;
+  gap: var(--gap-16);
+}
+.pane-header-left { display: flex; align-items: center; gap: var(--gap-16); }
+.pane-title { color: var(--text-primary); }
+.pane-subtitle { color: var(--text-secondary); margin-top: var(--gap-4); }
+.pane-header-right { display: flex; align-items: center; gap: var(--gap-12); }
+.pane-timestamp {
+  display: inline-flex; align-items: center; gap: var(--gap-4);
+  color: var(--text-tertiary);
+}
+.pane-timestamp svg { width: var(--icon-size-12); height: var(--icon-size-12); }
+
+/* ═══════  BODY & LAYOUT  ═══════ */
+.body3 {
+  flex: 1; display: flex; overflow: hidden; min-height: 0;
+  background: var(--bg-primary);
+}
+.content-pane {
+  flex: 1; overflow-y: auto;
+  padding: var(--gap-20) var(--gap-24) var(--gap-32);
+  min-width: 0;
+}
+
+/* ═══════  KPI STRIP  ═══════ */
+.kpi-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap-16);
+  margin-bottom: var(--gap-20);
+}
+.kpi-card {
+  background: var(--bg-primary);
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--gap-20);
+}
+.kpi-label {
+  color: var(--text-secondary);
+  display: flex; align-items: center; gap: var(--gap-4);
+  margin-bottom: var(--gap-12);
+}
+.kpi-label svg { width: var(--icon-size-12); height: var(--icon-size-12); color: var(--icon-tertiary); }
+.kpi-value-row {
+  display: flex; align-items: baseline; gap: var(--gap-8);
+  margin-bottom: var(--gap-8);
+  flex-wrap: wrap;
+}
+.kpi-value { color: var(--text-primary); }
+.kpi-value.danger { color: var(--text-danger-base); }
+.kpi-value.success { color: var(--text-success-base); }
+.kpi-suffix { color: var(--text-secondary); }
+.kpi-note {
+  color: var(--text-tertiary);
+  margin-top: var(--gap-8);
+}
+
+/* ═══════  MODULE CARDS  ═══════ */
+.module-card {
+  background: var(--bg-primary);
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--gap-20);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing-out), box-shadow var(--duration-fast) var(--easing-out);
+}
+.module-card:hover {
+  border-color: var(--border-brand-base);
+  box-shadow: var(--shadow-low);
+}
+.module-card:hover .module-card-arrow { color: var(--icon-brand-base); transform: translateX(2px); }
+.module-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--gap-16);
+}
+.module-card-title {
+  display: flex; align-items: center; gap: var(--gap-8);
+  color: var(--text-primary);
+}
+.module-card-icon {
+  width: var(--gap-32); height: var(--gap-32);
+  border-radius: var(--radius-md);
+  background: var(--bg-brand-subtler);
+  color: var(--icon-brand-base);
+  display: flex; align-items: center; justify-content: center;
+}
+.module-card-icon svg { width: var(--icon-size-16); height: var(--icon-size-16); }
+.module-card-arrow {
+  color: var(--icon-tertiary);
+  display: inline-flex;
+  transition: color var(--duration-fast) var(--easing-out), transform var(--duration-fast) var(--easing-out);
+}
+.module-card-arrow svg { width: var(--icon-size-16); height: var(--icon-size-16); }
+.module-card-value-row {
+  display: flex; align-items: baseline; gap: var(--gap-8);
+}
+.module-card-value { color: var(--text-danger-base); }
+.module-card-value-suffix { color: var(--text-secondary); }
+
+/* ═══════  TRIAL-MODE ADDITIONS (badge, credentials states, empty states) ═══════ */
+.trial-badge {
+  display: inline-flex; align-items: center;
+  padding: var(--gap-4) var(--gap-8);
+  border-radius: var(--radius-sm);
+  background: var(--bg-warning-subtle);
+  color: var(--text-warning-bold);
+  text-transform: uppercase;
+  margin-left: var(--gap-8);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+}
+
+/* Credentials-required module card — muted value area with prompt */
+.module-card.credentials-required .module-card-icon {
+  background: var(--bg-tertiary);
+  color: var(--icon-tertiary);
+}
+.creds-cta {
+  display: inline-flex; align-items: center; gap: var(--gap-8);
+  padding: var(--gap-8) var(--gap-12);
+  background: var(--bg-brand-subtler);
+  color: var(--text-brand-base);
+  border-radius: var(--radius-sm);
+  margin-top: var(--gap-4);
+}
+.creds-cta svg { width: var(--icon-size-16); height: var(--icon-size-16); }
+
+/* Full-card empty state (for tables and chart when credentials missing) */
+.empty-state {
+  padding: var(--gap-40) var(--gap-24);
+  display: flex; flex-direction: column;
+  align-items: center; text-align: center;
+  gap: var(--gap-12);
+  min-height: 240px;
+  justify-content: center;
+}
+.empty-state-icon {
+  width: var(--gap-48); height: var(--gap-48);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--icon-tertiary);
+  display: grid; place-items: center;
+}
+.empty-state-icon svg { width: var(--icon-size-24); height: var(--icon-size-24); }
+.empty-state-title { color: var(--text-primary); }
+.empty-state-body { color: var(--text-secondary); max-width: 480px; }
+.empty-state-cta {
+  display: inline-flex; align-items: center; gap: var(--gap-8);
+  padding: var(--gap-8) var(--gap-16);
+  border-radius: var(--radius-sm);
+  background: var(--bg-brand-base);
+  color: var(--text-on-fill);
+  text-transform: uppercase;
+  transition: background var(--duration-fast) var(--easing-out);
+  margin-top: var(--gap-8);
+}
+.empty-state-cta:hover { background: var(--bg-brand-bold); }
+.empty-state-cta svg { width: var(--icon-size-12); height: var(--icon-size-12); }
+
+/* ═══════  KPI SUBTEXT (WoW delta inside Total at Risk card) ═══════ */
+.kpi-subtext {
+  display: inline-flex; align-items: center; gap: var(--gap-4);
+  margin-top: var(--gap-8);
+  padding: var(--gap-4) var(--gap-8);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+.kpi-subtext.down { background: var(--bg-success-subtler); color: var(--text-success-base); }
+.kpi-subtext.up   { background: var(--bg-danger-subtler);  color: var(--text-danger-base); }
+.kpi-subtext svg  { width: var(--icon-size-12); height: var(--icon-size-12); }
+
+/* ═══════  TWO-TABLE GRID (side-by-side) ═══════ */
+.tables-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--gap-16);
+  margin-bottom: var(--gap-24);
+}
+
+/* ═══════  SCROLLABLE DATA TABLE ═══════ */
+.table-body-scroll {
+  overflow-y: auto;
+  max-height: 320px;
+}
+.data-tbl {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-tbl th {
+  padding: var(--gap-12) var(--gap-16);
+  background: var(--bg-secondary);
+  color: var(--text-tertiary);
+  text-align: right;
+  text-transform: uppercase;
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  white-space: nowrap;
+  position: sticky; top: 0; z-index: 1;
+}
+.data-tbl th:first-child { text-align: left; }
+.data-tbl td {
+  padding: var(--gap-12) var(--gap-16);
+  text-align: right;
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.data-tbl td:first-child { text-align: left; }
+.data-tbl tr:last-child td { border-bottom: none; }
+.data-tbl tr.total-row td {
+  background: var(--bg-secondary);
+  font-weight: var(--font-weight-semibold);
+  position: sticky; bottom: 0;
+}
+.data-tbl tbody tr:not(.total-row):hover td { background: var(--bg-tertiary); cursor: pointer; }
+
+/* ═══════  TABLE VIEW TOGGLE (Source / Account) ═══════ */
+.table-toggle {
+  display: inline-flex;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  padding: var(--gap-4);
+}
+.table-toggle button {
+  padding: var(--gap-4) var(--gap-12);
+  border-radius: var(--radius-sm);
+  color: var(--text-tertiary);
+  transition: background var(--duration-fast) var(--easing-out), color var(--duration-fast) var(--easing-out);
+}
+.table-toggle button[data-active="true"] {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+/* ═══════  SPF VALUE LEDGER CHART ═══════ */
+.chart-legend {
+  display: flex; flex-wrap: wrap;
+  gap: var(--gap-8);
+  padding: var(--gap-16) var(--gap-16) var(--gap-none);
+}
+.chart-chip {
+  display: inline-flex; align-items: center; gap: var(--gap-8);
+  padding: var(--gap-4) var(--gap-12);
+  border-radius: var(--radius-full);
+  border: var(--stroke-regular) solid var(--border-primary);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-out), opacity var(--duration-fast) var(--easing-out);
+}
+.chart-chip:hover { background: var(--bg-tertiary); }
+.chart-chip[data-active="false"] { opacity: var(--opacity-40); }
+.chart-chip-dot {
+  width: var(--gap-8); height: var(--gap-8);
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+.chart-chip-dot-eligible  { background: var(--text-tertiary); }
+.chart-chip-dot-raised    { background: var(--icon-brand-base); }
+.chart-chip-dot-approved  { background: var(--icon-success-base); }
+.chart-chip-dot-recovered { background: var(--chart-3); }
+.chart-chip-dot-rejected  { background: var(--icon-danger-base); }
+.chart-chip-dot-expired   { background: var(--icon-warning-base); }
+
+.chart-canvas {
+  padding: var(--gap-16);
+  cursor: pointer;
+}
+.chart-svg { display: block; width: 100%; height: auto; }
+.chart-gridline { stroke: var(--chart-gridlines); stroke-width: var(--stroke-thin); stroke-dasharray: 3 4; }
+.chart-axis-label { fill: var(--text-tertiary); font: var(--font-weight-regular) 11px/16px var(--font-family-primary); }
+.chart-line { fill: none; stroke-width: var(--stroke-medium); stroke-linecap: round; stroke-linejoin: round; }
+.chart-line.hidden { display: none; }
+.chart-line-eligible  { stroke: var(--text-tertiary); }
+.chart-line-raised    { stroke: var(--icon-brand-base); }
+.chart-line-approved  { stroke: var(--icon-success-base); }
+.chart-line-recovered { stroke: var(--chart-3); }
+.chart-line-rejected  { stroke: var(--icon-danger-base); }
+.chart-line-expired   { stroke: var(--icon-warning-base); }
+
+/* ═══════  SNAPSHOT TABLE (Channel × Module)  ═══════ */
+.card {
+  background: var(--bg-primary);
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.card-header {
+  padding: var(--gap-16);
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--gap-16);
+}
+.card-title { color: var(--text-primary); }
+.card-desc { color: var(--text-secondary); margin-top: var(--gap-4); }
+.card-header-right { display: flex; align-items: center; gap: var(--gap-8); flex-shrink: 0; }
+
+/* ═══════  RIGHT REGION (ALERTS)  ═══════ */
+.right-region {
+  background: var(--bg-tertiary);
+  border-left: var(--stroke-regular) solid var(--border-primary);
+  display: flex; flex-shrink: 0;
+  padding: var(--gap-12);
+  width: 340px;
+}
+.alert-card-container {
+  flex: 1; background: var(--bg-primary);
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.alert-header {
+  padding: var(--gap-16);
+  border-bottom: var(--stroke-regular) solid var(--border-primary);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.alert-count {
+  padding: var(--gap-4) var(--gap-8);
+  border-radius: var(--radius-full);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+.alert-list { flex: 1; overflow-y: auto; padding: var(--gap-8); }
+.rail-section {
+  color: var(--text-tertiary);
+  padding: var(--gap-12) var(--gap-4) var(--gap-8);
+  text-transform: uppercase;
+}
+.rail-section:first-child { padding-top: var(--gap-4); }
+.claim-row {
+  background: var(--bg-primary);
+  border: var(--stroke-regular) solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--gap-16);
+  margin-bottom: var(--gap-12);
+  display: flex; flex-direction: column;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing-out), box-shadow var(--duration-fast) var(--easing-out);
+}
+.claim-row:hover {
+  border-color: var(--border-brand-base);
+  box-shadow: var(--shadow-low);
+}
+.claim-sev {
+  display: inline-flex; align-items: center;
+  align-self: flex-start;
+  padding: var(--gap-4) var(--gap-8);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--gap-12);
+  text-transform: uppercase;
+}
+.claim-sev.warning { background: var(--bg-warning-subtle); color: var(--text-warning-bold); }
+.claim-sev.danger { background: var(--bg-danger-subtle); color: var(--text-danger-bold); }
+.claim-sev.info { background: var(--bg-info-subtle); color: var(--text-info-base); }
+.ac-title { color: var(--text-primary); }
+.ac-meta { color: var(--text-secondary); margin-top: var(--gap-4); }
+.ac-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: var(--gap-12);
+  gap: var(--gap-8);
+}
+.ac-time { color: var(--text-tertiary); }
+.ac-link {
+  display: inline-flex; align-items: center; gap: var(--gap-4);
+  color: var(--text-brand-base);
+}
+.ac-link svg { width: var(--icon-size-12); height: var(--icon-size-12); }
+.alert-foot {
+  text-align: center;
+  padding: var(--gap-12) var(--gap-none) var(--gap-8);
+  color: var(--text-tertiary);
+}
+
+/* ═══════  TOAST  ═══════ */
+.toast-container {
+  position: fixed; bottom: var(--gap-20); right: var(--gap-20);
+  z-index: 200; display: flex; flex-direction: column;
+  gap: var(--gap-8);
+}
+.toast {
+  background: var(--bg-inverse);
+  color: var(--text-primary-inverse);
+  padding: var(--gap-8) var(--gap-16);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-high);
+  display: flex; align-items: center;
+  gap: var(--gap-8);
+  animation: slideIn var(--duration-default) var(--easing-out);
+}
+.toast.ok { background: var(--bg-success-base); color: var(--text-on-fill); }
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ═══════  RESPONSIVE  ═══════ */
+@media (max-width: 1280px) {
+  .right-region { width: 300px; }
+}
+@media (max-width: 1100px) {
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  .tables-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ═════════  SIDEBAR  ═════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-mark text-h4">U</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-item active" title="Pulse">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-item" title="Payment Reco">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4m6 0h2"/></svg>
+      </div>
+      <div class="sidebar-item" title="Return To Stock">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+      </div>
+      <div class="sidebar-item" title="SPF Claims">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v2m8-2v2"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-item" title="Reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
+      </div>
+    </div>
+    <div class="sidebar-section" style="margin-top: auto;">
+      <div class="sidebar-item" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- ═════════  TOPBAR  ═════════ -->
+    <div class="topbar">
+      <div class="crumbs text-body-sm">
+        <span>UniReco</span>
+        <span class="sep">/</span>
+        <strong>Overview</strong>
+        <span class="trial-badge text-caption-sm">TRIAL</span>
+      </div>
+      <div class="spacer"></div>
+      <button class="icon-btn" title="Toggle theme" onclick="toggleTheme()">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <button class="icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      </button>
+      <div class="avatar text-label-sm">AR</div>
+    </div>
+
+    <!-- ═════════  PANE HEADER  ═════════ -->
+    <div class="pane-header">
+      <div class="pane-header-left">
+        <div>
+          <div class="pane-title text-h2">Overview</div>
+        </div>
+      </div>
+      <div class="pane-header-right">
+        <span class="pane-timestamp text-caption-sm">
+          Data as of Aug 05, 09:32 IST
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- ═════════  BODY  ═════════ -->
+    <div class="body3">
+      <div class="content-pane">
+
+        <!-- ─── KPI STRIP: 1 total + 3 modules ─── -->
+        <div class="kpi-strip">
+          <div class="kpi-card">
+            <div class="kpi-label text-body-sm">
+              Total ₹ at risk
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <div class="kpi-value-row">
+              <div class="kpi-value danger text-h1">₹8.42 L</div>
+              <div class="kpi-suffix text-body-md">R2S only</div>
+            </div>
+            <div class="kpi-subtext down text-caption-md">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+              ₹0.32 L vs last week
+            </div>
+          </div>
+
+          <!-- Payment Reco -->
+          <div class="module-card credentials-required" onclick="showToast('Opening Payment Reco credentials setup', true)">
+            <div class="module-card-head">
+              <div class="module-card-title text-h3">
+                <div class="module-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4m6 0h2"/></svg>
+                </div>
+                Payment Reco
+              </div>
+              <span class="module-card-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+            <div class="creds-cta text-label-md">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Connect credentials to see your data
+            </div>
+          </div>
+
+          <!-- Return To Stock -->
+          <div class="module-card" onclick="window.open('unireco_c2_journey_mocks_5.html', '_blank', 'noopener')">
+            <div class="module-card-head">
+              <div class="module-card-title text-h3">
+                <div class="module-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+                </div>
+                Return To Stock
+              </div>
+              <span class="module-card-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+            <div class="module-card-value-row">
+              <div class="module-card-value text-h1">₹8.42 L</div>
+              <div class="module-card-value-suffix text-body-md">at risk</div>
+            </div>
+          </div>
+
+          <!-- SPF Claims -->
+          <div class="module-card credentials-required" onclick="showToast('Opening SPF Claims credentials setup', true)">
+            <div class="module-card-head">
+              <div class="module-card-title text-h3">
+                <div class="module-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v2m8-2v2"/></svg>
+                </div>
+                SPF Claims
+              </div>
+              <span class="module-card-arrow">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+            </div>
+            <div class="creds-cta text-label-md">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Connect credentials to see your data
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── TWO TABLES SIDE-BY-SIDE ─── -->
+        <div class="tables-grid">
+
+          <!-- Table 1: Payment Reco + SPF Claims — awaiting credentials -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title text-h3">Payment Reco + SPF Claims</div>
+                <div class="card-desc text-body-sm">Connect credentials to see your source and account breakdown</div>
+              </div>
+            </div>
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <div class="empty-state-title text-h4">Credentials required</div>
+              <div class="empty-state-body text-body-sm">Add marketplace credentials for Payment Reco and SPF Claims to see your exposure by source and account.</div>
+              <button class="empty-state-cta text-label-md" onclick="showToast('Opening credentials setup', true)">
+                Add credentials
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Table 2: Return To Stock by facility -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title text-h3">Return To Stock</div>
+                <div class="card-desc text-body-sm">By facility · excludes FBA, FA, SJIT</div>
+              </div>
+              <div class="card-header-right">
+                <span class="pane-timestamp text-caption-sm">Open right now</span>
+              </div>
+            </div>
+            <div class="table-body-scroll">
+              <table class="data-tbl">
+                <thead>
+                  <tr>
+                    <th class="text-caption-sm">Facility</th>
+                    <th class="text-caption-sm">₹ at risk</th>
+                  </tr>
+                </thead>
+                <tbody id="table2-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── SPF VALUE LEDGER — awaiting credentials ─── -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title text-h3">SPF Value Ledger — Month-on-Month</div>
+              <div class="card-desc text-body-sm">Connect SPF Claims credentials to see the flow of claim value across the six states</div>
+            </div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="empty-state-title text-h4">Credentials required</div>
+            <div class="empty-state-body text-body-sm">The SPF Value Ledger tracks Eligible, Raised, Approved, Recovered, Rejected, and Expired claim values month-on-month. Add SPF Claims credentials to activate.</div>
+            <button class="empty-state-cta text-label-md" onclick="showToast('Opening SPF Claims credentials setup', true)">
+              Add credentials
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═════════  RIGHT REGION (ALERTS)  ═════════ -->
+      <div class="right-region">
+        <div class="alert-card-container">
+          <div class="alert-header">
+            <div class="text-h4">Alerts</div>
+            <div class="alert-count text-caption-sm">2 active</div>
+          </div>
+          <div class="alert-list">
+            <div class="rail-section text-caption-sm">Critical</div>
+
+            <div class="claim-row" onclick="showToast('Opening Return To Stock — Restock Backlog', true)">
+              <span class="claim-sev danger text-caption-sm">Return To Stock</span>
+              <div class="ac-title text-h4">Restock Backlog — 342 returns SLA breached</div>
+              <div class="ac-meta text-body-sm">6 warehouses · ₹6.84 L at risk</div>
+              <div class="ac-foot">
+                <span class="ac-time text-caption-sm">4h ago</span>
+                <span class="ac-link text-label-md">
+                  Take action
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="rail-section text-caption-sm">Warning</div>
+
+            <div class="claim-row" onclick="showToast('Opening Return To Stock — OFD Delivery Monitor', true)">
+              <span class="claim-sev warning text-caption-sm">Return To Stock</span>
+              <div class="ac-title text-h4">OFD Breach — Delhivery: 132 parcels 3+ days past due</div>
+              <div class="ac-meta text-body-sm">3 warehouses · ₹2.84 L at risk</div>
+              <div class="ac-foot">
+                <span class="ac-time text-caption-sm">5h ago</span>
+                <span class="ac-link text-label-md">
+                  Take action
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="alert-foot text-caption-sm">
+              Alerts refresh daily · <a href="#">Configure</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+
+<script>
+// ═══════  DATA  ═══════
+
+// Table 1: Payment Reco + SPF Claims — source or account view
+const table1Data = {
+  source: [
+    { name: 'Amazon India',  pr: '₹1.42 L', spf: '₹1.85 L', total: '₹3.27 L' },
+    { name: 'Flipkart',      pr: '₹1.28 L', spf: '₹1.42 L', total: '₹2.70 L' },
+    { name: 'Meesho',        pr: '₹0.78 L', spf: '₹0.85 L', total: '₹1.63 L' },
+    { name: 'Myntra',        pr: '₹0.42 L', spf: '₹1.12 L', total: '₹1.54 L' },
+    { name: 'Ajio',          pr: '₹0.24 L', spf: '₹0.32 L', total: '₹0.56 L' },
+    { name: 'Nykaa Fashion', pr: '₹0.14 L', spf: '₹0.16 L', total: '₹0.30 L' },
+  ],
+  account: [
+    { name: 'Peppermint · Amazon India',      pr: '₹0.85 L', spf: '₹1.12 L', total: '₹1.97 L' },
+    { name: 'Peppermint Kids · Amazon India', pr: '₹0.57 L', spf: '₹0.73 L', total: '₹1.30 L' },
+    { name: 'Peppermint · Flipkart',          pr: '₹0.78 L', spf: '₹0.88 L', total: '₹1.66 L' },
+    { name: 'Peppermint Kids · Flipkart',     pr: '₹0.50 L', spf: '₹0.54 L', total: '₹1.04 L' },
+    { name: 'Peppermint · Meesho',            pr: '₹0.78 L', spf: '₹0.85 L', total: '₹1.63 L' },
+    { name: 'Peppermint · Myntra',            pr: '₹0.42 L', spf: '₹1.12 L', total: '₹1.54 L' },
+    { name: 'Peppermint · Ajio',              pr: '₹0.24 L', spf: '₹0.32 L', total: '₹0.56 L' },
+    { name: 'Peppermint · Nykaa Fashion',     pr: '₹0.14 L', spf: '₹0.16 L', total: '₹0.30 L' },
+  ]
+};
+
+// Table 2: Return To Stock by facility (excludes FBA / FA / SJIT)
+const table2Data = [
+  { facility: 'Bhiwandi FC',  value: '₹2.18 L' },
+  { facility: 'Gurgaon FC',   value: '₹1.84 L' },
+  { facility: 'Bangalore FC', value: '₹1.62 L' },
+  { facility: 'Chennai FC',   value: '₹1.24 L' },
+  { facility: 'Delhi FC',     value: '₹0.96 L' },
+  { facility: 'Kolkata FC',   value: '₹0.58 L' },
+];
+
+// Chart: SPF Value Ledger — 6 metrics × 6 months (values in ₹ Lakhs)
+const chartMetrics = [
+  { key: 'eligible',  label: 'Eligible',  data: [20, 150, 400, 442, 460, 30] },
+  { key: 'raised',    label: 'Raised',    data: [5,  30,  65,  56,  20,  2 ] },
+  { key: 'approved',  label: 'Approved',  data: [2,  8,   12,  15,  8,   1 ] },
+  { key: 'recovered', label: 'Recovered', data: [1,  4,   8,   12,  6,   1 ] },
+  { key: 'rejected',  label: 'Rejected',  data: [3,  20,  55,  40,  12,  1 ] },
+  { key: 'expired',   label: 'Expired',   data: [0,  50,  200, 317, 150, 0 ] },
+];
+const chartMonths = ['Apr 26', 'May 26', 'Jun 26', 'Jul 26', 'Aug 26', 'Sep 26'];
+
+// ═══════  RENDER TABLES  ═══════
+
+function buildTable1(view){
+  const tb = document.getElementById('table1-tbody');
+  const header = document.getElementById('table1-col1-header');
+  header.textContent = view === 'source' ? 'Source' : 'Account';
+  const rows = table1Data[view];
+  tb.innerHTML = '';
+  rows.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.onclick = () => showToast('Opening filtered view: ' + row.name, true);
+    tr.innerHTML = `
+      <td class="text-body-md">${row.name}</td>
+      <td class="text-body-md">${row.pr}</td>
+      <td class="text-body-md">${row.spf}</td>
+      <td class="text-body-md">${row.total}</td>
+    `;
+    tb.appendChild(tr);
+  });
+  const totalTr = document.createElement('tr');
+  totalTr.className = 'total-row';
+  totalTr.innerHTML = `
+    <td class="text-label-md">All</td>
+    <td class="text-label-md">₹4.28 L</td>
+    <td class="text-label-md">₹5.72 L</td>
+    <td class="text-label-md">₹10.00 L</td>
+  `;
+  tb.appendChild(totalTr);
+}
+
+function buildTable2(){
+  const tb = document.getElementById('table2-tbody');
+  tb.innerHTML = '';
+  table2Data.forEach(row => {
+    const tr = document.createElement('tr');
+    tr.onclick = () => showToast('Opening Return To Stock — ' + row.facility, true);
+    tr.innerHTML = `
+      <td class="text-body-md">${row.facility}</td>
+      <td class="text-body-md">${row.value}</td>
+    `;
+    tb.appendChild(tr);
+  });
+  const totalTr = document.createElement('tr');
+  totalTr.className = 'total-row';
+  totalTr.innerHTML = `
+    <td class="text-label-md">All facilities</td>
+    <td class="text-label-md">₹8.42 L</td>
+  `;
+  tb.appendChild(totalTr);
+}
+
+function setTable1View(view){
+  document.querySelectorAll('#table1-toggle button').forEach(b => {
+    b.setAttribute('data-active', b.getAttribute('data-view') === view ? 'true' : 'false');
+  });
+  buildTable1(view);
+}
+
+// ═══════  RENDER CHART  ═══════
+
+const CHART_W = 1000, CHART_H = 320;
+const CHART_PAD_L = 60, CHART_PAD_R = 60, CHART_PAD_T = 30, CHART_PAD_B = 60;
+const CHART_INNER_W = CHART_W - CHART_PAD_L - CHART_PAD_R;
+const CHART_INNER_H = CHART_H - CHART_PAD_T - CHART_PAD_B;
+const CHART_MAX = 600; // ₹600 L = ₹6 Cr
+
+function xAt(i){ return CHART_PAD_L + (i / (chartMonths.length - 1)) * CHART_INNER_W; }
+function yAt(v){ return CHART_PAD_T + (1 - v / CHART_MAX) * CHART_INNER_H; }
+
+function buildChart(){
+  const svg = document.getElementById('chart-svg');
+  let out = '';
+
+  const yTicks = [0, 150, 300, 450, 600];
+  yTicks.forEach(tick => {
+    const y = yAt(tick);
+    out += `<line class="chart-gridline" x1="${CHART_PAD_L}" x2="${CHART_W - CHART_PAD_R}" y1="${y}" y2="${y}"/>`;
+    const label = tick === 0 ? '₹0' : `₹${(tick / 100).toFixed(1)} Cr`;
+    out += `<text class="chart-axis-label" x="${CHART_PAD_L - 12}" y="${y + 4}" text-anchor="end">${label}</text>`;
+  });
+
+  chartMonths.forEach((m, i) => {
+    const x = xAt(i);
+    out += `<text class="chart-axis-label" x="${x}" y="${CHART_H - CHART_PAD_B + 24}" text-anchor="middle">${m}</text>`;
+  });
+
+  chartMetrics.forEach(metric => {
+    const points = metric.data.map((v, i) => `${xAt(i)},${yAt(v)}`).join(' ');
+    out += `<polyline class="chart-line chart-line-${metric.key}" points="${points}" data-metric="${metric.key}"/>`;
+  });
+
+  svg.innerHTML = out;
+}
+
+function buildLegend(){
+  const wrap = document.getElementById('chart-legend');
+  wrap.innerHTML = '';
+  chartMetrics.forEach(metric => {
+    const chip = document.createElement('button');
+    chip.className = 'chart-chip text-caption-md';
+    chip.setAttribute('data-active', 'true');
+    chip.setAttribute('data-metric', metric.key);
+    chip.onclick = (e) => { e.stopPropagation(); toggleChartMetric(metric.key); };
+    chip.innerHTML = `<span class="chart-chip-dot chart-chip-dot-${metric.key}"></span>${metric.label}`;
+    wrap.appendChild(chip);
+  });
+}
+
+function toggleChartMetric(key){
+  const chip = document.querySelector('.chart-chip[data-metric="' + key + '"]');
+  const line = document.querySelector('.chart-line[data-metric="' + key + '"]');
+  const active = chip.getAttribute('data-active') === 'true';
+  chip.setAttribute('data-active', active ? 'false' : 'true');
+  line.classList.toggle('hidden');
+}
+
+// ═══════  INTERACTIONS  ═══════
+function toggleTheme(){
+  const html = document.documentElement;
+  const now = html.getAttribute('data-theme');
+  const next = now === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  const icon = document.getElementById('theme-icon');
+  if (next === 'dark') {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  } else {
+    icon.innerHTML = '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>';
+  }
+}
+
+function showToast(msg, isOk){
+  const t = document.createElement('div');
+  t.className = 'toast text-body-sm' + (isOk ? ' ok' : '');
+  t.innerHTML = (isOk ? '✓ ' : '') + msg;
+  document.getElementById('toasts').appendChild(t);
+  setTimeout(() => t.remove(), 2400);
+}
+
+// ═══════  INIT  ═══════
+// Trial mode: table1 (PR+SPF) and chart replaced by empty states, so skip their builders
+buildTable2();
+</script>
+</body>
+</html>
