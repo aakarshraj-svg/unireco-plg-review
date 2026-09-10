@@ -800,11 +800,12 @@
   <button class="journey-tab active" data-tab="s1"><span class="step">1</span>Smart Dashboard (trigger)</button>
   <button class="journey-tab" data-tab="s1b"><span class="step">2</span>Trial Start</button>
   <button class="journey-tab" data-tab="s2"><span class="step">3</span>Trial Leakage Dashboard (landing)</button>
-  <button class="journey-tab" data-tab="s3"><span class="step">4</span>R2S Module</button>
-  <button class="journey-tab" data-tab="s4"><span class="step">5</span>SPF Popup</button>
-  <button class="journey-tab" data-tab="s5"><span class="step">6</span>Channel Connectors</button>
-  <button class="journey-tab" data-tab="s6"><span class="step">7</span>SPF Module</button>
-  <button class="journey-tab" data-tab="s7"><span class="step">8</span>Payment Reco</button>
+  <button class="journey-tab" data-tab="s2b"><span class="step">4</span>Trial Dashboard · partial credentials</button>
+  <button class="journey-tab" data-tab="s3"><span class="step">5</span>R2S Module</button>
+  <button class="journey-tab" data-tab="s4"><span class="step">6</span>SPF Popup</button>
+  <button class="journey-tab" data-tab="s5"><span class="step">7</span>Channel Connectors</button>
+  <button class="journey-tab" data-tab="s6"><span class="step">8</span>SPF Module</button>
+  <button class="journey-tab" data-tab="s7"><span class="step">9</span>Payment Reco</button>
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -850,11 +851,23 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════════
+     SCREEN 2b — TRIAL DASHBOARD · PARTIAL CREDENTIALS (PRD 1a / 3b partial state)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="s2b" class="screen">
+  <div class="screen-caption">
+    <strong>Step 4 · Trial Dashboard · partial credentials</strong> · Amazon was already connected in Uniware, so Payment Reco and SPF Claims show real numbers from day one. Each card carries a clickable <strong>"Credentials of 4 channels missing →"</strong> tag; the table footer and the SPF ledger caption carry the same link. All of them open the Channels · Connectors tab (Step 7). Total ₹ at risk sums the partial values with no separate coverage indicator — the per-module tags carry the caveat.
+  </div>
+  <div class="iframe-wrap" style="height: calc(100vh - 165px);">
+    <iframe src="unireco_landing_dashboard_trial_partial.html" title="Trial dashboard — partial credentials"></iframe>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
      SCREEN 3 — R2S MODULE (AHA VIEW: SLA-BREACHED RETURNS)
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s3" class="screen">
   <div class="screen-caption">
-    <strong>Step 4 · R2S Action page — Aha view (Day 0-1)</strong> · Actual Return To Stock action page. User sees OFD Delivery Monitor + Return Restock Monitor with SLA-breached returns. Aha = visibility of breached returns.
+    <strong>Step 5 · R2S Action page — Aha view (Day 0-1)</strong> · Actual Return To Stock action page. User sees OFD Delivery Monitor + Return Restock Monitor with SLA-breached returns. Aha = visibility of breached returns.
   </div>
 
   <div class="journey-context-strip">
@@ -871,7 +884,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s4" class="screen">
   <div class="screen-caption">
-    <strong>Step 5 · SPF Popup — credentials required</strong> · User clicks "Add credentials →" on SPF card → popup opens explaining creds needed with two paths (CSM or self-serve via Channel Settings)
+    <strong>Step 6 · SPF Popup — credentials required</strong> · User clicks "Add credentials →" on SPF card → popup opens explaining creds needed with two paths (CSM or self-serve via Channel Settings)
   </div>
   <div class="uwr-shell" style="position: relative; min-height: 700px;">
     <aside class="uwr-sidebar">
@@ -935,7 +948,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s5" class="screen">
   <div class="screen-caption">
-    <strong>Step 6 · UniReco channel page · Connectors tab</strong> · SPF popup CTA deep-links to the first not-configured channel. Not a new page: a fourth tab on the existing UniReco channel page (Settings · Channel Category · Master Rate Card · <strong>Connectors</strong>), a copy of Uniware's Connectors tab. Credentials are written to Uniware; connectors unlock sequentially. Conditional (PRD 6a OQ.1): if the user is Reco Admin without Uniware Admin, the cards render read-only and the two PRD 4b U.2 fallback cards appear below. Spec: PRD 6a.
+    <strong>Step 7 · UniReco channel page · Connectors tab</strong> · SPF popup CTA deep-links to the first not-configured channel. Not a new page: a fourth tab on the existing UniReco channel page (Settings · Channel Category · Master Rate Card · <strong>Connectors</strong>), a copy of Uniware's Connectors tab. Credentials are written to Uniware; connectors unlock sequentially. Conditional (PRD 6a OQ.1): if the user is Reco Admin without Uniware Admin, the cards render read-only and the two PRD 4b U.2 fallback cards appear below. Spec: PRD 6a.
   </div>
   <div class="uwr-shell">
     <aside class="uwr-sidebar">
@@ -1015,7 +1028,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s6" class="screen">
   <div class="screen-caption">
-    <strong>Step 7 · SPF Action page — post-credentials (Day 3-4)</strong> · Actual SPF Claims page with Recoverable Backlog, KPI cards (Eligible / Raised / Response Awaited / Reopenable / Unsettled), and claim tables.
+    <strong>Step 8 · SPF Action page — post-credentials (Day 3-4)</strong> · Actual SPF Claims page with Recoverable Backlog, KPI cards (Eligible / Raised / Response Awaited / Reopenable / Unsettled), and claim tables.
   </div>
   <div class="journey-context-strip">
     <span class="trial-mini">TRIAL</span>
@@ -1031,7 +1044,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s7" class="screen">
   <div class="screen-caption">
-    <strong>Step 8 · Payment Reco — eligible-claim queue</strong> · Post-credentials, user sees the Payment Claims flow. One-click <strong>Raise Claim</strong> drafts the marketplace dispute. Raise Claim buttons pulse to indicate the primary action for this surface.
+    <strong>Step 9 · Payment Reco — eligible-claim queue</strong> · Post-credentials, user sees the Payment Claims flow. One-click <strong>Raise Claim</strong> drafts the marketplace dispute. Raise Claim buttons pulse to indicate the primary action for this surface.
   </div>
   <span id="sol-payment-claims-flow" class="mock-anchor" aria-hidden="true"></span>
   <div class="journey-context-strip">
@@ -1066,6 +1079,7 @@ document.querySelectorAll('.journey-tab').forEach(t => {
 });
 // Trial Start (s1b) posts when provisioning finishes → land on Trial Leakage Dashboard
 window.addEventListener('message', e => { if (e.data && e.data.type === 'unireco-trial-started') goTo('s2'); });
+window.addEventListener('message', e => { if (e.data && e.data.type === 'unireco-open-connectors') goTo('s5'); });
 
 // SPF popup state transitions
 function showCSMForm() {
