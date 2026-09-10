@@ -323,10 +323,6 @@ tbody tr.clickable{cursor:pointer}
 .tl-label{color:var(--text-primary);font-size:13px;font-weight:600;line-height:20px}
 .tl-step.pending .tl-label{color:var(--text-tertiary);font-weight:500}
 .tl-date{color:var(--text-tertiary);font-size:12px;line-height:16px}
-.recovery-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
-.recovery-cell{padding:var(--gap-16) var(--gap-20);border-right:var(--stroke-regular) solid var(--border-primary);
-  display:flex;flex-direction:column;gap:var(--gap-4)}
-.recovery-cell:last-child{border-right:none}
 
 
 /* Narrow slide-over (Ticket ID) */
@@ -527,12 +523,12 @@ tbody tr.clickable{cursor:pointer}
             <span class="metric-hint text-caption-md">Scraped · Sep 10</span>
           </div>
           <div class="metric-card">
-            <span class="metric-label text-caption-md">Settlement match</span>
+            <span class="metric-label text-caption-md">Recovered</span>
             <span class="metric-value">
               <span class="text-numeric-sm" style="color:var(--text-success-base)">₹3,240</span>
               <span class="text-body-sm" style="color:var(--text-tertiary)">/ ₹12,847</span>
             </span>
-            <span class="metric-hint text-caption-md">25% · from Payment Reco</span>
+            <span class="metric-hint text-caption-md">25% · lump-sum credit from marketplace</span>
           </div>
           <div class="metric-card">
             <span class="metric-label text-caption-md">Auto-close in</span>
@@ -551,52 +547,31 @@ tbody tr.clickable{cursor:pointer}
           </div>
         </div>
 
-        <div class="card clip" style="margin-bottom:var(--gap-16)">
-          <div class="card-head"><span class="text-h3">Recovery breakdown</span></div>
-          <div class="recovery-grid">
-            <div class="recovery-cell">
-              <span class="text-caption-md" style="color:var(--text-tertiary)">Attributed to orders</span>
-              <span class="text-numeric-sm" style="color:var(--text-success-base);font-variant-numeric:tabular-nums">₹1,240</span>
-              <span class="text-caption-md" style="color:var(--text-secondary)">3 orders matched via settlement stream</span>
-            </div>
-            <div class="recovery-cell">
-              <span class="text-caption-md" style="color:var(--text-tertiary)">Unattributed lump-sum</span>
-              <span class="text-numeric-sm" style="color:var(--text-success-base);font-variant-numeric:tabular-nums">₹2,000</span>
-              <span class="text-caption-md" style="color:var(--text-secondary)">Credited to claim, cannot split to orders</span>
-            </div>
-            <div class="recovery-cell">
-              <span class="text-caption-md" style="color:var(--text-tertiary)">Pending</span>
-              <span class="text-numeric-sm" style="font-variant-numeric:tabular-nums">₹9,607</span>
-              <span class="text-caption-md" style="color:var(--text-secondary)">9 orders · watching settlement stream</span>
-            </div>
-          </div>
-        </div>
-
         <div class="card clip">
           <div class="card-head">
             <span class="text-h3">Orders in this claim</span>
             <span class="text-caption-md" style="color:var(--text-tertiary)">12 orders · immutable</span>
           </div>
           <table>
-            <colgroup><col><col style="width:70px"><col style="width:130px"><col style="width:130px"><col style="width:140px"></colgroup>
+            <colgroup><col><col style="width:100px"><col style="width:160px"></colgroup>
             <thead>
-              <tr><th>Order</th><th style="text-align:right">SOIs</th><th style="text-align:right">Discrepancy claimed</th><th style="text-align:right">Settlement match</th><th style="text-align:right">Status</th></tr>
+              <tr><th>Order</th><th style="text-align:right">SOIs</th><th style="text-align:right">Discrepancy claimed</th></tr>
             </thead>
             <tbody>
-              <tr><td class="text-body-md">MSO-8471-K</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">312.40</td><td class="amt" style="text-align:right;color:var(--text-success-base)">312.40</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
-              <tr><td class="text-body-md">MSO-9012-P</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">687.15</td><td class="amt" style="text-align:right;color:var(--text-success-base)">687.15</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
-              <tr><td class="text-body-md">MSO-7746-Q</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">241.20</td><td class="amt" style="text-align:right;color:var(--text-success-base)">241.20</td><td style="text-align:right"><span class="badge badge-success">Matched</span></td></tr>
-              <tr><td class="text-body-md">MSO-3320-A</td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">915.60</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
-              <tr><td class="text-body-md">MSO-5501-R</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">128.45</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
-              <tr><td class="text-body-md">MSO-4488-B</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">423.90</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
-              <tr><td class="text-body-md">MSO-2299-J</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">88.30</td><td class="amt amt-muted" style="text-align:right">—</td><td style="text-align:right"><span class="badge badge-neutral">Pending</span></td></tr>
+              <tr><td class="text-body-md">MSO-8471-K</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">312.40</td></tr>
+              <tr><td class="text-body-md">MSO-9012-P</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">687.15</td></tr>
+              <tr><td class="text-body-md">MSO-7746-Q</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">241.20</td></tr>
+              <tr><td class="text-body-md">MSO-3320-A</td><td class="amt" style="text-align:right">3</td><td class="amt" style="text-align:right">915.60</td></tr>
+              <tr><td class="text-body-md">MSO-5501-R</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">128.45</td></tr>
+              <tr><td class="text-body-md">MSO-4488-B</td><td class="amt" style="text-align:right">2</td><td class="amt" style="text-align:right">423.90</td></tr>
+              <tr><td class="text-body-md">MSO-2299-J</td><td class="amt" style="text-align:right">1</td><td class="amt" style="text-align:right">88.30</td></tr>
             </tbody>
           </table>
         </div>
 
         <div class="alert alert-md alert-info">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <span class="text-body-sm">Claim-level recovery ₹ may exceed sum of per-order matches when marketplace credits are lump-sum. Order-level recovery % in Reports counts attributed only.</span>
+          <span class="text-body-sm">Recovery is credited by the marketplace as a lump sum at claim level. Per-order attribution isn't available.</span>
         </div>
       </section>
     </main>
