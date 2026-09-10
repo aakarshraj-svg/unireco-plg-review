@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniReco PLG · C1 UniCapture entry mocks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   
+/* ── journey chrome ── */
+.mock-nav { background: var(--bg-inverse); padding: var(--gap-12) var(--gap-24); display:flex; align-items:center; gap: var(--gap-16); position: sticky; top:0; z-index: 1000; }
+.mock-nav .brand { color: var(--text-primary-inverse); }
+.mock-nav .brand .accent { color: var(--text-brand-base); }
+.journey-tabs { display:flex; gap: var(--gap-4); margin-left: var(--gap-24); }
+.journey-tab { padding: var(--gap-8) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid transparent; border-radius: var(--radius-md); font-family: inherit; cursor: pointer; opacity: 0.72; display:flex; align-items:center; gap: var(--gap-8); }
+.journey-tab .step { width: var(--gap-20); height: var(--gap-20); border-radius: var(--radius-full); background: var(--bg-brand-base); color: var(--text-on-fill); display:grid; place-items:center; }
+.journey-tab.active { opacity: 1; background: var(--bg-brand-subtle); border-color: var(--border-brand-subtle); }
+.theme-toggle { margin-left:auto; padding: var(--gap-8) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; }
+.screen { display:none; } .screen.active { display:block; }
+.screen-caption { background: var(--bg-secondary); border-bottom: var(--stroke-regular) solid var(--border-primary); padding: var(--gap-12) var(--gap-24); color: var(--text-secondary); }
+.screen-caption strong { color: var(--text-primary); }
+.iframe-wrap { height: calc(100vh - 110px); } .iframe-wrap iframe { width:100%; height:100%; border:none; }
+
+/* ── UniCapture app shell ── */
+.uc-app { background: var(--bg-primary); min-height: 800px; }
+.uc-top { display:flex; align-items:center; gap: var(--gap-24); padding: var(--gap-12) var(--gap-24); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.uc-brand { display:flex; align-items:center; gap: var(--gap-8); }
+.uc-brand .mark { width: var(--gap-32); height: var(--gap-32); border-radius: var(--radius-md); background: var(--bg-warning-base); color: var(--text-on-fill); display:grid; place-items:center; }
+.uc-nav { display:flex; gap: var(--gap-4); }
+.uc-nav button { padding: var(--gap-8) var(--gap-12); background: transparent; border: none; color: var(--text-secondary); font-family: inherit; cursor:pointer; border-radius: var(--radius-sm); }
+.uc-nav button.active { color: var(--text-primary); background: var(--bg-tertiary); }
+.uc-tenant { margin-left:auto; padding: var(--gap-8) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-sm); color: var(--text-primary); }
+.uc-avatar { width: var(--gap-32); height: var(--gap-32); border-radius: var(--radius-full); background: var(--bg-quaternary); color: var(--text-primary); display:grid; place-items:center; }
+.uc-main { padding: var(--gap-24); display:flex; flex-direction: column; gap: var(--gap-20); }
+.uc-head { display:flex; align-items:flex-end; justify-content:space-between; }
+.uc-head .sub { color: var(--text-tertiary); margin-top: var(--gap-4); }
+.uc-controls { display:flex; gap: var(--gap-12); align-items:center; }
+.uc-select { padding: var(--gap-8) var(--gap-16); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-sm); color: var(--text-primary); background: var(--bg-primary); display:flex; align-items:center; gap: var(--gap-12); }
+.uc-select .caret { color: var(--icon-tertiary); }
+.uc-btn { padding: var(--gap-8) var(--gap-16); border-radius: var(--radius-sm); font-family: inherit; cursor:pointer; border: var(--stroke-regular) solid transparent; }
+.uc-btn.primary { background: var(--bg-warning-base); color: var(--text-on-fill); }
+.uc-btn.secondary { background: transparent; color: var(--text-primary); border-color: var(--border-secondary); }
+.uc-stats { display:grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-16); }
+.uc-stat { padding: var(--gap-20); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); }
+.uc-stat .lbl { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: var(--gap-8); }
+.uc-stat .val { color: var(--text-primary); display:flex; align-items:baseline; gap: var(--gap-12); }
+.uc-stat .chg { padding: var(--gap-4) var(--gap-8); border-radius: var(--radius-full); background: var(--bg-success-subtler); color: var(--text-success-base); }
+.uc-stat .chg.warn { background: var(--bg-warning-subtler); color: var(--text-warning-base); }
+.uc-stat .foot { color: var(--text-tertiary); margin-top: var(--gap-8); }
+.uc-table { width:100%; border-collapse: collapse; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); overflow:hidden; }
+.uc-table th, .uc-table td { padding: var(--gap-12) var(--gap-16); text-align:left; border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.uc-table th { background: var(--bg-secondary); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.02em; }
+.uc-table td { color: var(--text-primary); } .uc-table tbody tr:last-child td { border-bottom:none; }
+.uc-table td.num { text-align:right; font-variant-numeric: tabular-nums; }
+.pill { display:inline-flex; align-items:center; gap: var(--gap-4); padding: var(--gap-4) var(--gap-8); border-radius: var(--radius-full); }
+.pill.success { background: var(--bg-success-subtle); color: var(--text-success-base); }
+.pill.warning { background: var(--bg-warning-subtle); color: var(--text-warning-base); }
+.pill.danger { background: var(--bg-danger-subtle); color: var(--text-danger-base); }
+.pill.neutral { background: var(--bg-tertiary); color: var(--text-secondary); }
+.pill.brand { background: var(--bg-brand-subtle); color: var(--text-brand-base); }
+.uc-card { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); padding: var(--gap-20); }
+.uc-card .ttl { color: var(--text-primary); margin-bottom: var(--gap-12); display:flex; justify-content:space-between; align-items:center; }
+.uc-filters { display:grid; grid-template-columns: 1.4fr 1fr 1fr 1fr auto; gap: var(--gap-12); align-items:end; }
+.uc-field .lbl { color: var(--text-tertiary); margin-bottom: var(--gap-4); }
+.uc-input { padding: var(--gap-8) var(--gap-12); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-sm); color: var(--text-tertiary); background: var(--bg-primary); }
+.uc-fmt { display:flex; gap: var(--gap-12); }
+.uc-fmt label { display:flex; align-items:center; gap: var(--gap-8); padding: var(--gap-12) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); color: var(--text-primary); flex:1; cursor:pointer; }
+.uc-fmt label.sel { border-color: var(--border-brand-base); background: var(--bg-brand-subtler); }
+.uc-fmt input { accent-color: var(--bg-brand-base); }
+
+/* ── UniReco trigger (PRD 2b) — card on Dashboard, banner on Export ── */
+.ur-trigger { background: var(--bg-brand-subtler); border: var(--stroke-regular) solid var(--border-brand-subtle); border-radius: var(--radius-lg); padding: var(--gap-16) var(--gap-20); display:grid; grid-template-columns: 1fr auto; gap: var(--gap-20); align-items:center; position:relative; }
+.ur-trigger.banner { border-radius: var(--radius-md); padding: var(--gap-12) var(--gap-16); }
+.ur-trigger .close { position:absolute; top: var(--gap-8); right: var(--gap-8); background: transparent; border:none; cursor:pointer; color: var(--icon-tertiary); width: var(--gap-24); height: var(--gap-24); display:grid; place-items:center; border-radius: var(--radius-sm); }
+.ur-trigger .close:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.ur-trigger .eyebrow { display:inline-flex; align-items:center; gap: var(--gap-8); color: var(--text-brand-base); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--gap-4); }
+.ur-trigger .eyebrow .badge { padding: var(--gap-4) var(--gap-8); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); }
+.ur-trigger .headline { color: var(--text-primary); margin-bottom: var(--gap-4); }
+.ur-trigger .body { color: var(--text-secondary); padding-right: var(--gap-24); }
+.ur-trigger .actions { display:flex; flex-direction:column; align-items:flex-end; gap: var(--gap-8); }
+.ur-trigger .cta { padding: var(--gap-12) var(--gap-20); background: var(--bg-brand-base); color: var(--text-on-fill); border:none; border-radius: var(--radius-md); font-family: inherit; cursor:pointer; white-space:nowrap; }
+.ur-trigger .cta:hover { background: var(--bg-brand-bold); }
+.ur-trigger .learn { color: var(--text-brand-base); cursor:pointer; }
+.ur-flyout { display:none; position:absolute; top: var(--gap-32); right: var(--gap-8); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); box-shadow: var(--shadow-medium); padding: var(--gap-8); min-width: 220px; z-index: 5; }
+.ur-flyout button { display:block; width:100%; text-align:left; padding: var(--gap-8) var(--gap-12); background: transparent; border:none; color: var(--text-primary); font-family: inherit; cursor:pointer; border-radius: var(--radius-sm); }
+.ur-flyout button:hover { background: var(--bg-tertiary); }
+.ur-flyout button.muted { color: var(--text-tertiary); }
+.ur-trigger.open .ur-flyout { display:block; }
+.ur-dismissed { display:none; padding: var(--gap-8) var(--gap-16); background: var(--bg-tertiary); border-radius: var(--radius-md); color: var(--text-tertiary); }
+.ur-dismissed .undo { color: var(--text-brand-base); cursor:pointer; margin-left: var(--gap-8); }
+</style>
+</head>
+<body>
+<div class="mock-nav">
+  <span class="brand text-label-md">UniReco PLG <span class="accent">· C1 entry journey (UniCapture)</span></span>
+  <div class="journey-tabs">
+    <button class="journey-tab active" data-tab="c1" ><span class="step text-caption-sm">1</span><span class="text-label-sm">UniCapture Dashboard (trigger card)</span></button>
+    <button class="journey-tab" data-tab="c2"><span class="step text-caption-sm">2</span><span class="text-label-sm">UniCapture Export (trigger banner)</span></button>
+    <button class="journey-tab" data-tab="c3"><span class="step text-caption-sm">3</span><span class="text-label-sm">Trial Start</span></button>
+  </div>
+  <button class="theme-toggle text-label-sm" onclick="toggleTheme()">Light / Dark</button>
+</div>
+
+<!-- ═══ C1-1 · UniCapture Dashboard ═══ -->
+<section id="c1" class="screen active">
+  <div class="screen-caption text-caption-md"><strong>Step 1 · UniCapture Dashboard</strong> · C1 user opens UniCapture. UniReco trigger card sits above the fold at top of content (PRD 2b placement A). Corner × opens the dismiss flyout: 30-day snooze or permanent. CTA → Trial Start with <code>source_trigger=unicapture_c1</code>.</div>
+  <div class="uc-app">
+    <div class="uc-top">
+      <div class="uc-brand"><div class="mark text-label-md">▶</div><span class="text-heading-h4">UniCapture</span></div>
+      <div class="uc-nav"><button class="active text-label-sm">Dashboard</button><button class="text-label-sm">Recordings</button><button class="text-label-sm" onclick="goTo('c2')">Export</button><button class="text-label-sm">Devices</button><button class="text-label-sm">Settings</button></div>
+      <div class="uc-tenant text-label-sm">AccessoriesMasters ▾</div>
+      <div class="uc-avatar text-label-sm">RS</div>
+    </div>
+    <div class="uc-main">
+      <div class="uc-head">
+        <div><div class="text-heading-h2">Dashboard</div><div class="sub text-caption-md">Packing &amp; dispatch video capture · all facilities · today</div></div>
+        <div class="uc-controls"><div class="uc-select text-label-sm">Gurugram FC <span class="caret">▾</span></div><div class="uc-select text-label-sm">Today <span class="caret">▾</span></div><button class="uc-btn primary text-label-sm">● Start recording</button></div>
+      </div>
+
+      <!-- UniReco trigger card (PRD 2b) -->
+      <div id="trig-dash">
+        <div class="ur-trigger" id="ur-trig-1">
+          <button class="close" onclick="toggleFlyout('ur-trig-1')" title="Dismiss">×</button>
+          <div class="ur-flyout">
+            <button class="text-body-sm" onclick="dismiss('trig-dash','dash-dismissed','Hidden for 30 days')">Hide for 30 days</button>
+            <button class="text-body-sm muted" onclick="dismiss('trig-dash','dash-dismissed','Won\'t show again')">Not interested, don't show again</button>
+          </div>
+          <div>
+            <div class="eyebrow text-caption-sm"><span class="badge">UniReco</span>Recovery opportunity</div>
+            <div class="headline text-heading-h3">Recover leaking revenue you don't see today</div>
+            <div class="body text-body-sm">See how much your operations are losing to unreconciled returns, missed marketplace commissions, and unclaimed SPF value. Free 30-day trial, no credit card, no sales call.</div>
+          </div>
+          <div class="actions">
+            <button class="cta text-label-md" onclick="goTo('c3')">Start Free Trial →</button>
+            <span class="learn text-caption-md">Learn more</span>
+          </div>
+        </div>
+      </div>
+      <div class="ur-dismissed text-caption-md" id="dash-dismissed"></div>
+
+      <div class="uc-stats">
+        <div class="uc-stat"><div class="lbl text-caption-sm">Videos recorded today</div><div class="val text-numeric-lg">1,284 <span class="chg text-caption-sm">▲ 6.2%</span></div><div class="foot text-caption-md">vs yesterday by this time · 1,209</div></div>
+        <div class="uc-stat"><div class="lbl text-caption-sm">Orders covered</div><div class="val text-numeric-lg">97.4%</div><div class="foot text-caption-md">34 dispatched without a recording</div></div>
+        <div class="uc-stat"><div class="lbl text-caption-sm">Returns matched to a video</div><div class="val text-numeric-lg">312 <span class="chg warn text-caption-sm">18 unmatched</span></div><div class="foot text-caption-md">last 7 days · used in dispute evidence</div></div>
+        <div class="uc-stat"><div class="lbl text-caption-sm">Storage used</div><div class="val text-numeric-lg">1.8 TB</div><div class="foot text-caption-md">of 2.5 TB · 90-day retention</div></div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap: var(--gap-16);">
+        <div class="uc-card">
+          <div class="ttl text-label-md">Recent recordings <span class="pill neutral text-caption-sm">live</span></div>
+          <table class="uc-table text-body-sm">
+            <thead><tr><th class="text-caption-sm">AWB</th><th class="text-caption-sm">Order</th><th class="text-caption-sm">Channel</th><th class="text-caption-sm">Station</th><th class="text-caption-sm">Duration</th><th class="text-caption-sm">Status</th></tr></thead>
+            <tbody>
+              <tr><td>DL5471928834</td><td>AM-118237</td><td>Amazon</td><td>GGN-P04</td><td class="num">0:41</td><td><span class="pill success text-caption-sm">Uploaded</span></td></tr>
+              <tr><td>FK2209138877</td><td>AM-118236</td><td>Flipkart</td><td>GGN-P02</td><td class="num">0:38</td><td><span class="pill success text-caption-sm">Uploaded</span></td></tr>
+              <tr><td>MY8891027733</td><td>AM-118233</td><td>Myntra</td><td>BHW-P01</td><td class="num">1:02</td><td><span class="pill warning text-caption-sm">Uploading</span></td></tr>
+              <tr><td>ME4471002210</td><td>AM-118229</td><td>Meesho</td><td>GGN-P04</td><td class="num">0:29</td><td><span class="pill success text-caption-sm">Uploaded</span></td></tr>
+              <tr><td>DL5471928611</td><td>AM-118221</td><td>Amazon</td><td>BLR-P03</td><td class="num">—</td><td><span class="pill danger text-caption-sm">Camera offline</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="uc-card">
+          <div class="ttl text-label-md">Stations</div>
+          <table class="uc-table text-body-sm">
+            <thead><tr><th class="text-caption-sm">Station</th><th class="text-caption-sm">Today</th><th class="text-caption-sm">Health</th></tr></thead>
+            <tbody>
+              <tr><td>GGN-P01</td><td class="num">214</td><td><span class="pill success text-caption-sm">OK</span></td></tr>
+              <tr><td>GGN-P02</td><td class="num">198</td><td><span class="pill success text-caption-sm">OK</span></td></tr>
+              <tr><td>GGN-P04</td><td class="num">241</td><td><span class="pill success text-caption-sm">OK</span></td></tr>
+              <tr><td>BHW-P01</td><td class="num">176</td><td><span class="pill warning text-caption-sm">Slow upload</span></td></tr>
+              <tr><td>BLR-P03</td><td class="num">0</td><td><span class="pill danger text-caption-sm">Offline 2h</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ C1-2 · UniCapture Export page ═══ -->
+<section id="c2" class="screen">
+  <div class="screen-caption text-caption-md"><strong>Step 2 · UniCapture Export page</strong> · Highest-intent surface in UniCapture: users come here to pull packing videos as evidence for a return dispute. Trigger renders as a banner above the export form (PRD 2b placement B) with dispute-context copy. Same dismiss rules and attribution as the dashboard card; both placements share one suppression state.</div>
+  <div class="uc-app">
+    <div class="uc-top">
+      <div class="uc-brand"><div class="mark text-label-md">▶</div><span class="text-heading-h4">UniCapture</span></div>
+      <div class="uc-nav"><button class="text-label-sm" onclick="goTo('c1')">Dashboard</button><button class="text-label-sm">Recordings</button><button class="active text-label-sm">Export</button><button class="text-label-sm">Devices</button><button class="text-label-sm">Settings</button></div>
+      <div class="uc-tenant text-label-sm">AccessoriesMasters ▾</div>
+      <div class="uc-avatar text-label-sm">RS</div>
+    </div>
+    <div class="uc-main">
+      <div class="uc-head">
+        <div><div class="text-heading-h2">Export</div><div class="sub text-caption-md">Download recordings and recording logs for disputes, audits, or archival</div></div>
+      </div>
+
+      <!-- UniReco trigger banner (PRD 2b placement B) -->
+      <div id="trig-export">
+        <div class="ur-trigger banner" id="ur-trig-2">
+          <button class="close" onclick="toggleFlyout('ur-trig-2')" title="Dismiss">×</button>
+          <div class="ur-flyout">
+            <button class="text-body-sm" onclick="dismiss('trig-export','export-dismissed','Hidden for 30 days')">Hide for 30 days</button>
+            <button class="text-body-sm muted" onclick="dismiss('trig-export','export-dismissed','Won\'t show again')">Not interested, don't show again</button>
+          </div>
+          <div>
+            <div class="eyebrow text-caption-sm"><span class="badge">UniReco</span>Exporting evidence for a return dispute?</div>
+            <div class="headline text-heading-h4">You're pulling the evidence by hand. UniReco finds every eligible claim and raises it for you.</div>
+            <div class="body text-body-sm">312 returns matched to a recording in the last 7 days. UniReco checks which of them qualify for marketplace SPF reimbursement, drafts the claim, and tracks it to payout — with the recording attached. Free 30-day trial, no credit card.</div>
+          </div>
+          <div class="actions">
+            <button class="cta text-label-md" onclick="goTo('c3')">Start Free Trial →</button>
+            <span class="learn text-caption-md">Learn more</span>
+          </div>
+        </div>
+      </div>
+      <div class="ur-dismissed text-caption-md" id="export-dismissed"></div>
+
+      <div class="uc-card">
+        <div class="ttl text-label-md">New export</div>
+        <div class="uc-filters">
+          <div class="uc-field"><div class="lbl text-caption-sm">Order / AWB / SKU</div><div class="uc-input text-body-sm">Search by order ID, AWB or SKU…</div></div>
+          <div class="uc-field"><div class="lbl text-caption-sm">Date range</div><div class="uc-input text-body-sm" style="color: var(--text-primary);">01 Sep – 08 Sep 2026</div></div>
+          <div class="uc-field"><div class="lbl text-caption-sm">Channel</div><div class="uc-input text-body-sm" style="color: var(--text-primary);">All channels ▾</div></div>
+          <div class="uc-field"><div class="lbl text-caption-sm">Facility</div><div class="uc-input text-body-sm" style="color: var(--text-primary);">All facilities ▾</div></div>
+          <button class="uc-btn primary text-label-sm">Export</button>
+        </div>
+        <div style="margin-top: var(--gap-16);">
+          <div class="lbl text-caption-sm" style="color: var(--text-tertiary); margin-bottom: var(--gap-8);">Format</div>
+          <div class="uc-fmt text-body-sm">
+            <label class="sel"><input type="radio" name="fmt" checked> Recording log (CSV) · AWB, order, channel, timestamp, station, video link</label>
+            <label><input type="radio" name="fmt"> Videos (ZIP) · MP4 files named by AWB · max 500 per export</label>
+            <label><input type="radio" name="fmt"> Dispute pack · one PDF per order with stills + log line</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="uc-card">
+        <div class="ttl text-label-md">Export history</div>
+        <table class="uc-table text-body-sm">
+          <thead><tr><th class="text-caption-sm">Requested</th><th class="text-caption-sm">By</th><th class="text-caption-sm">Filter</th><th class="text-caption-sm">Format</th><th class="text-caption-sm">Items</th><th class="text-caption-sm">Status</th><th class="text-caption-sm"></th></tr></thead>
+          <tbody>
+            <tr><td>Today 10:42</td><td>Rahul S.</td><td>Flipkart · returns flagged "item mismatch" · 1–7 Sep</td><td>Dispute pack</td><td class="num">23</td><td><span class="pill success text-caption-sm">Ready</span></td><td><span class="text-label-sm" style="color: var(--text-brand-base);">Download</span></td></tr>
+            <tr><td>Yesterday 17:05</td><td>Priya M.</td><td>Amazon · AWB list (41)</td><td>Videos (ZIP)</td><td class="num">41</td><td><span class="pill success text-caption-sm">Ready</span></td><td><span class="text-label-sm" style="color: var(--text-brand-base);">Download</span></td></tr>
+            <tr><td>Yesterday 11:20</td><td>Rahul S.</td><td>Myntra · 25–31 Aug</td><td>Recording log</td><td class="num">1,908</td><td><span class="pill success text-caption-sm">Ready</span></td><td><span class="text-label-sm" style="color: var(--text-brand-base);">Download</span></td></tr>
+            <tr><td>06 Sep 09:12</td><td>Priya M.</td><td>Meesho · returns · Aug</td><td>Dispute pack</td><td class="num">67</td><td><span class="pill neutral text-caption-sm">Expired</span></td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ C1-3 · Trial Start ═══ -->
+<section id="c3" class="screen">
+  <div class="screen-caption text-caption-md"><strong>Step 3 · Trial Start (gate over the Trial Landing Dashboard, PRD 3a Steps 2–3)</strong> · The dashboard loads behind a blurred, non-dismissable overlay. Confirm account, accept terms, "Start My Trial" → provisioning → the blur lifts and the user is on their live dashboard. No separate page, no redirect.</div>
+  <div class="iframe-wrap"><iframe src="unireco_trial_start_5.html" title="Trial start"></iframe></div>
+</section>
+
+<script>
+function goTo(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.querySelectorAll('.journey-tab').forEach(t=>t.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelector('[data-tab="'+id+'"]').classList.add('active'); window.scrollTo(0,0); }
+document.querySelectorAll('.journey-tab').forEach(t=>t.addEventListener('click',()=>goTo(t.dataset.tab)));
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; document.querySelectorAll('iframe').forEach(f=>{ try{ f.contentDocument.documentElement.dataset.theme=r.dataset.theme; }catch(e){} }); }
+function toggleFlyout(id){ document.getElementById(id).classList.toggle('open'); }
+function dismiss(wrap,msgId,msg){ document.getElementById(wrap).style.display='none'; const m=document.getElementById(msgId); m.innerHTML=msg+' <span class="undo" onclick="undo(\''+wrap+'\',\''+msgId+'\')">Undo</span>'; m.style.display='block'; }
+function undo(wrap,msgId){ document.getElementById(wrap).style.display='block'; document.getElementById(msgId).style.display='none'; document.querySelectorAll('.ur-trigger').forEach(t=>t.classList.remove('open')); }
+window.addEventListener('message', e=>{ if(e.data && e.data.type==='unireco-trial-started'){ alert('Provisioning complete → redirect to Trial Landing Dashboard (PRD 3b). Open unireco_c2_journey_mocks_5.html, step 3, to continue the journey.'); } });
+</script>
+</body>
+</html>

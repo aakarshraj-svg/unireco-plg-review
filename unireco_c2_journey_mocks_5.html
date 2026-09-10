@@ -750,6 +750,42 @@
   }
   .uwr-content-pane { flex: 1; overflow-y: auto; }
 
+
+  /* ── S5: UniReco channel page · Connectors tab (clone of Uniware Connectors) ── */
+  .cn-crumb { display:flex; align-items:center; gap:10px; font-size:14px; color: var(--text-secondary); padding: 8px 0 14px; }
+  .cn-crumb strong { color: var(--text-primary); font-weight: 600; }
+  .cn-tabs { display:flex; gap:6px; border-bottom:1px solid var(--border-primary); margin-bottom:16px; }
+  .cn-tab { padding:10px 14px; font-size:14px; color: var(--text-secondary); border-bottom:2px solid transparent; cursor:pointer; display:flex; align-items:center; gap:8px; }
+  .cn-tab.active { color: var(--text-primary); font-weight:600; border-bottom-color: var(--text-primary); }
+  .cn-tab .badge { background: var(--bg-tertiary); color: var(--text-primary); border-radius:999px; padding:1px 8px; font-size:12px; }
+  .cn-layout { display:grid; grid-template-columns: 260px 1fr; gap:20px; }
+  .cn-rail { border-right:1px solid var(--border-primary); padding-right:16px; font-size:13px; }
+  .cn-rail .name { font-size:18px; font-weight:600; color: var(--text-primary); }
+  .cn-rail .sub { color: var(--text-secondary); margin:2px 0 14px; }
+  .cn-rail .logo { display:inline-block; padding:8px 14px; border-radius:6px; background:#2874f0; color:#fff; font-weight:700; font-size:13px; margin-bottom:6px; }
+  .cn-rail .cap { font-size:11px; letter-spacing:.06em; color: var(--text-tertiary); text-transform:uppercase; border-bottom:1px solid var(--border-primary); padding-bottom:12px; margin-bottom:12px; }
+  .cn-rail .grp { font-weight:600; color: var(--text-primary); margin:10px 0 8px; display:flex; justify-content:space-between; }
+  .cn-rail .kv { display:flex; justify-content:space-between; color: var(--text-secondary); padding:5px 0; }
+  .cn-rail .kv b { color: var(--text-primary); font-weight:500; }
+  .cn-rail .kv .bad { color: var(--text-danger-base); }
+  .cn-head { font-size:16px; font-weight:600; color: var(--text-primary); }
+  .cn-desc { color: var(--text-secondary); font-size:13px; margin:4px 0 14px; }
+  .cn-card { border:1px solid var(--border-primary); border-radius:10px; padding:18px 20px; margin-bottom:14px; background: var(--bg-primary); }
+  .cn-card.locked { opacity:.7; }
+  .cn-card .t { display:flex; align-items:center; gap:10px; font-weight:600; font-size:15px; color: var(--text-primary); }
+  .cn-pill { font-size:12px; font-weight:500; border-radius:999px; padding:3px 10px; background: var(--bg-tertiary); color: var(--text-secondary); }
+  .cn-pill.ok { background: var(--bg-success-subtle); color: var(--text-success-base); }
+  .cn-pill.err { background: var(--bg-danger-subtle); color: var(--text-danger-base); }
+  .cn-card p { color: var(--text-secondary); font-size:13px; margin:8px 0 0; }
+  .cn-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0 18px; }
+  .cn-fields label { display:block; font-size:13px; color: var(--text-primary); margin-bottom:6px; }
+  .cn-fields label i { color: var(--text-danger-base); font-style:normal; }
+  .cn-fields input { width:100%; height:38px; border:1px solid var(--border-secondary); border-radius:8px; padding:0 12px; font:inherit; font-size:13px; background: var(--bg-primary); color: var(--text-primary); }
+  .cn-actions { display:flex; justify-content:flex-end; align-items:center; gap:14px; }
+  .cn-link { font-size:13px; color: var(--text-primary); cursor:pointer; margin-right:auto; margin-left:auto; }
+  .cn-btn { height:36px; padding:0 18px; border-radius:999px; font:inherit; font-size:13px; font-weight:500; cursor:pointer; border:1px solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); }
+  .cn-btn.primary { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+  .cn-sync { background: var(--bg-info-subtle, #eff6ff); border:1px solid var(--border-info-subtle, #bfdbfe); border-radius:8px; padding:8px 12px; font-size:12px; color: var(--text-secondary); margin-bottom:14px; }
 </style>
 </head>
 <body>
@@ -762,12 +798,13 @@
 
 <nav class="journey-nav">
   <button class="journey-tab active" data-tab="s1"><span class="step">1</span>Smart Dashboard (trigger)</button>
-  <button class="journey-tab" data-tab="s2"><span class="step">2</span>Trial Leakage Dashboard (landing)</button>
-  <button class="journey-tab" data-tab="s3"><span class="step">3</span>R2S Module</button>
-  <button class="journey-tab" data-tab="s4"><span class="step">4</span>SPF Popup</button>
-  <button class="journey-tab" data-tab="s5"><span class="step">5</span>Channel Settings</button>
-  <button class="journey-tab" data-tab="s6"><span class="step">6</span>SPF Module</button>
-  <button class="journey-tab" data-tab="s7"><span class="step">7</span>Payment Reco</button>
+  <button class="journey-tab" data-tab="s1b"><span class="step">2</span>Trial Start</button>
+  <button class="journey-tab" data-tab="s2"><span class="step">3</span>Trial Leakage Dashboard (landing)</button>
+  <button class="journey-tab" data-tab="s3"><span class="step">4</span>R2S Module</button>
+  <button class="journey-tab" data-tab="s4"><span class="step">5</span>SPF Popup</button>
+  <button class="journey-tab" data-tab="s5"><span class="step">6</span>Channel Connectors</button>
+  <button class="journey-tab" data-tab="s6"><span class="step">7</span>SPF Module</button>
+  <button class="journey-tab" data-tab="s7"><span class="step">8</span>Payment Reco</button>
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -785,11 +822,23 @@
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════════
+     SCREEN 1b — TRIAL START (PRD 3a Section 3, Steps 2–3)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="s1b" class="screen">
+  <div class="screen-caption">
+    <strong>Step 2 · Trial Start (gate over the Trial Landing Dashboard)</strong> · Trigger CTA lands on the Trial Landing Dashboard with real Uniware data already behind a blurred, non-dismissable overlay: no close, no backdrop click, Esc ignored. Confirm account + accept terms → "Start My Trial" runs provisioning → "Show me my leakage" lifts the blur in place. Shared with the C1 journey. Spec: PRD 3a Steps 2–3.
+  </div>
+  <div class="iframe-wrap" style="height: calc(100vh - 165px);">
+    <iframe src="unireco_trial_start_5.html" title="Trial start"></iframe>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
      SCREEN 2 — LANDING DASHBOARD (TRIAL MODE — new UI)
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s2" class="screen">
   <div class="screen-caption">
-    <strong>Step 2 · Landing Dashboard (trial mode)</strong> · Same live-user UI. R2S data flows from Uniware WMS. Payment Reco and SPF Claims show credential-required states until marketplace credentials are added. Nothing is hidden or blurred.
+    <strong>Step 3 · Landing Dashboard (trial mode)</strong> · Same live-user UI. R2S data flows from Uniware WMS. Payment Reco and SPF Claims show credential-required states until marketplace credentials are added. Nothing is hidden or blurred.
   </div>
   <div class="journey-context-strip">
     <span class="trial-mini">TRIAL</span>
@@ -805,7 +854,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s3" class="screen">
   <div class="screen-caption">
-    <strong>Step 3 · R2S Action page — Aha view (Day 0-1)</strong> · Actual Return To Stock action page. User sees OFD Delivery Monitor + Return Restock Monitor with SLA-breached returns. Aha = visibility of breached returns.
+    <strong>Step 4 · R2S Action page — Aha view (Day 0-1)</strong> · Actual Return To Stock action page. User sees OFD Delivery Monitor + Return Restock Monitor with SLA-breached returns. Aha = visibility of breached returns.
   </div>
 
   <div class="journey-context-strip">
@@ -822,7 +871,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s4" class="screen">
   <div class="screen-caption">
-    <strong>Step 4 · SPF Popup — credentials required</strong> · User clicks "Add credentials →" on SPF card → popup opens explaining creds needed with two paths (CSM or self-serve via Channel Settings)
+    <strong>Step 5 · SPF Popup — credentials required</strong> · User clicks "Add credentials →" on SPF card → popup opens explaining creds needed with two paths (CSM or self-serve via Channel Settings)
   </div>
   <div class="uwr-shell" style="position: relative; min-height: 700px;">
     <aside class="uwr-sidebar">
@@ -865,168 +914,95 @@
     </main>
     <div class="popup-overlay">
       <div class="popup">
-        <button class="popup-close">×</button>
-
-        <!-- State 1: Initial options -->
-        <div id="popup-state-initial">
-          <div class="popup-eyebrow">SPF Claims · Credentials Needed</div>
-          <div class="popup-title">Marketplace credentials required</div>
-          <div class="popup-desc">
-            To pull SPF claim data from your marketplaces, we need your Seller Portal credentials for each channel. Two ways to set this up:
-          </div>
-          <div class="popup-option">
-            <strong>Option 1 · Get help from your CSM</strong>
-            Your Customer Success Manager can walk you through credential setup for each marketplace.
-          </div>
-          <div class="popup-option">
-            <strong>Option 2 · Add credentials yourself</strong>
-            Go to Uniware Channel Settings and add credentials for the channels you want to enable.
-          </div>
-          <div class="popup-footer">
-            <button class="popup-cta secondary" onclick="showCSMForm()">Talk to CSM</button>
-            <button class="popup-cta primary" onclick="goTo('s5')">Go to Channel Settings →</button>
-          </div>
+        <button class="popup-close" aria-label="Close">×</button>
+        <div class="popup-eyebrow">SPF Claims · Payment Reco</div>
+        <div class="popup-title">Connect your marketplaces to unlock SPF Claims and Payment Reco</div>
+        <div class="popup-desc">Connect your marketplaces in UniReco to unlock SPF Claims and Payment Reco. Credentials are stored in Uniware. One connection per marketplace lights up both modules.</div>
+        <div class="popup-option"><strong>Flipkart, Myntra, Meesho, Ajio</strong>Not connected · 4 of 5 channels missing credentials</div>
+        <div class="popup-option"><strong>Amazon India</strong>Connected · reconciling since 2 days</div>
+        <div class="popup-footer">
+          <button class="popup-cta secondary" onclick="goTo('s5')">I don't have credentials handy</button>
+          <button class="popup-cta primary" onclick="goTo('s5')">Connect Flipkart →</button>
         </div>
-
-        <!-- State 2: Contact form -->
-        <span id="sol-spf-csm-popup" class="mock-anchor" aria-hidden="true"></span>
-        <div id="popup-state-csm-form" style="display: none;">
-          <div class="popup-eyebrow">Request CSM Callback</div>
-          <div class="popup-title">Share your contact</div>
-          <div class="popup-desc">
-            A Customer Success Manager will call you within 24 hours to help set up marketplace credentials.
-          </div>
-          <div class="popup-form-field">
-            <label>Full Name</label>
-            <input type="text" placeholder="e.g., Rahul Sharma" value="Rahul Sharma" />
-          </div>
-          <div class="popup-form-field">
-            <label>Phone Number</label>
-            <input type="tel" placeholder="+91 XXXXX XXXXX" value="+91 98765 43210" />
-          </div>
-          <div class="popup-form-field">
-            <label>Best Time To Call</label>
-            <select>
-              <option>Weekdays · 10:00 AM – 1:00 PM</option>
-              <option>Weekdays · 1:00 PM – 4:00 PM</option>
-              <option>Weekdays · 4:00 PM – 7:00 PM</option>
-              <option>Weekends · Anytime</option>
-            </select>
-          </div>
-          <div class="popup-form-field">
-            <label>Notes for CSM (optional)</label>
-            <textarea rows="2" placeholder="e.g., I need help with Flipkart and Myntra SPF setup"></textarea>
-          </div>
-          <div class="popup-footer">
-            <button class="popup-cta secondary" onclick="backToOptions()">← Back</button>
-            <button class="popup-cta primary" onclick="submitCSMRequest()">Submit request →</button>
-          </div>
-        </div>
-
-        <!-- State 3: Confirmation -->
-        <div id="popup-state-csm-confirm" style="display: none;">
-          <div class="popup-confirmation-icon">✓</div>
-          <div class="popup-title">A CSM will call you soon</div>
-          <div class="popup-desc">
-            Your callback request has been queued. Expected callback: within <strong>24 hours</strong> during the time slot you selected.
-          </div>
-          <div class="popup-confirmation-detail">
-            📱 SMS confirmation sent to <strong>+91 98765 43210</strong><br>
-            📧 Email confirmation sent to <strong>rahul@accessoriesmasters.com</strong>
-          </div>
-          <div class="popup-footer">
-            <button class="popup-cta primary" onclick="goTo('s2')">Back to Dashboard</button>
-          </div>
-        </div>
-
+        <div style="text-align:center; margin-top:10px; font-size:12px; color: var(--text-tertiary);">or <a href="#" style="color: var(--text-brand-base);" onclick="return false;">ask a teammate who has them</a></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════════
-     SCREEN 5 — CHANNEL SETTINGS
+     SCREEN 5 — CHANNEL PAGE · CONNECTORS TAB (clone of Uniware Connectors, spec: PRD 6a)
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s5" class="screen">
   <div class="screen-caption">
-    <strong>Step 5 · Uniware Channel Settings</strong> · User arrives from SPF popup CTA. Sees per-channel status. Amazon connected via Uniware, other 4 need credentials.
+    <strong>Step 6 · UniReco channel page · Connectors tab</strong> · SPF popup CTA deep-links to the first not-configured channel. Not a new page: a fourth tab on the existing UniReco channel page (Settings · Channel Category · Master Rate Card · <strong>Connectors</strong>), a copy of Uniware's Connectors tab. Credentials are written to Uniware; connectors unlock sequentially. Conditional (PRD 6a OQ.1): if the user is Reco Admin without Uniware Admin, the cards render read-only and the two PRD 4b U.2 fallback cards appear below. Spec: PRD 6a.
   </div>
   <div class="uwr-shell">
     <aside class="uwr-sidebar">
-      <div class="uwr-sidebar-brand"><div class="uwr-brand-mark">U</div></div>
-      <div class="uwr-sidebar-section">
-        <div class="uwr-sidebar-item" title="Pulse"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-      </div>
+      <div class="uwr-sidebar-brand"><div class="uwr-brand-mark" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">U</div></div>
+      <div class="uwr-sidebar-section"><div class="uwr-sidebar-item" title="Pulse"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div></div>
       <div class="uwr-sidebar-section">
         <div class="uwr-sidebar-item" title="Claims"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v2m8-2v2"/></svg></div>
-        <div class="uwr-sidebar-item" title="Reports"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
-        <div class="uwr-sidebar-item" title="O2C Payout"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4m6 0h2"/></svg></div>
-      </div>
-      <div class="uwr-sidebar-section">
+        <div class="uwr-sidebar-item" title="Payment Reco"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></div>
         <div class="uwr-sidebar-item" title="Return to Stock"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
       </div>
-      <div class="uwr-sidebar-section" style="margin-top: auto;">
-        <div class="uwr-sidebar-item active" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div>
-      </div>
+      <div class="uwr-sidebar-section" style="margin-top:auto;"><div class="uwr-sidebar-item active" title="Settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></div></div>
     </aside>
     <main class="uwr-main">
       <div class="uwr-topbar">
-        <div class="uwr-crumbs">
-          <span>Uniware</span>
-          <span class="sep">/</span>
-          <strong>Channel Settings</strong>
-        </div>
+        <div class="uwr-crumbs"><span>UniReco</span></div>
         <div class="uwr-spacer"></div>
         <button class="uwr-topbar-btn" title="Toggle theme"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg></button>
-        <button class="uwr-topbar-btn" title="Notifications"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></button>
         <div class="uwr-avatar">AR</div>
       </div>
       <div class="uwr-content-pane">
-        <div class="ch-page-head">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <a href="#" style="font-size: 12px; color: var(--text-brand-base); font-weight: 500;" onclick="goTo('s2'); return false;">← Leakage Dashboard</a>
-          </div>
-          <div style="font-size: 20px; font-weight: 700; color: var(--text-primary); margin-top: 8px;">Channel Settings</div>
-          <div style="font-size: 12px; color: var(--text-tertiary); margin-top: 2px;">Add marketplace credentials to unlock SPF claim automation per channel</div>
+        <div class="cn-crumb"><a href="#" onclick="goTo('s2');return false;" style="color:var(--text-brand-base);font-size:12px;">← Leakage Dashboard</a><span style="opacity:.4">|</span><span>Channels</span><span style="opacity:.5">›</span><strong>FLIPKART_B2C</strong></div>
+        <div class="cn-tabs">
+          <div class="cn-tab">Settings</div><div class="cn-tab">Channel Category</div><div class="cn-tab">Master Rate Card</div><div class="cn-tab active">Connectors <span class="badge">3</span></div>
         </div>
+        <div class="cn-layout">
+          <aside class="cn-rail">
+            <div class="name">FLIPKART_B2C</div>
+            <div class="sub">Marketplace · Enabled</div>
+            <div class="logo">Flipkart</div>
+            <div class="cap">Marketplace</div>
+            <div class="grp">Reconciliation <span style="font-weight:400;color:var(--text-tertiary);">⟳</span></div>
+            <div class="kv"><span>Last synced</span><b>—</b></div>
+            <div class="kv"><span>Settlements pulled</span><b>0</b></div>
+            <div class="kv"><span>Unreconciled</span><b class="bad">—</b></div>
+            <div class="grp">SPF Claims</div>
+            <div class="kv"><span>Eligible returns</span><b>—</b></div>
+            <div class="kv"><span>Claims raised</span><b>0</b></div>
+            <div class="grp">Return To Stock</div>
+            <div class="kv"><span>Returns tracked</span><b>1,204</b></div>
+            <div class="kv"><span>SLA breaches</span><b class="bad">47</b></div>
+          </aside>
+          <div>
+            <div class="cn-head">Connectors</div>
+            <div class="cn-desc">Connect UniReco to the channel. Each connector unlocks once the one above it is done.</div>
+            <div class="cn-sync"><strong>Stored in Uniware.</strong> Credentials you enter here are written to this channel's connectors in Uniware and used by every Unicommerce product. 1 of 5 channels connected · <a href="#" style="color:var(--text-brand-base);">see all channels</a></div>
 
-        <div class="ch-list">
-          <div class="ch-row header">
-            <div>CHANNEL</div>
-            <div>STATUS</div>
-            <div>MODULES ENABLED</div>
-            <div></div>
-          </div>
+            <div class="cn-card">
+              <div class="t">Flipkart Seller Panel <span class="cn-pill">ⓘ Not configured</span></div>
+              <p>Provide credentials which you use to log into Seller Panel.</p>
+              <div class="cn-fields">
+                <div><label>username <i>*</i></label><input type="text" placeholder=""></div>
+                <div><label>password <i>*</i></label><input type="password" placeholder=""></div>
+              </div>
+              <div class="cn-actions"><span class="cn-link">Show Password</span><button class="cn-btn">Skip</button><button class="cn-btn primary" onclick="goTo('s6')">Connect</button></div>
+            </div>
 
-          <div class="ch-row">
-            <div class="ch-name"><div class="ch-logo">A</div>Amazon</div>
-            <div class="ch-status connected">✓ Connected via Uniware</div>
-            <div class="ch-modules"><span class="yes">R2S ✓</span> · <span class="yes">SPF ✓</span></div>
-            <div class="ch-action"><button class="ch-manage-btn">Manage →</button></div>
-          </div>
-          <div class="ch-row">
-            <div class="ch-name"><div class="ch-logo">F</div>Flipkart</div>
-            <div class="ch-status not-connected">Not connected · SPF credentials needed</div>
-            <div class="ch-modules"><span class="yes">R2S ✓</span> · <span class="lock">SPF 🔒</span></div>
-            <div class="ch-action"><button class="ch-add-btn" onclick="goTo('s6')">Add credentials</button></div>
-          </div>
-          <div class="ch-row">
-            <div class="ch-name"><div class="ch-logo">M</div>Myntra</div>
-            <div class="ch-status not-connected">Not connected · SPF credentials needed</div>
-            <div class="ch-modules"><span class="yes">R2S ✓</span> · <span class="lock">SPF 🔒</span></div>
-            <div class="ch-action"><button class="ch-add-btn">Add credentials</button></div>
-          </div>
-          <div class="ch-row">
-            <div class="ch-name"><div class="ch-logo">Me</div>Meesho</div>
-            <div class="ch-status not-connected">Not connected · SPF credentials needed</div>
-            <div class="ch-modules"><span class="yes">R2S ✓</span> · <span class="lock">SPF 🔒</span></div>
-            <div class="ch-action"><button class="ch-add-btn">Add credentials</button></div>
-          </div>
-          <div class="ch-row">
-            <div class="ch-name"><div class="ch-logo">Aj</div>Ajio</div>
-            <div class="ch-status not-connected">Not connected · SPF credentials needed</div>
-            <div class="ch-modules"><span class="yes">R2S ✓</span> · <span class="lock">SPF 🔒</span></div>
-            <div class="ch-action"><button class="ch-add-btn">Add credentials</button></div>
+            <div class="cn-card locked">
+              <div class="t">Flipkart Inventory Panel <span class="cn-pill">ⓘ Not configured</span></div>
+              <p>Provide credentials which you use to log into Seller Panel.</p>
+              <p>Complete the connector above first.</p>
+            </div>
+
+            <div class="cn-card locked">
+              <div class="t">Flipkart TOTP Connector <span class="cn-pill">ⓘ Not configured</span></div>
+              <p>Time-based one-time password used to authorise settlement and claim pulls.</p>
+              <p>Complete the connector above first.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -1039,7 +1015,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s6" class="screen">
   <div class="screen-caption">
-    <strong>Step 6 · SPF Action page — post-credentials (Day 3-4)</strong> · Actual SPF Claims page with Recoverable Backlog, KPI cards (Eligible / Raised / Response Awaited / Reopenable / Unsettled), and claim tables.
+    <strong>Step 7 · SPF Action page — post-credentials (Day 3-4)</strong> · Actual SPF Claims page with Recoverable Backlog, KPI cards (Eligible / Raised / Response Awaited / Reopenable / Unsettled), and claim tables.
   </div>
   <div class="journey-context-strip">
     <span class="trial-mini">TRIAL</span>
@@ -1055,7 +1031,7 @@
      ═══════════════════════════════════════════════════════════════════ -->
 <section id="s7" class="screen">
   <div class="screen-caption">
-    <strong>Step 7 · Payment Reco — eligible-claim queue</strong> · Post-credentials, user sees the Payment Claims flow. One-click <strong>Raise Claim</strong> drafts the marketplace dispute. Raise Claim buttons pulse to indicate the primary action for this surface.
+    <strong>Step 8 · Payment Reco — eligible-claim queue</strong> · Post-credentials, user sees the Payment Claims flow. One-click <strong>Raise Claim</strong> drafts the marketplace dispute. Raise Claim buttons pulse to indicate the primary action for this surface.
   </div>
   <span id="sol-payment-claims-flow" class="mock-anchor" aria-hidden="true"></span>
   <div class="journey-context-strip">
@@ -1088,6 +1064,8 @@ function goTo(id) {
 document.querySelectorAll('.journey-tab').forEach(t => {
   t.addEventListener('click', () => goTo(t.dataset.tab));
 });
+// Trial Start (s1b) posts when provisioning finishes → land on Trial Leakage Dashboard
+window.addEventListener('message', e => { if (e.data && e.data.type === 'unireco-trial-started') goTo('s2'); });
 
 // SPF popup state transitions
 function showCSMForm() {

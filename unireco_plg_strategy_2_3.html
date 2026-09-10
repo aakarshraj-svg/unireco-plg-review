@@ -544,7 +544,6 @@ const ANCHOR_MAP = {
   // Anchors listed here for consistency; clicking still lands at master-mock top
   // until the surface is transplanted.
   sol_teammate_reach:            'sol-teammate-reach',
-  sol_payout_action_guide:       'sol-payout-action-guide',
   sol_c2_payout_whats_changed:   'sol-c2-payout-whats-changed',
 };
 // Solutions with placeholder mocks in THIS file but no corresponding surface
@@ -558,7 +557,6 @@ const PLACEHOLDER_ONLY = new Set([
   'sol_c3_paid_extension_popup',
   'sol_c4_paid_csm_popup',
   'sol_teammate_reach',
-  'sol_payout_action_guide',
   'sol_c2_payout_whats_changed',
 ]);
 
@@ -594,10 +592,10 @@ const cohorts = {
     frictions: [
       {
         transition: 'To Aware', stage: 'aware', persona: 'WH',
-        surface: 'Uniware · Smart Dashboard + 2 more screens',
+        surface: 'UniCapture · Dashboard card + Export page banner (mock: unireco_c1_unicapture_mocks.html)',
         friction: 'Non-relevant users seeing triggers (ops/warehouse staff, not DMs)',
         solutions: [
-          { id: 'sol_dm_email', label: 'Bi-weekly Marketing email to Decision Makers', hasMock: true, type: 'out' },
+          { id: 'sol_dm_email', label: 'Daily POC Leakage Digest email · tenant\'s own Return To Stock numbers from Uniware WMS', hasMock: true, type: 'out' },
           { id: 'sol_teammate_reach', label: 'In-product "Forward to DM" button on trigger banner', hasMock: true, type: 'in+out', variant: 'dm' }
         ]
       },
@@ -673,7 +671,7 @@ const cohorts = {
         surface: 'Trial Leakage Dashboard · Payment Reco card',
         friction: 'Same post-creds action ambiguity as C1 · plus C2 may compare against pre-termination Payment Reco behavior and expect different discrepancy numbers or view',
         solutions: [
-          { id: 'sol_payout_action_guide', label: 'In-product action guide: "What to do with your discrepancy ₹" + one-click marketplace dispute drafting', hasMock: true, type: 'in' },
+          { id: 'sol_payment_claims_flow', label: 'Payment Reco flow surfaces the eligible-claim queue with a one-click "Raise Claim" action per row (drafts marketplace dispute) · same as C1', hasMock: true, type: 'in' },
           { id: 'sol_c2_payout_whats_changed', label: 'C2 tooltip on Payment Reco view: "What has changed since you left"', hasMock: true, type: 'in' }
         ]
       },
@@ -700,7 +698,7 @@ const cohorts = {
         friction: 'Users see returns pain daily but don\'t connect UniReco as solution',
         solutions: [
           { id: 'sol_returns_pain', label: 'Trigger copy anchored to their actual ₹ leakage', hasMock: true, type: 'in' },
-          { id: 'sol_dm_email', label: 'Bi-weekly Marketing email to Decision Makers', hasMock: true, type: 'out' }
+          { id: 'sol_dm_email', label: 'Daily POC Leakage Digest email · tenant\'s own Return To Stock numbers from Uniware WMS', hasMock: true, type: 'out' }
         ]
       },
       {
@@ -758,7 +756,8 @@ const cohorts = {
         surface: 'Uniware · Smart Dashboard',
         friction: 'Complacency — "we\'re already getting paid"',
         solutions: [
-          { id: 'sol_leakage_reveal', label: 'Trigger shows THEIR leakage: "You\'re missing ₹2.4L/mo"', hasMock: true, type: 'in' }
+          { id: 'sol_leakage_reveal', label: 'Trigger shows THEIR leakage: "You\'re missing ₹2.4L/mo"', hasMock: true, type: 'in' },
+          { id: 'sol_dm_email', label: 'Daily POC Leakage Digest email · tenant\'s own Return To Stock numbers from Uniware WMS', hasMock: true, type: 'out' }
         ]
       },
       {
@@ -811,32 +810,37 @@ const cohorts = {
 
 const solutions = {
   sol_dm_email: {
-    title: 'Bi-weekly Marketing Email to Decision Makers',
+    title: 'Daily POC Leakage Digest',
     type: 'email',
-    typeLabel: 'Out-Product Email Template',
-    description: 'Marketing sends a bi-weekly email to identified Decision Makers (CFO / Head of Finance / Head of Ecommerce) explaining the leakage problem and pointing them to UniReco. Bypasses the "wrong user sees trigger" issue.',
+    typeLabel: 'Out-Product Email · Daily Digest',
+    description: 'Every business day the registered account POC at C1, C3 and C4 tenants receives their own previous-day Return To Stock leakage, computed from Uniware WMS data with no credentials and no trial. A tenant-specific number they cannot get elsewhere, with one rotating cohort framing line and a trial CTA. Empty days are skipped; 10 unopened sends drop the recipient to weekly, 4 unopened weeklies stop the program and flag CSM. Spec: PRD 2a.',
     details: [
-      { lbl: 'Owner', val: 'Marketing team' },
-      { lbl: 'Cadence', val: 'Bi-weekly · Tue 10am' },
-      { lbl: 'Segment', val: 'DMs at C1/C3 tenants' },
-      { lbl: 'Est. reach', val: '~2,400 DMs/month' }
+      { lbl: 'Owner', val: 'Marketing + PLG · data job owned by Tech' },
+      { lbl: 'Cadence', val: 'Daily · Mon–Sat 09:00 IST · skipped on empty days' },
+      { lbl: 'Segment', val: 'Registered POC at C1 / C3 / C4 tenants (1 per tenant)' },
+      { lbl: 'Est. reach', val: '~144 POCs/day at launch base (28 + 65 + 51)' }
     ],
     mock: `
       <div class="email-mock">
         <div class="email-mock-header">
-          <div class="row"><div class="label">FROM</div><div class="val">Priya Menon &lt;priya@unicommerce.com&gt;</div></div>
+          <div class="row"><div class="label">FROM</div><div class="val">UniReco &lt;unireco@unicommerce.com&gt;</div></div>
           <div class="row"><div class="label">TO</div><div class="val">rahul.sharma@accessoriesmasters.com</div></div>
-          <div class="row"><div class="label">SUBJECT</div><div class="val">You're leaving ₹2-5L/month on the table (based on your GMV)</div></div>
+          <div class="row"><div class="label">SUBJECT</div><div class="val">AccessoriesMasters: ₹8.42 L at risk in returns this month</div></div>
         </div>
         <div class="email-mock-body">
           <h3>Hi Rahul,</h3>
-          <p>Quick data point that most Ecommerce Heads at your scale miss:</p>
-          <p><strong>Sellers with your monthly GMV (~₹9Cr) typically lose 2-5% to unstocked returns, unfiled marketplace claims, and payment discrepancies.</strong> That's ₹18L–₹45L/month sitting untouched.</p>
-          <p>Our recovery-ops platform, <strong>UniReco</strong>, plugs into your existing Uniware setup and identifies this leakage automatically. <strong>85 active Enterprise clients</strong> recovered <strong>₹47L in the last 30 days</strong> combined.</p>
-          <p>30-day free trial · no credit card · Payment Reco + Returns + Claims all included:</p>
-          <a href="#" class="email-cta">See your leakage number →</a>
+          <p style="font-size: 11px; color: #6b7280; margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em;">Yesterday at AccessoriesMasters</p>
+          <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 14px;">
+            <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 8px 0;"><strong>47</strong> returns breached the restocking SLA</td><td style="text-align: right; padding: 8px 0;"><strong>₹1,24,500</strong></td></tr>
+            <tr style="border-bottom: 1px solid #e5e7eb;"><td style="padding: 8px 0;"><strong>312</strong> returns received, not yet restocked <span style="color:#9ca3af;">· oldest: 19 days</span></td><td style="text-align: right; padding: 8px 0;"><strong>₹7,18,200</strong></td></tr>
+            <tr><td style="padding: 8px 0;">₹ at risk this month</td><td style="text-align: right; padding: 8px 0;"><strong>₹8.42 L</strong> <span style="color:#dc2626; font-size: 11px;">▲ ₹1.2 L vs yesterday</span></td></tr>
+          </table>
+          <p style="font-size: 10px; color: #9ca3af; margin: 0 0 14px;">Source: your Uniware WMS returns data · previous calendar day</p>
+          <p>UniCapture keeps operations tight. This is the money that leaks after operations are done.</p>
+          <p>See all three leakage streams in one place. Free 30-day trial, no credit card, no sales call — Return To Stock is live in the first minute because your Uniware data already flows in.</p>
+          <a href="#" class="email-cta">See my full leakage →</a>
           <p style="margin-top: 20px; font-size: 11px; color: #999;">
-            You're getting this because AccessoriesMasters is an active Uniware customer. Manage preferences.
+            Prefer not to receive this? Unsubscribe — no follow-up.
           </p>
         </div>
       </div>
@@ -1062,7 +1066,7 @@ const solutions = {
     title: 'Marketplace Credentials Popup with CSM Callback Form',
     type: 'in-app',
     typeLabel: 'In-Product · Popup',
-    description: 'When user clicks Add credentials on the SPF Claims card (or Payment Reco card — same creds), if they don\'t have marketplace credentials handy, they can request a CSM callback via a contact form. Adding creds unlocks both SPF Claims and Payment Reco modules simultaneously (both gate on the same marketplace API credentials).',
+    description: 'When user clicks Connect [channel] on the SPF Claims card (or Payment Reco card — same connectors), the CTA opens the channel\'s Connectors tab in UniReco (a copy of the Uniware Connectors tab, PRD 6a); if they don\'t have marketplace credentials handy, they can request a CSM callback via a contact form. Adding creds unlocks both SPF Claims and Payment Reco modules simultaneously (both gate on the same marketplace API credentials).',
     details: [
       { lbl: 'Trigger', val: 'Click "Add credentials" on SPF Claims or Payment Reco card' },
       { lbl: 'Unlocks', val: 'SPF Claims + Payment Reco (shared creds)' },
@@ -1176,65 +1180,6 @@ Thanks!</textarea>
     `
   },
 
-  sol_payout_action_guide: {
-    title: 'Payment Reco Action Guide · What to do with your discrepancy ₹',
-    type: 'in-app',
-    typeLabel: 'In-Product · Side Panel',
-    description: 'When user opens Payment Reco module for the first time and sees discrepancy ₹, a side panel guides them through three action paths: dispute with marketplace (one-click template), adjust internal expectations, or escalate to finance team. Removes the "what do I do with this number" ambiguity that kills conversion at UsedPay.',
-    details: [
-      { lbl: 'Trigger', val: 'First Payment Reco module open post-Aha' },
-      { lbl: 'Placement', val: 'Right side panel · dismissible · pinned' },
-      { lbl: 'Persistence', val: 'Appears until user takes any action, then collapses to icon' },
-      { lbl: 'Status', val: 'Placeholder surface · to be added to master C2 journey mock' }
-    ],
-    mock: `
-      <div style="max-width: 720px; margin: 0 auto; background: #fff; border: 1px solid var(--border-primary); border-radius: 8px; overflow: hidden;">
-        <div style="display: grid; grid-template-columns: 1fr 300px; min-height: 400px;">
-          <div style="padding: 20px; border-right: 1px solid var(--border-primary); background: var(--bg-secondary);">
-            <div style="font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">Payment Reco · This month</div>
-            <div style="font-size: 24px; font-weight: 700; color: var(--text-danger-base); margin-bottom: 2px;">₹2,47,320</div>
-            <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 20px;">discrepancy identified across Amazon, Flipkart, Myntra</div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Amazon</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹1,42,180</span></div>
-                <div style="color: var(--text-tertiary); font-size: 11px;">Commission over-charged on 234 orders</div>
-              </div>
-              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Flipkart</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹68,940</span></div>
-                <div style="color: var(--text-tertiary); font-size: 11px;">Missing settlement on 89 orders</div>
-              </div>
-              <div style="padding: 12px; background: #fff; border: 1px solid var(--border-primary); border-radius: 6px; font-size: 12px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;"><strong>Myntra</strong><span style="color: var(--text-danger-base); font-weight: 600;">₹36,200</span></div>
-                <div style="color: var(--text-tertiary); font-size: 11px;">Rate mismatch on 47 orders</div>
-              </div>
-            </div>
-          </div>
-          <div style="padding: 16px; background: var(--bg-brand-subtler); border-left: 3px solid var(--bg-brand-base);">
-            <div style="font-size: 11px; font-weight: 700; color: var(--text-brand-bold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;">What to do next</div>
-            <div style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px;">3 ways to recover this ₹2.4L</div>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">① Dispute with marketplace</div>
-                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">One-click generates a formatted dispute email for each channel with SKU-level backup.</div>
-                <button style="font-size: 11px; padding: 4px 10px; background: var(--bg-brand-base); color: #fff; border: none; border-radius: 4px; font-weight: 500; cursor: pointer;">Draft dispute →</button>
-              </div>
-              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">② Adjust rate card expectations</div>
-                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">If marketplace changed commission rate, update expectation baseline to stop future flags.</div>
-                <button style="font-size: 11px; padding: 4px 10px; background: #fff; color: var(--text-brand-bold); border: 1px solid var(--border-brand-subtle); border-radius: 4px; font-weight: 500; cursor: pointer;">Review rate card</button>
-              </div>
-              <div style="padding: 10px 12px; background: #fff; border-radius: 4px;">
-                <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px;">③ Share with your finance team</div>
-                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 6px;">Export CSV + PDF summary and send to internal finance via in-product email.</div>
-                <button style="font-size: 11px; padding: 4px 10px; background: #fff; color: var(--text-brand-bold); border: 1px solid var(--border-brand-subtle); border-radius: 4px; font-weight: 500; cursor: pointer;">Share with Finance →</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p style="text-align: center; margin-top: 12px; color: var(--text-tertiary); font-size: 12px;">Placeholder surface · to be added to master C2 journey mock at first Payment Reco module open</p>
-    `
-  },
 
   sol_c2_payout_whats_changed: {
     title: 'C2 Tooltip · What has changed in Payment Reco since you left',

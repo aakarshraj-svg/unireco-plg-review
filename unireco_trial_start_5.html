@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniReco · Start your trial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   
+html, body { height: 100%; overflow: hidden; }
+body { background: var(--bg-tertiary); }
+
+/* dashboard behind — the real Trial Landing Dashboard (PRD 3b), blurred and inert until the trial starts */
+.bg { position: fixed; inset: 0; }
+.bg iframe { width: 100%; height: 100%; border: none; filter: blur(6px) saturate(0.85); transform: scale(1.02); pointer-events: none; transition: filter 0.6s ease, transform 0.6s ease; }
+.bg.revealed iframe { filter: none; transform: none; pointer-events: auto; }
+
+/* gate — cannot be dismissed: no close button, no backdrop click, Esc ignored */
+.gate { position: fixed; inset: 0; background: var(--bg-overlay); display: grid; place-items: center; z-index: 10; transition: opacity 0.5s ease; }
+.gate.hidden { opacity: 0; pointer-events: none; }
+.card { width: 100%; max-width: 440px; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-high); padding: var(--gap-32); }
+.brand { display:flex; align-items:center; gap: var(--gap-8); margin-bottom: var(--gap-24); }
+.mark { width: var(--gap-24); height: var(--gap-24); border-radius: var(--radius-sm); background: var(--bg-brand-base); color: var(--text-on-fill); display:grid; place-items:center; }
+.eyebrow { display:inline-flex; padding: var(--gap-4) var(--gap-12); background: var(--bg-brand-subtler); color: var(--text-brand-base); border-radius: var(--radius-full); margin-bottom: var(--gap-16); }
+.title { margin-bottom: var(--gap-8); }
+.sub { color: var(--text-secondary); margin-bottom: var(--gap-24); }
+.tenant { display:flex; align-items:center; gap: var(--gap-12); padding: var(--gap-12) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); margin-bottom: var(--gap-20); background: var(--bg-secondary); }
+.tenant .av { width: var(--gap-40); height: var(--gap-40); border-radius: var(--radius-md); background: var(--bg-brand-base); color: var(--text-on-fill); display:grid; place-items:center; flex-shrink:0; }
+.tenant .name { color: var(--text-primary); }
+.tenant .email { color: var(--text-tertiary); }
+.tenant .ok { margin-left:auto; color: var(--text-success-base); white-space:nowrap; }
+.consent { display:flex; align-items:flex-start; gap: var(--gap-12); margin-bottom: var(--gap-16); color: var(--text-secondary); }
+.consent input { margin-top: var(--gap-4); accent-color: var(--bg-brand-base); }
+.consent a { color: var(--text-brand-base); }
+.cta { width: 100%; padding: var(--gap-16); background: var(--bg-brand-base); color: var(--text-on-fill); border: none; border-radius: var(--radius-md); font-family: inherit; cursor: pointer; box-shadow: var(--shadow-low); }
+.cta:hover { background: var(--bg-brand-bold); }
+.cta:disabled { background: var(--bg-quaternary); color: var(--text-disabled); cursor: not-allowed; box-shadow: none; }
+.foot { margin-top: var(--gap-16); color: var(--text-tertiary); display:flex; justify-content:center; gap: var(--gap-16); }
+.foot span::before { content:"✓ "; color: var(--text-success-base); }
+.peek { margin-top: var(--gap-20); padding-top: var(--gap-16); border-top: var(--stroke-regular) solid var(--border-primary); display:flex; align-items:center; gap: var(--gap-8); color: var(--text-tertiary); }
+.peek .d { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--bg-success-base); animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:.3 } }
+
+/* provisioning */
+.prov { display:none; text-align:center; }
+.ring { width: var(--gap-64); height: var(--gap-64); border-radius: var(--radius-full); border: var(--stroke-medium) solid var(--border-primary); border-top-color: var(--border-brand-base); margin: 0 auto var(--gap-24); animation: spin 0.9s linear infinite; }
+.ring.done { animation: none; border-color: var(--bg-success-base); background: var(--bg-success-base); color: var(--text-on-fill); display:grid; place-items:center; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.step { color: var(--text-secondary); min-height: var(--gap-24); }
+.go { display:none; margin-top: var(--gap-24); }
+.theme { position: fixed; top: var(--gap-16); right: var(--gap-16); z-index: 20; padding: var(--gap-4) var(--gap-12); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); color: var(--text-secondary); font-family: inherit; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="bg" id="bg"><iframe src="unireco_landing_dashboard_trial.html" title="Trial Landing Dashboard (behind gate)"></iframe></div>
+<button class="theme text-caption-md" onclick="toggleTheme()">Theme</button>
+
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="ttl">
+  <div class="card">
+    <div id="form">
+      <div class="brand"><div class="mark text-label-sm">U</div><span class="text-label-md">UniReco</span></div>
+      <div class="eyebrow text-caption-sm">Free 30-day trial</div>
+      <h1 class="title text-heading-h1" id="ttl">Your dashboard is ready behind this</h1>
+      <p class="sub text-body-md">Uniware is already connected and your returns data is loaded. Confirm the account to unlock it.</p>
+
+      <div class="tenant">
+        <div class="av text-label-md">AM</div>
+        <div><div class="name text-label-md">AccessoriesMasters</div><div class="email text-caption-md">rahul.sharma@accessoriesmasters.com</div></div>
+        <span class="ok text-caption-sm">● Connected</span>
+      </div>
+
+      <label class="consent text-body-sm">
+        <input type="checkbox" id="agree" onchange="document.getElementById('start').disabled=!this.checked">
+        <span>I accept the <a href="#">trial terms</a>. Nothing changes in Uniware.</span>
+      </label>
+
+      <button class="cta text-label-lg" id="start" disabled onclick="startProvisioning()">Start My Trial →</button>
+      <div class="foot text-caption-md"><span>No credit card</span><span>No sales call</span><span>Ends automatically</span></div>
+      <div class="peek text-caption-md"><span class="d"></span>Return To Stock is live from Uniware · Payment Reco and SPF Claims unlock with marketplace credentials</div>
+    </div>
+
+    <div id="prov" class="prov">
+      <div class="ring" id="ring"></div>
+      <h1 class="title text-heading-h2" id="provTitle">Setting up your trial</h1>
+      <div class="step text-body-sm" id="stepTxt">Creating your workspace…</div>
+      <button class="cta text-label-lg go" id="go" onclick="reveal()">Show me my leakage →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Gate cannot be dismissed: no close control, backdrop is not clickable, Esc is swallowed.
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('gate').classList.contains('hidden')) e.preventDefault(); });
+function startProvisioning(){
+  document.getElementById('form').style.display='none';
+  document.getElementById('prov').style.display='block';
+  const steps=['Creating your workspace…','Reading your Uniware returns…','Setting your 30 days…'];
+  let i=0;
+  const t=setInterval(()=>{ i++; if(i<steps.length){ document.getElementById('stepTxt').textContent=steps[i]; } else { clearInterval(t); done(); } }, 1300);
+}
+function done(){
+  const r=document.getElementById('ring'); r.classList.add('done'); r.textContent='✓';
+  document.getElementById('provTitle').textContent='Your trial is live';
+  document.getElementById('stepTxt').textContent='30 days · started today';
+  document.getElementById('go').style.display='block';
+}
+function reveal(){
+  document.getElementById('gate').classList.add('hidden');
+  document.getElementById('bg').classList.add('revealed');
+  try { window.parent.postMessage({type:'unireco-trial-started'}, '*'); } catch(e){}
+}
+function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{ document.querySelector('.bg iframe').contentDocument.documentElement.dataset.theme=r.dataset.theme; }catch(e){} }
+</script>
+</body>
+</html>

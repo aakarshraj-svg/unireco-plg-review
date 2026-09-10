@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily POC Leakage Digest — email preview (PRD 2a)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111827;--ink2:#4b5563;--ink3:#9ca3af;--line:#e5e7eb;--bg:#f3f4f6;--green:#16a34a;--green2:#dcfce7;--red:#dc2626;--red2:#fee2e2;--amber:#d97706;--amber2:#fef3c7;--brand:#6bbf3b;--brand-dk:#1f2937}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:13px}
+.top{background:var(--brand-dk);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.top .t{font-weight:600}.top .s{opacity:.6;font-size:12px}
+.seg{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:3px;border-radius:8px}.seg button{border:none;background:transparent;color:#fff;opacity:.7;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}.seg button.on{opacity:1;background:rgba(255,255,255,.18)}
+.right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}.btn:hover{background:rgba(255,255,255,.12)}
+.wrap{display:grid;grid-template-columns:1fr 340px;gap:24px;padding:24px;max-width:1240px;margin:0 auto}
+.stage{display:flex;flex-direction:column;align-items:center;gap:12px}
+.client{width:100%;max-width:720px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.06)}
+.client.mobile{max-width:390px}
+.chrome{background:#fafafa;border-bottom:1px solid var(--line);padding:12px 16px;font-size:12px;color:var(--ink2)}
+.chrome .from{display:flex;gap:10px;align-items:center;margin-bottom:6px}.chrome .av{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700}
+.chrome .subj{font-size:15px;font-weight:600;color:var(--ink)}.chrome .pre{color:var(--ink3);margin-top:2px}
+.emailbody{background:#f4f5f7;padding:24px 16px}
+.side .card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.side h4{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin-bottom:10px}
+.side .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px}.side .kv b{color:var(--ink2);font-weight:500}.side code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px}
+.side ul{padding-left:16px;font-size:12px;color:var(--ink2);line-height:1.6}
+.note{font-size:11px;color:var(--ink3);text-align:center;max-width:720px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div><div class="t">Daily POC Leakage Digest — email preview</div><div class="s">PRD 2a · content final · layout is a starting point for Marketing</div></div>
+  <div class="seg" id="variant"><button class="on" data-v="c1">C1 · UniCapture</button><button data-v="c3">C3 · High returns</button><button data-v="c4">C4 · Marketplace</button><button data-v="wk">Saturday rollup</button></div>
+  <div class="seg" id="device"><button class="on" data-d="desktop">Desktop</button><button data-d="mobile">Mobile</button></div>
+  <div class="right"><button class="btn" id="copy">Copy email HTML</button><button class="btn" id="dl">Download .html</button></div>
+</div>
+
+<div class="wrap">
+  <div class="stage">
+    <div class="client" id="client">
+      <div class="chrome">
+        <div class="from"><div class="av">U</div><div><b>UniReco</b> &lt;unireco@unicommerce.com&gt;<br><span style="color:var(--ink3)">to rahul.sharma@accessoriesmasters.com · 09:00</span></div></div>
+        <div class="subj" id="subj"></div><div class="pre" id="pre"></div>
+      </div>
+      <div class="emailbody" id="emailbody"></div>
+    </div>
+    <div class="note">Rendered with table-based HTML and inline styles (no external CSS, no web fonts, no JS) so it survives Gmail, Outlook and Apple Mail. "Copy email HTML" gives Marketing the exact markup shown.</div>
+  </div>
+
+  <aside class="side">
+    <div class="card"><h4>Send rules</h4><ul><li>Mon–Sat 09:00 IST · one email per tenant · registered account POC</li><li>Skipped when yesterday's delta is zero; six empty days → Saturday rollup</li><li>10 unopened sends → weekly · 4 unopened weeklies → stop, flag CSM · any open resets</li><li>1 UniReco email per recipient per day; digest yields</li></ul></div>
+    <div class="card"><h4>Tokens</h4><div class="kv">
+      <b>[Tenant Name]</b><span>≤ 20 chars in subject, else ellipsis</span>
+      <b>[First Name]</b><span>fallback "Hi there,"</span>
+      <b>[N] / ₹[X]</b><span>SLA-breached returns yesterday + value</span>
+      <b>[M] / ₹[Y] / [D]</b><span>unrestocked count, value, oldest age (days)</span>
+      <b>₹[Z] / delta</b><span>MTD ₹ at risk, day-over-day change</span>
+      <b>[P] · channels</b><span>C4 only: % of yesterday's returns from marketplaces</span>
+      <b>Framing line</b><span>1 of 5, rotates daily, no repeat in a cycle</span>
+      <b>CTA URL</b><span><code>?source_email_id=…&source_trigger=poc_digest_[c1|c3|c4]</code></span>
+    </div></div>
+    <div class="card"><h4>Rendering rules</h4><ul><li>Indian numbering (₹1,24,500); L / Cr above ₹1,00,000</li><li>Never hide a digest row — zero renders as 0, structure stays stable day to day</li><li>Delta arrow red when risk grew, green when it fell</li><li>Subject &lt; 60 chars, preheader &lt; 90 after tokens resolve</li><li>Plain-text alternative carries the same three rows aligned with spaces</li></ul></div>
+    <div class="card"><h4>For Marketing</h4><ul><li>Palette and logo are placeholders — swap for the brand kit</li><li>Keep the numbers block above the fold on mobile; the framing line and CTA follow</li><li>Five framing lines per cohort live in ESP admin; the block structure is locked by PRD 2a</li><li>Seed-test Gmail, Outlook Windows/Web, Apple Mail before the warm-up ramp</li></ul></div>
+  </aside>
+</div>
+
+<script>
+const T={tenant:'AccessoriesMasters',first:'Rahul',N:47,X:'₹1,24,500',M:312,Y:'₹7,18,200',D:19,Z:'₹8.42 L',delta:'₹1.2 L',up:true,P:71,channels:'Amazon · Flipkart · Myntra',
+ W:{N:263,X:'₹6,91,300',M:312,Y:'₹7,18,200',Z:'₹8.42 L',delta:'₹3.9 L'}};
+const V={
+ c1:{subject:`${T.tenant}: ${T.Z} at risk in returns this month`,pre:`Yesterday: ${T.N} SLA breaches, ${T.M} awaiting restock. UniCapture ops data, one layer deeper.`,
+     frame:'UniCapture keeps operations tight. This is the money that leaks after operations are done.',
+     body:'See all three leakage streams in one place. Free 30-day trial, no credit card, no sales call — Return To Stock is live in the first minute because your Uniware data already flows in.',cta:'See my full leakage →',tag:'poc_digest_c1'},
+ c3:{subject:`${T.tenant}: ${T.N} returns breached SLA yesterday`,pre:`${T.Z} at risk this month. Your return rate is above 30% — here is what that costs daily.`,
+     frame:'At a return rate above 30%, restocking speed is a P&L line, not an ops metric.',
+     body:'UniReco tracks every return from receipt to restock, flags the breaches, and surfaces the claims. Free 30-day trial, no credit card — live on day one from your Uniware data.',cta:'Show me every breach →',tag:'poc_digest_c3'},
+ c4:{subject:`${T.tenant}: ${T.Z} leaking on marketplace returns`,pre:`Yesterday's marketplace returns, and the payout and claim leakage sitting behind them.`,
+     frame:'Returns are the visible leak. Marketplace commission discrepancies and unclaimed SPF are the ones you can\'t see from Uniware alone.',
+     body:'UniReco reconciles all three. Return To Stock is live from your Uniware data on day one; add marketplace credentials once and Payment Reco and SPF Claims light up together.',cta:'See what marketplaces owe me →',tag:'poc_digest_c4',mp:true},
+ wk:{subject:`${T.tenant}: this week's returns leakage — ${T.Z}`,pre:`${T.W.N} SLA breaches this week, ${T.M} still awaiting restock.`,
+     frame:'This number resets every month. The leakage doesn\'t.',
+     body:'UniReco tracks every return from receipt to restock, flags the breaches, and surfaces the claims. Free 30-day trial, no credit card — live on day one from your Uniware data.',cta:'See my full leakage →',tag:'poc_digest_c3',weekly:true}
+};
+function email(v){
+  const w=v.weekly, N=w?T.W.N:T.N, X=w?T.W.X:T.X, Z=T.Z, delta=w?T.W.delta:T.delta, period=w?'This week':'Yesterday', deltaLbl=w?'vs last week':'vs yesterday';
+  const arrow=T.up?'▲':'▼', dcol=T.up?'#dc2626':'#16a34a';
+  const bars=[38,52,44,71,58,100,64].map((h,i)=>`<td valign="bottom" style="padding:0 2px;height:36px;"><div style="height:${Math.round(h*0.36)}px;background:${i===5?'#dc2626':'#fecaca'};border-radius:2px 2px 0 0;"></div></td>`).join('');
+  const mp=v.mp?`<tr><td style="padding:10px 0;border-top:1px solid #e5e7eb;font-size:13px;color:#4b5563;">of which from marketplaces</td><td align="right" style="padding:10px 0;border-top:1px solid #e5e7eb;font-size:13px;color:#111827;white-space:nowrap;"><b>${T.P}%</b> <span style="color:#9ca3af;font-size:11px;">· ${T.channels}</span></td></tr>`:'';
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;font-family:Inter,Helvetica,Arial,sans-serif;">
+<tr><td style="background:#1f2937;border-radius:12px 12px 0 0;padding:18px 24px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+    <td style="color:#ffffff;font-size:15px;font-weight:700;letter-spacing:.2px;"><span style="display:inline-block;width:22px;height:22px;border-radius:6px;background:#6bbf3b;color:#fff;text-align:center;line-height:22px;font-size:13px;margin-right:8px;">U</span>UniReco</td>
+    <td align="right" style="color:#9ca3af;font-size:11px;text-transform:uppercase;letter-spacing:.08em;">Daily leakage digest</td>
+  </tr></table>
+</td></tr>
+<tr><td style="background:#ffffff;padding:28px 24px 8px;">
+  <p style="margin:0 0 14px;font-size:14px;color:#111827;">Hi ${T.first},</p>
+  <p style="margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;">${period} at ${T.tenant}</p>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;"><tr>
+    <td style="padding:16px 18px;">
+      <div style="font-size:12px;color:#991b1b;margin-bottom:2px;">₹ at risk this month</div>
+      <div style="font-size:34px;font-weight:700;color:#dc2626;line-height:1.1;">${Z}</div>
+      <div style="font-size:12px;color:${dcol};margin-top:4px;"><b>${arrow} ${delta}</b> <span style="color:#6b7280;">${deltaLbl}</span></div>
+    </td>
+    <td align="right" valign="bottom" style="padding:16px 18px 14px 0;width:120px;"><table role="presentation" cellpadding="0" cellspacing="0" align="right"><tr>${bars}</tr></table><div style="font-size:10px;color:#9ca3af;text-align:right;margin-top:4px;">last 7 days</div></td>
+  </tr></table>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:14px;">
+    <tr><td style="padding:10px 0;font-size:13px;color:#4b5563;"><b style="color:#111827;">${N}</b> returns breached the restocking SLA</td><td align="right" style="padding:10px 0;font-size:13px;color:#111827;white-space:nowrap;"><b>${X}</b></td></tr>
+    <tr><td style="padding:10px 0;border-top:1px solid #e5e7eb;font-size:13px;color:#4b5563;"><b style="color:#111827;">${T.M}</b> returns received, not yet restocked <span style="color:#9ca3af;font-size:11px;">· oldest ${T.D} days</span></td><td align="right" style="padding:10px 0;border-top:1px solid #e5e7eb;font-size:13px;color:#111827;white-space:nowrap;"><b>${T.Y}</b></td></tr>
+    ${mp}
+  </table>
+  <p style="margin:6px 0 0;font-size:10px;color:#9ca3af;">Source: your Uniware WMS returns data · ${w?'trailing 7 days':'previous calendar day'}</p>
+</td></tr>
+<tr><td style="background:#ffffff;padding:8px 24px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="border-left:3px solid #6bbf3b;padding:8px 14px;font-size:15px;line-height:1.45;color:#111827;font-weight:500;">${v.frame}</td></tr></table>
+</td></tr>
+<tr><td style="background:#ffffff;padding:18px 24px 26px;">
+  <p style="margin:0 0 18px;font-size:14px;line-height:1.55;color:#4b5563;">${v.body}</p>
+  <table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#16a34a;border-radius:8px;"><a href="https://app.unireco.com/trial?source_email_id={{dispatch_id}}&source_trigger=${v.tag}" style="display:inline-block;padding:13px 22px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">${v.cta}</a></td></tr></table>
+  <p style="margin:14px 0 0;font-size:11px;color:#9ca3af;">No credit card · No sales call · Ends automatically</p>
+</td></tr>
+<tr><td style="background:#f9fafb;border-top:1px solid #e5e7eb;border-radius:0 0 12px 12px;padding:14px 24px;font-size:11px;color:#9ca3af;line-height:1.5;">
+  Prefer not to receive this? <a href="{{unsubscribe_url}}" style="color:#6b7280;">Unsubscribe</a> — no follow-up.<br>Unicommerce eSolutions · Gurugram, India
+</td></tr>
+</table>`;
+}
+let cur='c1';
+function render(){const v=V[cur];document.getElementById('subj').textContent=v.subject;document.getElementById('pre').textContent=v.pre;document.getElementById('emailbody').innerHTML=email(v);}
+document.querySelectorAll('#variant button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#variant button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cur=b.dataset.v;render();}));
+document.querySelectorAll('#device button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#device button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('client').classList.toggle('mobile',b.dataset.d==='mobile');}));
+function standalone(){const v=V[cur];return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width"><title>${v.subject}</title></head><body style="margin:0;padding:24px 12px;background:#f4f5f7;"><div style="display:none;max-height:0;overflow:hidden;">${v.pre}</div>${email(v)}</body></html>`;}
+document.getElementById('copy').addEventListener('click',async()=>{await navigator.clipboard.writeText(standalone());const b=document.getElementById('copy');b.textContent='Copied';setTimeout(()=>b.textContent='Copy email HTML',1500);});
+document.getElementById('dl').addEventListener('click',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([standalone()],{type:'text/html'}));a.download=`unireco_digest_${cur}.html`;a.click();});
+render();
+</script>
+</body>
+</html>
