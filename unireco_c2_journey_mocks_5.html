@@ -807,6 +807,7 @@
   <button class="journey-tab" data-tab="s5"><span class="step">8</span>Channel Connectors</button>
   <button class="journey-tab" data-tab="s6"><span class="step">9</span>SPF Module</button>
   <button class="journey-tab" data-tab="s7"><span class="step">10</span>Payment Reco</button>
+  <button class="journey-tab" data-tab="s8"><span class="step">11</span>Trial ended</button>
 </nav>
 
 <!-- ═══════════════════════════════════════════════════════════════════
@@ -1068,6 +1069,16 @@
     <iframe src="payment-claims-flow_5.html" title="Payment Claims Flow"></iframe>
   </div>
 </section>
+<!-- ═══════════════════════════════════════════════════════════════════
+     SCREEN 8 — TRIAL ENDED (day 31+)
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="s8" class="screen">
+  <div class="screen-caption">
+    <strong>Step 11 · Trial ended</strong> · User opens UniReco after day 30. The dashboard is kept read-only behind a non-dismissable gate: what the trial found, one CTA to a CSM callback (SC.1 <code>trial_expired</code>), and "Not now". Trial data is retained 30 days. Nothing in Uniware changes.
+  </div>
+  <div class="iframe-wrap" style="height: calc(100vh - 165px);"><iframe src="unireco_trial_expired.html" title="Trial ended"></iframe></div>
+</section>
+
 
 <script>
 function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }

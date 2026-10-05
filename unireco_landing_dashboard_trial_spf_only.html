@@ -829,8 +829,9 @@ a { color: var(--text-brand-base); text-decoration: none; }
 .cm-tip .dots { display:flex; gap: var(--gap-4); margin-left: var(--gap-8); } .cm-tip .dots i { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--border-secondary); } .cm-tip .dots i.on { background: var(--bg-brand-base); }
 
 /* ── First-visit help prompt ── */
-.cm-ask { position:fixed; right: var(--gap-24); bottom: var(--gap-24); z-index: 800; width: 320px; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-high); padding: var(--gap-16) var(--gap-20); display:none; }
+.cm-ask { position:fixed; right: var(--gap-24); top: 64px; z-index: 800; width: 320px; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-high); padding: var(--gap-16) var(--gap-20); display:none; }
 .cm-ask.on { display:block; }
+.cm-ask::before { content:''; position:absolute; top:-7px; right: 56px; width: 12px; height: 12px; background: var(--bg-primary); border-left: var(--stroke-regular) solid var(--border-primary); border-top: var(--stroke-regular) solid var(--border-primary); transform: rotate(45deg); }
 .cm-ask .x { position:absolute; top: var(--gap-8); right: var(--gap-8); background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-24); height: var(--gap-24); border-radius: var(--radius-sm); }
 .cm-ask .t { color: var(--text-primary); margin-bottom: var(--gap-4); padding-right: var(--gap-24); }
 .cm-ask .b { color: var(--text-secondary); margin-bottom: var(--gap-12); }
@@ -1357,7 +1358,7 @@ function showStop(){
 }
 function askClose(){ document.getElementById('cm-ask').classList.remove('on'); }
 // first-visit prompt: fires on every landing until the user takes the tour or dismisses it (persisted per user in production; in this mock, once per load)
-window.addEventListener('load',()=>{ if(firstVisit) setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 900); });
+window.addEventListener('load',()=>{ const q=new URLSearchParams(location.search); if(q.get('tour')==='1'){ setTimeout(startTour, 400); } else if(firstVisit){ setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 700); } });
 window.addEventListener('resize',()=>{ if(document.getElementById('cm-ov').classList.contains('on')) showStop(); });
 </script>
 </body>

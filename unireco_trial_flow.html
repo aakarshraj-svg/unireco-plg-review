@@ -45,7 +45,7 @@
   <p>Every screen is the real mock, loaded live from this site. Click the same buttons a user would; the flow moves on its own. The left rail shows where you are and lets you jump.</p>
   <div class="personas">
     <div class="pc" onclick="start('admin')"><div class="k">Path A</div><h2>Uniware Admin — not the DM/POC</h2><p>Sees the trigger, has no trial access, hands it to the decision maker.</p><ol><li>Uniware Smart Dashboard · strip</li><li>No-trial-access popup</li><li>Mails the DM/POC · success</li><li>The DM/POC's inbox</li><li>→ hands over to Path B</li></ol><span class="go">Start Path A →</span></div>
-    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>SPF Claims · Raise Claim</li><li>Day 23 · trial-end popup</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
+    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>SPF Claims · Raise Claim</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
   </div>
 </div></div>
 
@@ -78,12 +78,14 @@ const F={
   {t:'Connectors tab',d:'UniReco channel page · Connect',src:'unireco_c2_journey_mocks_5.html?embed=1#s5',on:{'journey:s6':1}},
   {t:'SPF Claims live',d:'Raise Claim on an eligible return',src:'unireco_c2_journey_mocks_5.html?embed=1#s6',on:{'journey:s7':'hand-pr'}},
   {t:'Day 23 · trial-end popup',d:'C3 extension ask · Book callback · Done',src:'unireco_intervention_mocks.html?embed=1#i8',on:{'done:i8_book':1,'dismiss':1}},
+  {t:'Day 31 · trial ended',d:'User opens UniReco after the trial · read-only dashboard behind a gate · go live or leave',src:'unireco_trial_expired.html?embed=1',on:{'expired:booked':1,'expired:leave':'hand-expired'}},
   {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
  ]};
 const HAND={
  'hand-dm':{h:'Handover',p:'The DM/POC opens the link. From here the flow is Path B — the trial gate, the dashboard, and everything after.',b:[['Continue as the DM/POC →',()=>start('dm',1)],['Back to start',home]]},
  'hand-csm':{h:'CSM takes it from here',p:'A callback is logged. The next thing this user sees is a phone call within 24 hours — nothing further in product.',b:[['Back to start',home],['Continue anyway',()=>nav(1)]]},
  'hand-dismiss':{h:'Dismissed',p:'The user closed the popup. Nothing is sent; the strip stays on the Uniware dashboard and the popup fires again on the next click.',b:[['Try again',()=>load(1)],['Back to start',home]]},
+ 'hand-expired':{h:'The user leaves',p:'Nothing further in product. The trial record stays Expired in the funnel; the CSM queue still has the day-23 record if one was created.',b:[['Back to start',home],['See what we see →',()=>nav(1)]]},
  'hand-pr':{h:'Payment Reco is on go-live',p:'In the trial model the Payment Reco page is locked. The next product moment is the trial-end popup on day 23.',b:[['Go to day 23 →',()=>nav(1)]]},
 };
 let P='dm',i=0,done=new Set();
