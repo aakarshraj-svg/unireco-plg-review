@@ -838,7 +838,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
 .cm-ask button { height: var(--gap-32); padding: 0 var(--gap-12); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; border: var(--stroke-regular) solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); }
 .cm-ask button.primary { background: var(--bg-brand-base); color: var(--text-on-fill); border-color: transparent; }
 </style>
-</head>
+<style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="shell">
 
@@ -988,7 +988,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
           </div>
 
           <!-- SPF Claims — partial credentials (Amazon connected) -->
-          <div class="module-card" id="cm-spf" onclick="showToast('Opening SPF Claims', true)">
+          <div class="module-card" id="cm-spf" onclick="flowNav('spf-card')">
             <div class="module-card-head">
               <div class="module-card-title text-h3">
                 <div class="module-card-icon">
@@ -1136,6 +1136,8 @@ a { color: var(--text-brand-base); text-decoration: none; }
 <div class="toast-container" id="toasts"></div>
 
 <script>
+(function(){ const q=new URLSearchParams(location.search); if(q.get('embed')==='1') document.body.dataset.embed='1'; })();
+
 // ═══════  DATA  ═══════
 
 // Table 1: Payment Reco + SPF Claims — source or account view
@@ -1323,7 +1325,8 @@ function showToast(msg, isOk){
 // Trial mode: table1 (PR+SPF) and chart replaced by empty states, so skip their builders
 buildTable2();
 
-function openConnectors(){ try { window.parent.postMessage({type:'unireco-open-connectors'}, '*'); } catch(e){} showToast('Opening Channels · Connectors', true); }
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
+function openConnectors(){ flowNav('spf-card'); }
 </script>
 
 <div class="cm-overlay" id="cm-ov"><div class="cm-hole" id="cm-hole"></div><div class="cm-tip" id="cm-tip"></div></div>

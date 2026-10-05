@@ -12,7 +12,7 @@
 .seg{display:flex;gap:4px;background:rgba(255,255,255,.08);padding:3px;border-radius:8px}.seg button{border:none;background:transparent;color:#fff;opacity:.7;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}.seg button.on{opacity:1;background:rgba(255,255,255,.18)}
 .right{margin-left:auto;display:flex;gap:8px;align-items:center}
 .btn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}.btn:hover{background:rgba(255,255,255,.12)}
-.wrap{display:grid;grid-template-columns:1fr 340px;gap:24px;padding:24px;max-width:1240px;margin:0 auto}
+body[data-embed] .wrap{grid-template-columns:1fr}.wrap{display:grid;grid-template-columns:1fr 340px;gap:24px;padding:24px;max-width:1240px;margin:0 auto}
 .stage{display:flex;flex-direction:column;align-items:center;gap:12px}
 .client{width:100%;max-width:720px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.06)}
 .client.mobile{max-width:390px}
@@ -26,7 +26,7 @@
 .side ul{padding-left:16px;font-size:12px;color:var(--ink2);line-height:1.6}
 .note{font-size:11px;color:var(--ink3);text-align:center;max-width:720px}
 </style>
-</head>
+<style id="embed-css">body[data-embed] .top, body[data-embed] .side, body[data-embed] .note, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .top-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="top">
   <div><div class="t">Credentials request to a Uniware Admin — email preview</div><div class="s">PRD 4 · I.4 "Ask an admin to add them" · SC.2 <code>creds_request</code> · sent on behalf of the trial user</div></div>
@@ -36,7 +36,7 @@
   <div class="right"><button class="btn" id="copy">Copy email HTML</button><button class="btn" id="dl">Download .html</button></div>
 </div>
 
-<div class="wrap">
+<div class="wrap" id="wrapper">
   <div class="stage">
     <div class="client" id="client">
       <div class="chrome">
@@ -62,6 +62,9 @@
 </div>
 
 <script>
+(function(){ const q=new URLSearchParams(location.search); if(q.get('embed')==='1') document.body.dataset.embed='1'; })();
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
+
 const T={tenant:'AccessoriesMasters',first:'Priya'};
 const S={name:'yes'};
 function subject(){ return `Marketplace connectors need your attention in UniReco`; }
@@ -80,7 +83,7 @@ function email(){
   <p style="margin:0 0 16px;${F}font-size:15px;line-height:1.6;color:#111827;">${hi}</p>
   <p style="margin:0 0 18px;${F}font-size:15px;line-height:1.6;color:#111827;">A colleague at ${T.tenant} (cc'd) is trying UniReco — Unicommerce's returns and claims recovery tool — and it needs working marketplace connectors, which only a Uniware Admin can add or repair.</p>
   <p style="margin:0 0 18px;${F}font-size:14px;line-height:1.6;color:#374151;">Open UniReco's Connectors tab — the same one you use in Uniware — and fix the marketplaces showing <b>Not configured</b> or <b>Broken</b>. About a minute per channel.</p>
-  <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr><td style="background:#1d4ed8;border-radius:8px;"><a href="https://app.unireco.com/channels?filter=needs_attention&source=creds_request" style="display:inline-block;padding:12px 24px;${F}color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">Open Connectors</a></td></tr></table>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr><td style="background:#1d4ed8;border-radius:8px;"><a href="https://app.unireco.com/channels?filter=needs_attention&source=creds_request" onclick="event.preventDefault();flowNav('email-cta')" style="display:inline-block;padding:12px 24px;${F}color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">Open Connectors</a></td></tr></table>
   <p style="margin:0 0 24px;${F}font-size:12px;line-height:1.6;color:#6b7280;">Once connected, SPF Claims switches on within 15 minutes. Nothing else changes.</p>
   <p style="margin:0;${F}font-size:14px;line-height:1.6;color:#111827;">— The UniReco team</p>
 </td></tr>

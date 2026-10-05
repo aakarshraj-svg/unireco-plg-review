@@ -249,7 +249,7 @@ body { background: var(--bg-secondary); }
 .ur-fly button:hover { background: var(--bg-tertiary); } .ur-fly button.muted { color: var(--text-tertiary); }
 .ur-strip.open .ur-fly { display:block; }
 .ur-gone { display:none; color: var(--text-tertiary); } .ur-gone .undo { color: var(--text-brand-base); cursor:pointer; margin-left: var(--gap-8); }
-</style></head>
+</style><style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="mock-nav"><span class="brand text-label-md">UniReco PLG · Uniware Smart Dashboard <b>v2</b> entry point <span style="opacity:.6">(PRD 2c)</span></span><button class="mtab active text-label-sm" data-t="ov">Overview</button><button class="mtab text-label-sm" data-t="rt">Returns</button><div class="chip text-caption-md"><label><input type="checkbox" id="nodata"> No-data fallback</label></div></div>
 <div class="cap text-caption-md"><strong>One placement for every tab</strong> · the strip lives in the tab row, in the empty slot between the tab group and ✦. It stays put when the user switches tabs — one build, never jumps. Copy changes per tab: C4 leakage-reveal on Overview, C3 ₹-anchored on Returns. 40px, right-aligned, capped at 620px. × = PRD 2c snooze. CTA → trial gate, or the PRD 4 I.1 popup when the user has no trial access.</div>
@@ -270,9 +270,13 @@ body { background: var(--bg-secondary); }
 <div class="wgrid"><div class="w"><div class="t text-label-lg">Return Items by Date <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Return Items by Courier <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Pending Items Heading to High-return Pincodes <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Return Rate: COD vs Prepaid <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div></div></div></section>
 </div></div>
 <script>
+(function(){ const q=new URLSearchParams(location.search); if(q.get('embed')==='1') document.body.dataset.embed='1'; })();
+
+(function(){ const h=location.hash.slice(1); if(h==='ov'||h==='rt'){ document.querySelectorAll('.mtab').forEach(x=>x.classList.toggle('active',x.dataset.t===h)); document.querySelectorAll('.screen').forEach(x=>x.classList.toggle('active',x.id===h)); } })();
 document.querySelectorAll('.mtab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.t).classList.add('active');}));
 document.getElementById('nodata').addEventListener('change',e=>{const nd=e.target.checked;document.querySelectorAll('[data-live]').forEach(x=>x.style.display=nd?'none':'');document.querySelectorAll('[data-nodata]').forEach(x=>x.style.display=nd?'':'none');});
-function go(src){ alert('Opens the UniReco trial start gate (PRD 3a) with source_trigger='+src+'. If the user has no trial access → PRD 4 I.1 popup instead.'); }
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
+function go(src){ flowNav('trigger-cta:'+src); }
 function gone(id,gid,txt){ const c=document.getElementById(id); c.style.display='none'; c.classList.remove('open'); const m=document.getElementById(gid); m.innerHTML=txt+' <span class="undo" onclick="undo(\''+id+'\',\''+gid+'\')">Undo</span>'; m.style.display='inline'; }
 function undo(id,gid){ document.getElementById(id).style.display=''; document.getElementById(gid).style.display='none'; }
 </script></body></html>

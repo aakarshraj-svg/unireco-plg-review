@@ -787,7 +787,7 @@
   .cn-btn.primary { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
   .cn-sync { background: var(--bg-info-subtle, #eff6ff); border:1px solid var(--border-info-subtle, #bfdbfe); border-radius:8px; padding:8px 12px; font-size:12px; color: var(--text-secondary); margin-bottom:14px; }
 </style>
-</head>
+<style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 
 <div class="app-topbar">
@@ -1070,7 +1070,9 @@
 </section>
 
 <script>
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
 function goTo(id) {
+  flowNav('journey:'+id);
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.journey-tab').forEach(t => t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1087,6 +1089,7 @@ function goTo(id) {
     conf.style.display = 'none';
   }
 }
+(function(){ const q=new URLSearchParams(location.search); if(q.get('embed')==='1') document.body.dataset.embed='1'; const h=location.hash.slice(1); if(h&&document.getElementById(h)) setTimeout(()=>goTo(h),0); })();
 document.querySelectorAll('.journey-tab').forEach(t => {
   t.addEventListener('click', () => goTo(t.dataset.tab));
 });

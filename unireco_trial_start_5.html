@@ -176,8 +176,6 @@ body {
   min-height: 100vh;
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   
 html, body { height: 100%; overflow: hidden; }
 body { background: var(--bg-tertiary); }
 
@@ -275,10 +273,11 @@ function done(){
   document.getElementById('stepTxt').textContent='30 days · started today';
   document.getElementById('go').style.display='block';
 }
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
 function reveal(){
   document.getElementById('gate').classList.add('hidden');
   document.getElementById('bg').classList.add('revealed');
-  try { window.parent.postMessage({type:'unireco-trial-started'}, '*'); } catch(e){}
+  try { window.parent.postMessage({type:'unireco-trial-started'}, '*'); } catch(e){} flowNav('trial-started');
 }
 function toggleTheme(){ const r=document.documentElement; r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'; try{ document.querySelector('.bg iframe').contentDocument.documentElement.dataset.theme=r.dataset.theme; }catch(e){} }
 </script>

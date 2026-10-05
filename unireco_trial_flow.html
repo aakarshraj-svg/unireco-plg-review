@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UniReco PLG · Trial flow — connected walkthrough</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#111827;--ink2:#4b5563;--ink3:#9ca3af;--line:#e5e7eb;--bg:#f3f4f6;--brand:#1d4ed8;--brand2:#eff6ff;--good:#16a34a;--good2:#dcfce7;--dk:#1f2937}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:13px}
+/* landing */
+.land{min-height:100%;display:grid;place-items:center;padding:40px}
+.land .box{max-width:860px;width:100%}
+.land h1{font-size:26px;font-weight:700;margin-bottom:6px}.land p{color:var(--ink2);margin-bottom:28px;font-size:15px}
+.personas{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04)}.pc:hover{border-color:var(--brand);box-shadow:0 8px 30px rgba(29,78,216,.10)}
+.pc .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}.pc h2{font-size:18px;margin-bottom:8px}.pc p{font-size:13px;color:var(--ink2);margin:0 0 16px}.pc ol{padding-left:18px;font-size:12px;color:var(--ink2);line-height:1.7}
+.pc .go{display:inline-block;margin-top:16px;padding:9px 16px;background:var(--brand);color:#fff;border-radius:8px;font-weight:600;font-size:13px}
+/* player */
+.player{display:none;height:100%;grid-template-columns:300px 1fr}
+.player.on{display:grid}
+.rail{background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;height:100%}
+.rail .hd{padding:16px 18px;border-bottom:1px solid var(--line)}.rail .hd .p{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand)}.rail .hd h3{font-size:15px;margin-top:2px}.rail .hd a{font-size:12px;color:var(--ink3);cursor:pointer}
+.steps{flex:1;overflow:auto;padding:10px 0}
+.st{display:flex;gap:12px;padding:10px 18px;color:var(--ink3);cursor:pointer}.st:hover{background:#fafafa}
+.st .n{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.st.done{color:var(--ink2)}.st.done .n{background:var(--good2);border-color:var(--good);color:var(--good)}
+.st.cur{color:var(--ink);background:var(--brand2)}.st.cur .n{background:var(--brand);border-color:var(--brand);color:#fff}
+.st .t{font-size:13px;font-weight:500}.st .d{font-size:11px;color:var(--ink3);margin-top:2px}
+.rail .ft{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.rail .ft button{padding:7px 12px;border:1px solid var(--line);border-radius:7px;background:#fff;font:inherit;font-size:12px;cursor:pointer}.rail .ft button.primary{background:var(--brand);color:#fff;border-color:transparent}
+.rail .ft .hint{font-size:11px;color:var(--ink3);margin-left:auto;text-align:right}
+.stage{position:relative;height:100%;background:#e9eaec}
+.stage iframe{width:100%;height:100%;border:none;background:#fff}
+.act{position:absolute;left:0;right:0;top:0;background:var(--dk);color:#fff;font-size:12px;padding:8px 16px;display:flex;align-items:center;gap:10px}
+.act b{color:#93c5fd}.act .x{margin-left:auto;cursor:pointer;opacity:.7}
+.hand{position:absolute;inset:0;background:rgba(17,24,39,.85);display:none;place-items:center;color:#fff;text-align:center;padding:40px}
+.hand.on{display:grid}.hand h2{font-size:22px;margin-bottom:8px}.hand p{color:#cbd5e1;max-width:520px;margin:0 auto 20px;font-size:14px;line-height:1.6}
+.hand button{padding:10px 18px;border-radius:8px;border:none;background:#fff;color:var(--ink);font:inherit;font-weight:600;cursor:pointer;margin:0 6px}
+</style>
+</head>
+<body>
+
+<div class="land" id="land"><div class="box">
+  <h1>UniReco trial — the connected flow</h1>
+  <p>Every screen is the real mock, loaded live from this site. Click the same buttons a user would; the flow moves on its own. The left rail shows where you are and lets you jump.</p>
+  <div class="personas">
+    <div class="pc" onclick="start('admin')"><div class="k">Path A</div><h2>Uniware Admin — not the DM/POC</h2><p>Sees the trigger, has no trial access, hands it to the decision maker.</p><ol><li>Uniware Smart Dashboard · strip</li><li>No-trial-access popup</li><li>Mails the DM/POC · success</li><li>The DM/POC's inbox</li><li>→ hands over to Path B</li></ol><span class="go">Start Path A →</span></div>
+    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>SPF Claims · Raise Claim</li><li>Day 23 · trial-end popup</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
+  </div>
+</div></div>
+
+<div class="player" id="player">
+  <aside class="rail">
+    <div class="hd"><div class="p" id="rp"></div><h3 id="rt"></h3><a onclick="home()">← choose a path</a></div>
+    <div class="steps" id="steps"></div>
+    <div class="ft"><button onclick="nav(-1)">‹ Back</button><button class="primary" onclick="nav(1)">Next ›</button><span class="hint">or click the button on screen</span></div>
+  </aside>
+  <div class="stage">
+    <div class="act" id="act" style="display:none"><span id="actTxt"></span><span class="x" onclick="this.parentElement.style.display='none'">×</span></div>
+    <iframe id="fr" src="about:blank"></iframe>
+    <div class="hand" id="hand"></div>
+  </div>
+</div>
+
+<script>
+const F={
+ admin:[
+  {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
+  {t:'No trial access',d:'Admin, not DM/POC · choose Mail the DM/POC · Continue',src:'unireco_intervention_mocks.html?embed=1#i1',on:{'done:i1_mail':1,'done:i1_csm':'hand-csm','dismiss':'hand-dismiss'}},
+  {t:'The DM/POC receives the invite',d:'What lands in their inbox · click Open your trial',src:'unireco_dm_invite_email_preview.html?embed=1',on:{'email-cta':'hand-dm'}},
+ ],
+ dm:[
+  {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
+  {t:'Trial start gate',d:'Dashboard behind a blur · accept · Start My Trial · Show me my leakage',src:'unireco_trial_start_5.html?embed=1',on:{'trial-started':1}},
+  {t:'Trial dashboard',d:'Checklist + tour · click the SPF card or step 2',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1',on:{'spf-card':1}},
+  {t:'Connect credentials',d:'Connect it now, or Ask an admin',src:'unireco_intervention_mocks.html?embed=1#i4',on:{'connectors':2,'done:i4_admin':1,'done:i4_csm':'hand-csm','dismiss':-1}},
+  {t:'The admin receives the request',d:'What the Uniware Admin sees · click Open Connectors',src:'unireco_creds_request_email_preview.html?embed=1',on:{'email-cta':1}},
+  {t:'Connectors tab',d:'UniReco channel page · Connect',src:'unireco_c2_journey_mocks_5.html?embed=1#s5',on:{'journey:s6':1}},
+  {t:'SPF Claims live',d:'Raise Claim on an eligible return',src:'unireco_c2_journey_mocks_5.html?embed=1#s6',on:{'journey:s7':'hand-pr'}},
+  {t:'Day 23 · trial-end popup',d:'C3 extension ask · Book callback · Done',src:'unireco_intervention_mocks.html?embed=1#i8',on:{'done:i8_book':1,'dismiss':1}},
+  {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
+ ]};
+const HAND={
+ 'hand-dm':{h:'Handover',p:'The DM/POC opens the link. From here the flow is Path B — the trial gate, the dashboard, and everything after.',b:[['Continue as the DM/POC →',()=>start('dm',1)],['Back to start',home]]},
+ 'hand-csm':{h:'CSM takes it from here',p:'A callback is logged. The next thing this user sees is a phone call within 24 hours — nothing further in product.',b:[['Back to start',home],['Continue anyway',()=>nav(1)]]},
+ 'hand-dismiss':{h:'Dismissed',p:'The user closed the popup. Nothing is sent; the strip stays on the Uniware dashboard and the popup fires again on the next click.',b:[['Try again',()=>load(1)],['Back to start',home]]},
+ 'hand-pr':{h:'Payment Reco is on go-live',p:'In the trial model the Payment Reco page is locked. The next product moment is the trial-end popup on day 23.',b:[['Go to day 23 →',()=>nav(1)]]},
+};
+let P='dm',i=0,done=new Set();
+function start(p,at=0){ P=p; i=at; done=new Set([...Array(at).keys()]); document.getElementById('land').style.display='none'; const pl=document.getElementById('player'); pl.classList.add('on'); document.getElementById('rp').textContent=p==='admin'?'Path A':'Path B'; document.getElementById('rt').textContent=p==='admin'?'Uniware Admin — not the DM/POC':'DM/POC — has trial access'; load(i); }
+function home(){ document.getElementById('player').classList.remove('on'); document.getElementById('land').style.display='grid'; document.getElementById('hand').classList.remove('on'); }
+function rail(){ document.getElementById('steps').innerHTML=F[P].map((s,k)=>`<div class="st ${k===i?'cur':done.has(k)?'done':''}" onclick="load(${k})"><span class="n">${done.has(k)&&k!==i?'✓':k+1}</span><div><div class="t">${s.t}</div><div class="d">${s.d}</div></div></div>`).join(''); }
+function load(k){ i=Math.max(0,Math.min(F[P].length-1,k)); document.getElementById('hand').classList.remove('on'); document.getElementById('fr').src=F[P][i].src; rail(); }
+function nav(dir){ if(dir>0) done.add(i); load(i+dir); }
+function hand(key){ const h=HAND[key]; const el=document.getElementById('hand'); el.innerHTML=`<div><h2>${h.h}</h2><p>${h.p}</p>${h.b.map((b,j)=>`<button data-j="${j}">${b[0]}</button>`).join('')}</div>`; el.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>h.b[+b.dataset.j][1]())); el.classList.add('on'); }
+window.addEventListener('message',e=>{
+  const d=e.data; if(!d||!d.type) return;
+  let key=null;
+  if(d.type==='unireco-nav') key=d.to; else if(d.type==='unireco-trial-started') key='trial-started'; else if(d.type==='unireco-open-connectors') key='spf-card';
+  if(!key) return;
+  const on=F[P][i].on; let act=on[key]; if(act===undefined && key.startsWith('trigger-cta')) act=on['trigger-cta']; if(act===undefined) return;
+  const a=document.getElementById('act'); document.getElementById('actTxt').innerHTML=`User action: <b>${key}</b>`; a.style.display='flex'; setTimeout(()=>a.style.display='none',1800);
+  if(typeof act==='number'){ done.add(i); load(i+act); } else hand(act);
+});
+</script>
+</body>
+</html>
