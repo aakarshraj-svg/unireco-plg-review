@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>UniReco PLG · Intervention mocks (PRD 4)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body { background: var(--bg-tertiary); }
+.nav { position: sticky; top:0; z-index: 10; background: var(--bg-inverse); padding: var(--gap-12) var(--gap-24); display:flex; align-items:center; gap: var(--gap-16); flex-wrap: wrap; }
+.nav .brand { color: var(--text-primary-inverse); }
+.tab { padding: var(--gap-8) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid transparent; border-radius: var(--radius-md); font-family: inherit; cursor:pointer; opacity:.7; }
+.tab.active { opacity:1; background: var(--bg-brand-subtle); border-color: var(--border-brand-subtle); }
+.theme { margin-left:auto; padding: var(--gap-4) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; }
+.screen { display:none; } .screen.active { display:block; }
+.cap { padding: var(--gap-12) var(--gap-24); color: var(--text-secondary); background: var(--bg-secondary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.stage { position: relative; height: calc(100vh - 110px); overflow:hidden; }
+.stage.light { display:grid; place-items:center; }
+.ghost { position:absolute; inset:0; padding: var(--gap-32); filter: blur(4px); opacity:.6; }
+.ghost-bar { height: var(--gap-40); background: var(--bg-primary); border-radius: var(--radius-md); margin-bottom: var(--gap-24); }
+.ghost-row { display:flex; gap: var(--gap-16); margin-bottom: var(--gap-16); }
+.ghost-row i { flex:1; height: 120px; background: var(--bg-primary); border-radius: var(--radius-md); } .ghost-row i.w { flex:2; height:260px; } .ghost-row i.n { height:260px; }
+.overlay { position:absolute; inset:0; background: var(--bg-overlay); display:grid; place-items:center; }
+.modal { width: 520px; max-width: 92vw; background: var(--bg-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-high); padding: var(--gap-24); }
+.m-head { display:flex; justify-content:space-between; align-items:flex-start; gap: var(--gap-16); margin-bottom: var(--gap-8); }
+.eyebrow { color: var(--text-brand-base); text-transform:uppercase; letter-spacing:.06em; margin-bottom: var(--gap-4); }
+.x { background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-24); height: var(--gap-24); border-radius: var(--radius-sm); }
+.desc { color: var(--text-secondary); margin-bottom: var(--gap-16); }
+.opts { display:flex; flex-direction:column; gap: var(--gap-8); margin-bottom: var(--gap-16); }
+.opt { display:flex; gap: var(--gap-12); padding: var(--gap-12) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); cursor:pointer; }
+.opt:has(input:checked) { border-color: var(--border-brand-base); background: var(--bg-brand-subtler); }
+.opt input { margin-top: var(--gap-4); accent-color: var(--bg-brand-base); } .opt > div { flex:1; }
+.opt .sub { color: var(--text-secondary); }
+.opt .hide { display:none; margin-top: var(--gap-8); } .opt:has(input:checked) .hide { display:block; }
+.fields { display:grid; gap: var(--gap-12); margin-bottom: var(--gap-16); } .fields.two { grid-template-columns: 1fr 1fr; }
+.fld { display:flex; flex-direction:column; gap: var(--gap-4); margin-bottom: var(--gap-12); }
+.fld label { color: var(--text-secondary); }
+.fld input, .fld select, textarea { font: inherit; padding: var(--gap-8) var(--gap-12); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-sm); background: var(--bg-primary); color: var(--text-primary); width:100%; }
+textarea { min-height: 72px; resize: vertical; }
+.m-foot { display:flex; justify-content:flex-end; gap: var(--gap-8); }
+.btn { padding: var(--gap-8) var(--gap-16); border-radius: var(--radius-md); border: var(--stroke-regular) solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); font-family: inherit; cursor:pointer; }
+.btn.primary { background: var(--bg-brand-base); color: var(--text-on-fill); border-color: transparent; }
+.list { padding-left: var(--gap-20); display:flex; flex-direction:column; gap: var(--gap-8); margin-bottom: var(--gap-16); color: var(--text-secondary); } .list b { color: var(--text-primary); }
+.pill { display:inline-flex; padding: var(--gap-4) var(--gap-8); border-radius: var(--radius-full); background: var(--bg-tertiary); color: var(--text-secondary); } .pill.warn { background: var(--bg-warning-subtle); color: var(--text-warning-base); }
+.chips { display:flex; flex-wrap:wrap; gap: var(--gap-8); padding: var(--gap-8); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-sm); }
+.chip { display:inline-flex; gap: var(--gap-8); align-items:center; padding: var(--gap-4) var(--gap-12); background: var(--bg-brand-subtler); color: var(--text-brand-base); border-radius: var(--radius-full); } .chip i { font-style:normal; cursor:pointer; }
+.chips input { border:none; flex:1; min-width: 120px; padding: var(--gap-4); }
+.hint { color: var(--text-tertiary); margin: 0 0 var(--gap-12); }
+.queue { width: 640px; max-width: 92vw; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-low); padding: var(--gap-24); }
+.q-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: var(--gap-16); }
+.q-grid { display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap-12) var(--gap-24); margin-bottom: var(--gap-20); }
+.q-grid div { display:flex; flex-direction:column; } .q-grid span { color: var(--text-tertiary); } .q-grid b { color: var(--text-primary); font-weight: 500; }
+.modal .success { display:none; text-align:center; padding: var(--gap-8) 0; }
+.modal.done .m-head, .modal.done .desc, .modal.done .opts, .modal.done .fields, .modal.done .list, .modal.done .fld, .modal.done .hint, .modal.done .m-foot { display:none; }
+.modal.done .success { display:block; }
+.s-ic { width: var(--gap-48); height: var(--gap-48); border-radius: var(--radius-full); background: var(--bg-success-subtle); color: var(--text-success-base); display:grid; place-items:center; margin: 0 auto var(--gap-16); }
+.s-title { margin-bottom: var(--gap-8); }
+.s-body { color: var(--text-secondary); margin-bottom: var(--gap-16); }
+.s-next { text-align:left; background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--gap-12) var(--gap-16); margin-bottom: var(--gap-20); }
+.s-next .h { color: var(--text-tertiary); text-transform:uppercase; letter-spacing:.06em; margin-bottom: var(--gap-8); }
+.s-next ol { padding-left: var(--gap-20); color: var(--text-secondary); display:flex; flex-direction:column; gap: var(--gap-4); }
+.s-next b { color: var(--text-primary); font-weight: 500; }
+.s-foot { display:flex; justify-content:center; gap: var(--gap-8); }
+.q-foot { display:flex; justify-content:space-between; align-items:center; border-top: var(--stroke-regular) solid var(--border-primary); padding-top: var(--gap-16); }
+</style></head>
+<body>
+<div class="nav"><span class="brand text-label-md">UniReco PLG · Intervention mocks <span style="opacity:.6">(PRD 4)</span></span>
+<button class="tab active text-label-sm" data-t="i1">I.1 · No-trial-access popup</button><button class="tab  text-label-sm" data-t="i2">I.2 · What's new (ex-UniReco tenants)</button><button class="tab  text-label-sm" data-t="i3">I.3 · R2S feedback popup</button><button class="tab  text-label-sm" data-t="i4">I.4 · No-credentials popup</button><button class="tab  text-label-sm" data-t="i5">I.5 · Share trial with a teammate</button><button class="tab  text-label-sm" data-t="i6">I.6 · C1 CSM outbound — queue record</button><button class="tab  text-label-sm" data-t="i7">I.7 · C2 pricing popup</button><button class="tab  text-label-sm" data-t="i8">I.8 · C3 trial-extension popup</button><button class="tab  text-label-sm" data-t="i9">I.9 · C4 procurement popup</button>
+<button class="theme text-caption-md" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">Theme</button></div>
+
+
+<section id="i1" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">UniReco trial · access needed</div><div class="text-heading-h3">This trial is set up for your decision maker</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">Your Uniware admin account isn't on the UniReco trial access list. Two ways forward:</p>
+      <div class="opts" id="i1o"><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Mail the DM/POC</div><div class="text-caption-md sub">An automatic invite goes to <b>Rahul Sharma</b> (rahul.sharma@accessoriesmasters.com) with the trial link. You'll be cc'd.</div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Talk to a CSM</div><div class="text-caption-md sub">Leave your details — a CSM will call within 24 hours and can set up access for the right person.</div><div class="fields two hide"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div></div></div></label></div>
+      <div class="success" data-s="i1_mail"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Invite sent.</div><p class="s-body text-body-sm">We've emailed your DM/POC the trial link and a summary of the leakage found. You're cc'd.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Your decision maker opens the link and starts the trial — it takes under a minute.</li><li>You'll get a copy of the email now.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="success" data-s="i1_csm"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">A CSM will call you within 24 hours</div><p class="s-body text-body-sm">We've logged your request. The CSM can set up trial access for the right person on your team.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A CSM calls the number you gave during business hours</li><li>Keep your Uniware admin login handy for the call</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="done(this, ['i1_mail','i1_csm'])">Continue →</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i2" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">Welcome back</div><div class="text-heading-h3">What's new in UniReco since you left</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">Your trial is live. Three things have changed:</p>
+      <ul class="list text-body-sm"><li><b>Return To Stock is new</b> — your Uniware WMS returns turned into a live recovery view. Live now.</li><li><b>SPF Claims coverage expanded</b> — more marketplaces, one-click Raise Claim. Connect a marketplace to see it.</li><li><b>Payment Reco rebuilt</b> — rate card auto-fetch, cross-marketplace commission view. <span class="pill text-caption-sm">Available on go-live</span></li></ul>
+      <div class="m-foot"><button class="btn primary" >Got it</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i3" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">Return To Stock</div><div class="text-heading-h3">Not seeing value in what we're showing?</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">You opened Return To Stock and left quickly. One click helps us — no follow-up unless you want it.</p>
+      <div class="opts"><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Not relevant for me</div><div class="text-caption-md sub">A mail will be sent to your DM/POC so the right person on your team can take a look.</div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Relevant, but I'll use it later</div><div class="text-caption-md sub">We'll store this and get out of your way.</div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Something else</div><div class="text-caption-md sub"></div><div class="hide"><textarea class="text-body-sm" placeholder="Tell us what you expected to see…"></textarea></div></div></label></div>
+      <div class="success" data-s="i3_later"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Noted.</div><p class="s-body text-body-sm">We won't ask again this trial.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Return To Stock stays where it is — come back whenever you're ready.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="success" data-s="i3_share"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Shared with your decision maker</div><p class="s-body text-body-sm">We've sent the Return To Stock view to your DM/POC with a note that you flagged it as relevant to their role.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Your DM/POC receives the email now; the link opens straight to Return To Stock</li><li>This popup won't show again for you</li><li>You can keep using the trial as normal</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="success" data-s="i3_feedback"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Thanks — we've got it</div><p class="s-body text-body-sm">Your note goes to the UniReco product team. We read every one; we won't follow up unless you asked us to.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Nothing more for you to do.</li><li>If it's a data mismatch, a CSM may reach out to check your Uniware setup</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Close</button><button class="btn primary" onclick="done(this, ['i3_share','i3_later','i3_feedback'])">Submit</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i4" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">SPF Claims · Flipkart</div><div class="text-heading-h3">Connect Flipkart to unlock SPF Claims</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">Credentials are stored in Uniware and used by every Unicommerce product.</p>
+      <div class="opts"><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Connect it now</div><div class="text-caption-md sub">Opens Channels › FLIPKART_B2C › Connectors. Takes about a minute.</div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Ask an admin to add them</div><div class="text-caption-md sub">An automatic email with the channels needing credentials and a link to the Connectors tab.</div><div class="hide"><div class="fld"><label class="text-caption-sm">Send to</label><select class="text-body-sm"><option>Rahul Sharma · rahul.sharma@ (Uniware Admin)</option><option>Priya Mehta · priya.m@ (Uniware Admin)</option><option>Vikram S · vikram@ (Uniware Admin)</option></select></div></div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Talk to a CSM</div><div class="text-caption-md sub">A CSM calls within 24 hours and walks you through it.</div></div></label></div>
+      <div class="success" data-s="i4_admin"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Request sent to your admin</div><p class="s-body text-body-sm">We've emailed the admin you chose, listing the channels that need credentials, with a link to the Connectors tab.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Your admin adds the credentials in UniReco — about a minute per channel</li><li>SPF Claims for the channel lights up within 15 minutes of the connection</li><li>You'll see the card updated on your dashboard.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="success" data-s="i4_csm"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">A CSM will call you within 24 hours</div><p class="s-body text-body-sm">We've logged your request with the channels that still need credentials.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A CSM calls the number you gave during business hours</li><li>Have your marketplace seller-panel logins to hand</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="done(this, ['__nav','i4_admin','i4_csm'])">Continue →</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i5" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">Share trial</div><div class="text-heading-h3">SPF claims are usually raised at HQ</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">Share this trial with the person who owns marketplace settlements. They need Uniware Admin access; a UniReco role is granted when they accept.</p>
+      <div class="fld"><label class="text-caption-sm">Colleagues</label><div class="chips"><span class="chip text-caption-md">Rahul Sharma <i>×</i></span><span class="chip text-caption-md">Anita Desai <i>×</i></span><input placeholder="Add by name…"></div></div><div class="hint text-caption-md">Only Uniware Admin users are listed. 2 selected · both eligible.</div><div class="fld"><label class="text-caption-sm">Message (optional)</label><textarea class="text-body-sm" placeholder="Have a look at the SPF eligible list — 118 returns we could be claiming."></textarea></div>
+      <div class="success" data-s="i5_send"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Invites sent</div><p class="s-body text-body-sm">Your colleagues have been emailed a link to this trial.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>They accept the invite and get a UniReco role automatically — no admin step</li><li>You'll see them in the trial's user list once they've logged in</li><li>Invites expire with the trial</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Cancel</button><button class="btn primary" onclick="show(this,'i5_send')">Send invites</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i6" class="screen">
+  <div class="stage light">
+    <div class="queue">
+      <div class="q-head"><div><div class="eyebrow text-caption-sm">CSM queue · C1 · trial ends in 7 days</div><div class="text-heading-h3">AccessoriesMasters</div></div><span class="pill warn text-caption-sm">No conversion signal</span></div>
+      <div class="q-grid text-body-sm">
+        <div><span>Industry / size</span><b>Fashion accessories · mid-market</b></div><div><span>Trial start</span><b>26 Aug 2026 · day 23</b></div>
+        <div><span>Modules used</span><b>Return To Stock ✓ · SPF Claims ✓</b></div><div><span>Channels connected</span><b>Amazon · Flipkart</b></div>
+        <div><span>₹ at risk surfaced</span><b>₹9.80 L</b></div><div><span>Interventions fired</span><b>I.3 (later) · I.4 (self-serve)</b></div>
+        <div><span>Signals</span><b>No pricing visit · no CSM request · no contract event</b></div><div><span>Prior notes</span><b>—</b></div>
+      </div>
+      <div class="q-foot"><span class="text-caption-md">Script: Open → Listen → Match objection → Close → Log</span><button class="btn primary" >Log call outcome</button></div>
+    </div>
+  </div>
+</section>
+<section id="i7" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">We noticed you're back · 7 days left</div><div class="text-heading-h3">Left last time due to pricing?</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">Let's find you a better offer. A CSM will call with your pricing history and options for your current usage.</p>
+      <div class="fields two"><div class="fld"><label class="text-caption-sm">Full name</label><input class="text-body-sm" type="text" placeholder="Rahul Sharma"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 98xxx xxxxx"></div><div class="fld"><label class="text-caption-sm">Best time to call</label><select class="text-body-sm"><option>Weekdays 10–1</option><option>Weekdays 2–5</option><option>Weekends by request</option></select></div></div>
+      <div class="success" data-s="i7_book"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Callback booked</div><p class="s-body text-body-sm">A CSM will call within 24 hours with your pricing history and options for your current usage.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A CSM calls during your chosen window</li><li>Your trial stays live until then — nothing changes</li><li>If timing doesn't work, reply to the confirmation email</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="show(this,'i7_book')">Book callback →</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i8" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">Your trial ends in 7 days</div><div class="text-heading-h3">Need more time to evaluate?</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">You've seen the returns leakage recovery. If your budget cycle doesn't fit the window, request an extension — a CSM will process it within 24 hours.</p>
+      <div class="fields two"><div class="fld"><label class="text-caption-sm">Full name</label><input class="text-body-sm" type="text" placeholder="Rahul Sharma"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 98xxx xxxxx"></div><div class="fld"><label class="text-caption-sm">Best time to call</label><select class="text-body-sm"><option>Weekdays 10–1</option><option>Weekdays 2–5</option><option>Weekends by request</option></select></div><div class="fld"><label class="text-caption-sm">Extension reason</label><select class="text-body-sm"><option>Budget cycle mismatch</option><option>Still evaluating</option><option>Waiting on sign-off</option><option>Other</option></select></div></div>
+      <div class="success" data-s="i8_book"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Extension request received</div><p class="s-body text-body-sm">A CSM will review it within 24 hours. Most extensions are approved the same day.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>If approved, your trial end date updates automatically — you'll see the new day count on the dashboard</li><li>You'll get an email either way</li><li>No action needed from you</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="show(this,'i8_book')">Book callback →</button></div>
+    </div></div>
+  </div>
+</section>
+<section id="i9" class="screen">
+  <div class="stage">
+    <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
+    <div class="overlay"><div class="modal">
+      <div class="m-head"><div><div class="eyebrow text-caption-sm">You've seen ~₹9.80 L in leakage · 7 days left</div><div class="text-heading-h3">Ready to move ahead?</div></div><button class="x">×</button></div>
+      <p class="desc text-body-sm">At your scale this is usually a procurement conversation. A CSM will come prepared with annual pricing, MSA templates and volume terms.</p>
+      <div class="fields two"><div class="fld"><label class="text-caption-sm">Full name</label><input class="text-body-sm" type="text" placeholder="Rahul Sharma"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 98xxx xxxxx"></div><div class="fld"><label class="text-caption-sm">Best time to call</label><select class="text-body-sm"><option>Weekdays 10–1</option><option>Weekdays 2–5</option><option>Weekends by request</option></select></div><div class="fld"><label class="text-caption-sm">Who should be on the call (optional)</label><input class="text-body-sm" type="text" placeholder="e.g. Finance head, procurement"></div></div>
+      <div class="success" data-s="i9_book"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Callback booked</div><p class="s-body text-body-sm">A CSM will call within 24 hours prepared with annual pricing, MSA and volume terms.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A CSM calls during your chosen window; anyone you named is added to the invite</li><li>You'll get a calendar invite by email</li><li>Your trial stays live until the conversation is done</li></ol></div><div class="s-foot"><button class="btn primary" onclick="reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="show(this,'i9_book')">Book callback →</button></div>
+    </div></div>
+  </div>
+</section>
+<script>
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.t).classList.add('active');}));
+document.querySelector('.screen').classList.add('active');
+function show(btn,key){ const m=btn.closest('.modal'); m.querySelectorAll('.success').forEach(x=>x.style.display='none'); const sc=m.querySelector('.success[data-s="'+key+'"]'); m.classList.add('done'); sc.style.display='block'; }
+function done(btn,keys){ const m=btn.closest('.modal'); const opts=[...m.querySelectorAll('.opt input')]; const i=opts.findIndex(o=>o.checked); if(i<0){ alert('Pick an option first'); return; } const k=keys[i];
+  if(k==='__nav'){ alert('Navigates to Channels › FLIPKART_B2C › Connectors (journey mock Step 8). No success screen — the tab is the next step.'); return; }
+  show(btn,k); }
+function reset(btn){ const m=btn.closest('.modal'); m.classList.remove('done'); m.querySelectorAll('.success').forEach(x=>x.style.display='none'); m.querySelectorAll('.opt input').forEach(o=>o.checked=false); }
+</script>
+</body></html>

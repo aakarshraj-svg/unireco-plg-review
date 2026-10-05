@@ -797,6 +797,46 @@ a { color: var(--text-brand-base); text-decoration: none; }
   .kpi-strip { grid-template-columns: repeat(2, 1fr); }
   .tables-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Trial checklist (what to do next) ── */
+.tc { display:flex; align-items:center; gap: var(--gap-16); padding: var(--gap-12) var(--gap-16); margin-bottom: var(--gap-16); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); }
+.tc .day { display:flex; flex-direction:column; padding-right: var(--gap-16); border-right: var(--stroke-regular) solid var(--border-primary); min-width: 96px; }
+.tc .day b { color: var(--text-primary); } .tc .day span { color: var(--text-tertiary); }
+.tc .steps { display:flex; align-items:center; gap: var(--gap-8); flex:1; }
+.tc .step { display:flex; align-items:center; gap: var(--gap-8); padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-full); color: var(--text-secondary); }
+.tc .step .n { width: var(--gap-20); height: var(--gap-20); border-radius: var(--radius-full); display:grid; place-items:center; border: var(--stroke-regular) solid var(--border-secondary); color: var(--text-tertiary); flex-shrink:0; }
+.tc .step.done { color: var(--text-secondary); } .tc .step.done .n { background: var(--bg-success-base); border-color: var(--bg-success-base); color: var(--text-on-fill); }
+.tc .step.next { background: var(--bg-brand-subtler); color: var(--text-brand-base); cursor:pointer; } .tc .step.next .n { border-color: var(--border-brand-base); color: var(--text-brand-base); }
+.tc .step.locked { color: var(--text-disabled); }
+.tc .arrow { color: var(--icon-tertiary); }
+.tc .prog { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-tertiary); }
+.tc .bar { width: 96px; height: var(--gap-8); background: var(--bg-tertiary); border-radius: var(--radius-full); overflow:hidden; } .tc .bar i { display:block; height:100%; width:33%; background: var(--bg-success-base); }
+
+/* ── Coachmarks ── */
+.cm-btn { display:inline-flex; align-items:center; gap: var(--gap-8); height: var(--gap-32); padding: 0 var(--gap-12); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); background: var(--bg-primary); color: var(--text-primary); font-family: inherit; cursor:pointer; margin-right: var(--gap-8); }
+.cm-btn:hover { background: var(--bg-secondary); }
+.cm-overlay { position:fixed; inset:0; z-index: 900; display:none; }
+.cm-overlay.on { display:block; }
+.cm-hole { position:absolute; border-radius: var(--radius-md); box-shadow: 0 0 0 9999px var(--bg-overlay); transition: all .25s ease; pointer-events:none; }
+.cm-tip { position:absolute; width: 320px; background: var(--bg-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-high); padding: var(--gap-16) var(--gap-20); }
+.cm-tip .k { color: var(--text-tertiary); margin-bottom: var(--gap-4); }
+.cm-tip .t { color: var(--text-primary); margin-bottom: var(--gap-8); }
+.cm-tip .b { color: var(--text-secondary); margin-bottom: var(--gap-16); }
+.cm-tip .f { display:flex; align-items:center; gap: var(--gap-8); }
+.cm-tip .skip { color: var(--text-tertiary); cursor:pointer; margin-right:auto; }
+.cm-tip button { height: var(--gap-32); padding: 0 var(--gap-12); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; border: var(--stroke-regular) solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); }
+.cm-tip button.primary { background: var(--bg-brand-base); color: var(--text-on-fill); border-color: transparent; }
+.cm-tip .dots { display:flex; gap: var(--gap-4); margin-left: var(--gap-8); } .cm-tip .dots i { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--border-secondary); } .cm-tip .dots i.on { background: var(--bg-brand-base); }
+
+/* ── First-visit help prompt ── */
+.cm-ask { position:fixed; right: var(--gap-24); bottom: var(--gap-24); z-index: 800; width: 320px; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-high); padding: var(--gap-16) var(--gap-20); display:none; }
+.cm-ask.on { display:block; }
+.cm-ask .x { position:absolute; top: var(--gap-8); right: var(--gap-8); background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-24); height: var(--gap-24); border-radius: var(--radius-sm); }
+.cm-ask .t { color: var(--text-primary); margin-bottom: var(--gap-4); padding-right: var(--gap-24); }
+.cm-ask .b { color: var(--text-secondary); margin-bottom: var(--gap-12); }
+.cm-ask .f { display:flex; gap: var(--gap-8); }
+.cm-ask button { height: var(--gap-32); padding: 0 var(--gap-12); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; border: var(--stroke-regular) solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); }
+.cm-ask button.primary { background: var(--bg-brand-base); color: var(--text-on-fill); border-color: transparent; }
 </style>
 </head>
 <body>
@@ -846,6 +886,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
         <span class="trial-badge text-caption-sm">TRIAL</span>
       </div>
       <div class="spacer"></div>
+      <button class="cm-btn text-label-sm" id="cm-restart" onclick="startTour()" title="Show me around this page"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Show me around</button>
       <button class="icon-btn" title="Toggle theme" onclick="toggleTheme()">
         <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
@@ -874,8 +915,21 @@ a { color: var(--text-brand-base); text-decoration: none; }
     <div class="body3">
       <div class="content-pane">
 
+        <!-- ─── TRIAL CHECKLIST: what to do next ─── -->
+        <div class="tc" id="tc">
+          <div class="day"><b class="text-label-md">Day 6 of 30</b><span class="text-caption-md">trial ends 28 Oct</span></div>
+          <div class="steps">
+            <div class="step done text-label-sm"><span class="n text-caption-sm">✓</span>See your returns leakage</div>
+            <span class="arrow">›</span>
+            <div class="step next text-label-sm" onclick="openConnectors()"><span class="n text-caption-sm">2</span>Connect a marketplace →</div>
+            <span class="arrow">›</span>
+            <div class="step locked text-label-sm"><span class="n text-caption-sm">3</span>Raise your first SPF claim</div>
+          </div>
+          <div class="prog text-caption-md"><span>1 of 3</span><span class="bar"><i></i></span></div>
+        </div>
+
         <!-- ─── KPI STRIP: 1 total + 3 modules ─── -->
-        <div class="kpi-strip">
+        <div class="kpi-strip" id="cm-kpi">
           <div class="kpi-card">
             <div class="kpi-label text-body-sm">
               Total ₹ at risk
@@ -934,7 +988,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
           </div>
 
           <!-- SPF Claims — partial credentials (Amazon connected) -->
-          <div class="module-card" onclick="showToast('Opening SPF Claims', true)">
+          <div class="module-card" id="cm-spf" onclick="showToast('Opening SPF Claims', true)">
             <div class="module-card-head">
               <div class="module-card-title text-h3">
                 <div class="module-card-icon">
@@ -1270,6 +1324,38 @@ function showToast(msg, isOk){
 buildTable2();
 
 function openConnectors(){ try { window.parent.postMessage({type:'unireco-open-connectors'}, '*'); } catch(e){} showToast('Opening Channels · Connectors', true); }
+</script>
+
+<div class="cm-overlay" id="cm-ov"><div class="cm-hole" id="cm-hole"></div><div class="cm-tip" id="cm-tip"></div></div>
+<div class="cm-ask" id="cm-ask">
+  <button class="x" onclick="askClose()">×</button>
+  <div class="t text-label-md">New here? We can show you around.</div>
+  <div class="b text-body-sm">Three quick stops: your ₹ at risk, what to do next, and where SPF Claims switches on.</div>
+  <div class="f"><button class="primary text-label-sm" onclick="askClose(); startTour()">Show me around</button><button class="text-label-sm" onclick="askClose()">No thanks</button></div>
+</div>
+<script>
+// ── Coachmarks: three stops, first landing only; restart from the top-right button ──
+const CM=[
+  {el:'#cm-kpi', k:'1 of 3', t:'This is what your returns are costing', b:'₹ at risk this month, from your Uniware returns data. Return To Stock is live already — nothing to set up.'},
+  {el:'#tc', k:'2 of 3', t:'Your three steps for the trial', b:'This bar always shows where you are and what to do next. The highlighted step is a link.'},
+  {el:'#cm-spf', k:'3 of 3', t:'SPF Claims switches on here', b:'Connect one marketplace and this card fills with the claims you can raise. One connection, about a minute.'}
+];
+let cmI=0, firstVisit=true;
+function startTour(){ cmI=0; document.getElementById('cm-ov').classList.add('on'); showStop(); }
+function endTour(){ document.getElementById('cm-ov').classList.remove('on'); }
+function showStop(){
+  const st=CM[cmI], el=document.querySelector(st.el); el.scrollIntoView({block:'center',behavior:'instant'});
+  const r=el.getBoundingClientRect(), pad=8, hole=document.getElementById('cm-hole'), tip=document.getElementById('cm-tip');
+  Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+2*pad)+'px',height:(r.height+2*pad)+'px'});
+  tip.innerHTML=`<div class="k text-caption-sm">${st.k}</div><div class="t text-heading-h4">${st.t}</div><div class="b text-body-sm">${st.b}</div>
+    <div class="f"><span class="skip text-caption-md" onclick="endTour()">Skip tour</span>${cmI>0?'<button class="text-label-sm" onclick="cmI--;showStop()">Back</button>':''}<button class="primary text-label-sm" onclick="${cmI<CM.length-1?'cmI++;showStop()':'endTour()'}">${cmI<CM.length-1?'Next':'Done'}</button><span class="dots">${CM.map((_,i)=>`<i class="${i===cmI?'on':''}"></i>`).join('')}</span></div>`;
+  const below=r.bottom+pad+12, fits=below+200<window.innerHeight;
+  Object.assign(tip.style,{top:(fits?below:r.top-pad-12-tip.offsetHeight-140)+'px',left:Math.min(Math.max(16,r.left),window.innerWidth-340)+'px'});
+}
+function askClose(){ document.getElementById('cm-ask').classList.remove('on'); }
+// first-visit prompt: fires on every landing until the user takes the tour or dismisses it (persisted per user in production; in this mock, once per load)
+window.addEventListener('load',()=>{ if(firstVisit) setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 900); });
+window.addEventListener('resize',()=>{ if(document.getElementById('cm-ov').classList.contains('on')) showStop(); });
 </script>
 </body>
 </html>

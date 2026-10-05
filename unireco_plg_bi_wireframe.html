@@ -2,282 +2,239 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PLG Cohort × Trial Funnel — functional BI mock (PRD 5a)</title>
+<title>PLG Trial Tracking — BI mock v2 (PRD 5a)</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Tool-agnostic functional mock. Everything on screen is computed from the synthetic event log below — the same aggregation rules Tech must implement. */
-:root{--ink:#1b1c1d;--ink2:#57595d;--ink3:#979a9f;--line:#dadcde;--bg:#f3f4f5;--card:#fff;--hi:#e2edfd;--hi2:#1b72f3;--warn:#fde7c7;--bad:#fbdcdc;--good:#dcefe4}
+:root{--ink:#1b1c1d;--ink2:#57595d;--ink3:#979a9f;--line:#dadcde;--bg:#f3f4f5;--card:#fff;--hi:#e2edfd;--hi2:#1b72f3;--bad:#fbdcdc;--good:#dcefe4;--today:#c8f0d0;--lapsed:#ececec;--conv:#1f9d55;--warn:#fde7c7}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.45}
-.top{background:var(--ink);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:24px;position:sticky;top:0;z-index:20}
+.top{background:var(--ink);color:#fff;padding:12px 24px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:30}
 .top .t{font-weight:600}.top .s{opacity:.6;font-size:12px}
 .tabs{display:flex;gap:4px;margin-left:auto}.tab{padding:6px 12px;border-radius:6px;background:transparent;color:#fff;border:1px solid transparent;font:inherit;font-size:12px;cursor:pointer;opacity:.7}.tab.active{opacity:1;background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.2)}
-.role{margin-left:12px;font-size:12px;opacity:.85}.role select{font:inherit;font-size:12px;background:#333;color:#fff;border:1px solid #555;border-radius:4px;padding:3px 6px}
-.wrap{padding:20px 24px;max-width:1400px;margin:0 auto}
+.wrap{padding:20px 24px;max-width:1600px;margin:0 auto}
 .filters{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
 .f{display:flex;align-items:center;gap:6px;padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink2);font-size:12px}
 .f select,.f input{font:inherit;font-size:12px;border:none;background:transparent;color:var(--ink);font-weight:500}
-.f .chip{cursor:pointer;padding:1px 8px;border-radius:999px;background:var(--bg)}.f .chip.on{background:var(--ink);color:#fff}
+.chip{cursor:pointer;padding:1px 8px;border-radius:999px;background:var(--bg)}.chip.on{background:var(--ink);color:#fff}
 .btn{padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:var(--card);font:inherit;font-size:12px;cursor:pointer}.btn:hover{background:var(--bg)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
 .card h3{font-size:13px;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:12px}.card h3 span{font-weight:400;color:var(--ink3);font-size:11px}
-table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;font-variant-numeric:tabular-nums}
 th,td{padding:7px 10px;text-align:left;border-bottom:1px solid var(--line);font-size:12px;white-space:nowrap}
-th{color:var(--ink2);font-weight:500;text-transform:uppercase;letter-spacing:.03em;font-size:11px;background:#fafafa;cursor:pointer;user-select:none}th.s::after{content:" ↕";color:var(--ink3)}th.asc::after{content:" ↑"}th.desc::after{content:" ↓"}
+th{color:var(--ink2);font-weight:500;text-transform:uppercase;letter-spacing:.03em;font-size:11px;background:#fafafa}
 td.n,th.n{text-align:right}tr.total td{font-weight:600;border-top:2px solid var(--ink)}
 td.cell{cursor:pointer}td.cell:hover{background:var(--hi)}td.cell .r{display:block;font-size:10px;color:var(--ink3)}
-td.cell.lo{background:var(--bad)}td.cell.hi{background:var(--good)}
+td.cell.lo{background:var(--bad)}td.cell.hi{background:var(--good)}td.cell.sel{outline:2px solid var(--hi2);outline-offset:-2px}
 td.rowh{cursor:pointer;text-decoration:underline dotted var(--ink3)}
 .kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
 .k{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}.k .l{font-size:11px;color:var(--ink2);text-transform:uppercase;letter-spacing:.03em}.k .v{font-size:22px;font-weight:600;margin-top:4px}.k .d{font-size:11px;color:var(--ink3)}
 .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;background:var(--bg);color:var(--ink2)}.pill.good{background:var(--good)}.pill.bad{background:var(--bad)}.pill.warn{background:var(--warn)}
-.bar{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;min-width:90px}.bar i{display:block;height:100%;background:var(--ink3)}
-.screen{display:none}.screen.active{display:block}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.spec{font-size:12px;color:var(--ink2)}.spec code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px;color:var(--ink)}
-.drill{border-color:var(--hi2)}.crumb{font-size:12px;color:var(--ink2);margin-bottom:10px}.crumb a{color:var(--hi2);cursor:pointer}
-.chart{display:flex;align-items:flex-end;gap:6px;height:160px;padding:8px 4px 0;border-bottom:1px solid var(--line)}
-.chart .col{flex:1;display:flex;flex-direction:column-reverse;height:100%;position:relative}
-.chart .col i{display:block}.chart .col .lbl{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--ink3)}
-.legend{display:flex;gap:12px;font-size:11px;color:var(--ink2);margin-top:22px}.legend i{display:inline-block;width:10px;height:10px;margin-right:4px;vertical-align:middle}
-.c1{background:#1b1c1d}.c2{background:#57595d}.c3{background:#979a9f}.c4{background:#dadcde}
-.tip{position:fixed;background:var(--ink);color:#fff;font-size:11px;padding:6px 8px;border-radius:4px;pointer-events:none;display:none;z-index:50;max-width:280px}
-.locked{padding:12px;color:var(--ink3);border:1px dashed var(--line);border-radius:6px;text-align:center}
-.email{background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px;max-width:640px;font-size:13px}.email h4{margin-bottom:8px}.email .kv{display:grid;grid-template-columns:1fr auto auto;gap:4px 16px;margin:8px 0}.email .kv b{text-align:right}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ink2);margin-bottom:10px;align-items:center}.legend i{display:inline-block;width:14px;height:14px;border:1px solid var(--line);border-radius:3px;vertical-align:middle;margin-right:4px}
+.gridwrap{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:6px}
+.grid{width:max-content;min-width:100%}
+.grid th{position:sticky;top:0;z-index:3}
+.grid th.day{text-align:center;min-width:88px;padding:6px 4px}
+.grid td.day{min-width:88px;padding:4px;vertical-align:top;border-left:1px solid #f0f0f0}
+.grid td.day.lapsed{background:var(--lapsed)}
+.grid td.day.today{background:var(--today)}
+.grid td.day.after{background:#fff}
+.grid td.day.live{background:var(--good)}
+.grid td.day.ended{background:repeating-linear-gradient(45deg,#f4f4f4,#f4f4f4 4px,#ececec 4px,#ececec 8px)}
+.grid th.fix,.grid td.fix{position:sticky;background:#fff;z-index:2}
+.grid th.fix{z-index:4;background:#fafafa}
+.grid .c1{left:0;min-width:180px}.grid .c2{left:180px;min-width:50px}.grid .c3{left:230px;min-width:90px}.grid .c4{left:320px;min-width:130px;border-right:2px solid var(--line)}
+.ev{display:inline-block;font-size:10px;line-height:16px;padding:0 5px;border-radius:4px;margin:1px 1px 0 0;background:#fff;border:1px solid var(--line);color:var(--ink2);cursor:default}
+.ev.login{color:var(--ink3)}.ev.landed{border-color:#93b6e8;color:#1f4d8a;background:#eaf2fc}.ev.r2s{border-color:#c4a6e8;color:#5b2d91;background:#f3ebfb}.ev.creds{border-color:#e8c58a;color:#8a5a00;background:#fdf3e2}.ev.spf{border-color:#8fd0a8;color:#1d6b3a;background:#e6f6ec}.ev.conv{background:var(--conv);border-color:var(--conv);color:#fff;font-weight:600}.ev.int{border-style:dashed;color:var(--ink2)}.ev.exp{color:#a33;border-color:#e5b3b3;background:#fbecec}
+.tip{position:fixed;background:var(--ink);color:#fff;font-size:11px;padding:6px 8px;border-radius:4px;pointer-events:none;display:none;z-index:50;max-width:300px;white-space:pre-line}
+.spec{font-size:12px;color:var(--ink2)}.spec code{background:var(--bg);padding:1px 5px;border-radius:4px;font-size:11px;color:var(--ink)}.spec table{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.screen{display:none}.screen.active{display:block}
 </style>
 </head>
 <body>
 <div class="top">
-  <div><div class="t">PLG · Cohort × Trial Funnel</div><div class="s">Functional mock for PRD 5a · every number is computed from the synthetic event log · greyscale on purpose</div></div>
-  <div class="tabs">
-    <button class="tab active" data-tab="funnel">Funnel</button>
-    <button class="tab" data-tab="drill">Drill-down</button>
-    <button class="tab" data-tab="interventions">Interventions</button>
-    <button class="tab" data-tab="source">Source attribution</button>
-    <button class="tab" data-tab="weekly">Weekly email</button>
-    <button class="tab" data-tab="spec">Metric spec</button>
-  </div>
-  <div class="role">Viewing as <select id="role"><option value="plg">Product / PLG lead</option><option value="bh">Business Head</option><option value="csm">CSM lead (Shubham)</option><option value="ro">Read-only</option></select></div>
+  <div><div class="t">PLG · Trial Tracking</div><div class="s">BI mock v2 for PRD 5a · two widgets · every cell computed from the synthetic event log</div></div>
+  <div class="tabs"><button class="tab active" data-tab="w">Widgets</button><button class="tab" data-tab="spec">Metric spec</button></div>
 </div>
 
 <div class="wrap">
-  <div class="filters">
-    <div class="f">Trials started <input type="date" id="fFrom"> – <input type="date" id="fTo"></div>
-    <div class="f">Cohort <span class="chip on" data-c="all">All</span><span class="chip" data-c="C1">C1</span><span class="chip" data-c="C2">C2</span><span class="chip" data-c="C3">C3</span><span class="chip" data-c="C4">C4</span></div>
-    <div class="f">Persona <select id="fPersona"><option value="all">All</option><option value="HQ">HQ</option><option value="WH">WH</option></select></div>
-    <div class="f">Source <select id="fSource"><option value="all">All</option></select></div>
-    <div class="f">Compare to <select id="fCmp"><option value="7">7 days ago</option><option value="14">14 days ago</option><option value="28">28 days ago</option></select></div>
-    <button class="btn" id="reset">Reset</button>
-    <button class="btn" id="reseed" title="Regenerate the synthetic dataset">Reseed data</button>
-    <span style="font-size:11px;color:var(--ink3)" id="stamp"></span>
-  </div>
+  <section id="w" class="screen active">
+    <div class="filters">
+      <div class="f">Trials started <input type="date" id="fFrom"> – <input type="date" id="fTo"></div>
+      <div class="f">Cohort <span class="chip on" data-c="all">All</span><span class="chip" data-c="C1">C1</span><span class="chip" data-c="C2">C2</span><span class="chip" data-c="C3">C3</span><span class="chip" data-c="C4">C4</span></div>
+      <div class="f">Status <select id="fStatus"><option value="all">All</option><option value="active">Active</option><option value="inactive">Inactive 5d+</option><option value="converted">Converted</option><option value="expired">Expired</option></select></div>
+      <button class="btn" id="reset">Reset</button><button class="btn" id="reseed">Reseed data</button>
+      <span style="font-size:11px;color:var(--ink3)" id="stamp"></span>
+    </div>
 
-  <section id="funnel" class="screen active">
     <div class="kpi" id="kpis"></div>
-    <div class="card"><h3>Cohort × stage · tenant-unique counts <span>hover a cell for conversion from the previous stage · click a cell or a cohort to drill · tint = ±10 pp vs blended</span></h3><table id="funnelTbl"></table></div>
-    <div class="two">
-      <div class="card"><h3>Trials started per week <span>stacked by cohort · hover a bar</span></h3><div class="chart" id="weekly"></div><div class="legend"><span><i class="c1"></i>C1</span><span><i class="c2"></i>C2</span><span><i class="c3"></i>C3</span><span><i class="c4"></i>C4</span></div></div>
-      <div class="card"><h3>Stage conversion vs <span id="cmpLbl">7 days ago</span> <span>snapshot = same rules, events before the cutoff only</span></h3><table id="deltaTbl"></table></div>
+
+    <div class="card">
+      <h3>Widget 1 · Cohort × stage · tenant-unique counts <span>hover a cell for conversion from the previous stage · click a cell to filter Widget 2 to those tenants · tint = ±10 pp vs blended</span></h3>
+      <table id="funnelTbl" style="width:100%"></table>
     </div>
-  </section>
 
-  <section id="drill" class="screen">
-    <div class="crumb" id="crumb"></div>
-    <div class="card drill"><h3 id="drillTitle">Drill-down</h3>
-      <div class="filters" style="margin-bottom:8px"><span class="f">Show <span class="chip on" id="reached">reached</span><span class="chip" id="notReached">did not reach</span></span><button class="btn" id="csv">Export CSV</button><span style="font-size:11px;color:var(--ink3)" id="drillNote"></span></div>
-      <div id="drillWrap"></div>
+    <div class="card">
+      <h3 id="gridTitle">Widget 2 · Trial day grid</h3>
+      <div class="legend">
+        <span><i style="background:var(--lapsed)"></i>Lapsed day</span><span><i style="background:var(--today)"></i>Current trial day</span><span><i style="background:#fff"></i>Upcoming</span><span><i style="background:var(--good)"></i>Live (post-conversion)</span><span><i style="background:repeating-linear-gradient(45deg,#f4f4f4,#f4f4f4 4px,#ececec 4px,#ececec 8px)"></i>Trial ended</span>
+        <span style="margin-left:8px;color:var(--ink3)">Events:</span>
+        <span class="ev login">Login</span><span class="ev landed">Landed</span><span class="ev r2s">Used Returns</span><span class="ev creds">Creds added</span><span class="ev spf">Used SPF</span><span class="ev conv">Converted</span><span class="ev int">I.x intervention</span><span class="ev exp">Expired</span>
+      </div>
+      <div class="filters" style="margin-bottom:8px"><span class="f">Sort <select id="gSort"><option value="day">Trial day ↓</option><option value="start">Start date ↓</option><option value="last">Days since last login ↓</option><option value="cohort">Cohort</option></select></span><button class="btn" id="csv">Export CSV</button></div>
+      <div class="gridwrap"><table class="grid" id="gridTbl"></table></div>
     </div>
-  </section>
-
-  <section id="interventions" class="screen">
-    <div class="filters"><div class="f">Stage <select id="iStage"><option value="all">All</option><option value="A">Activation</option><option value="U">Usage</option><option value="P">Conversion</option></select></div><div class="f">Mechanism <select id="iMech"><option value="all">All</option><option value="SC.1">SC.1 popup</option><option value="SC.2">SC.2 template</option><option value="SC.3">SC.3 popover</option><option value="surface">surface copy</option><option value="email">email</option><option value="csm">CSM call</option></select></div><div class="f"><span class="chip" id="csmView">CSM view</span> SC.1 variants + P.1, adds queue and time-to-callback</div></div>
-    <div class="card"><h3>Per-intervention effectiveness <span>lift = Paid ≤ 30d after fire vs eligible tenants where it did not fire · suppressed below n=10 · zero-fire rows at bottom</span></h3><table id="intTbl"></table></div>
-  </section>
-
-  <section id="source" class="screen">
-    <div class="card"><h3>Trial starts by source trigger <span>last-touch · totals reconcile to the Landed column</span></h3><table id="srcTbl"></table></div>
-    <div class="card"><h3>Starts by source, weekly <span>top 4 sources</span></h3><div class="chart" id="srcWeekly"></div><div class="legend" id="srcLegend"></div></div>
-  </section>
-
-  <section id="weekly" class="screen">
-    <div class="card"><h3>Monday 09:00 IST executive summary <span>generated from the same data, unfiltered · recipients: Business Head + Product/PLG leads</span></h3><div class="email" id="email"></div></div>
   </section>
 
   <section id="spec" class="screen">
     <div class="two">
       <div class="card spec"><h3>Event schema every producer must emit</h3>
         <table><thead><tr><th>Field</th><th>Values / notes</th></tr></thead><tbody>
-          <tr><td><code>event_type</code></td><td><code>impression</code> · <code>click</code> · <code>dispatch</code> · <code>open</code> · <code>trial_started</code> · <code>gate_lifted</code> · <code>module_interaction</code> · <code>creds_added</code> · <code>intervention_fired</code> · <code>intervention_engaged</code> · <code>intervention_dismissed</code> · <code>csm_queue_created</code> · <code>csm_call_completed</code> · <code>converted</code></td></tr>
-          <tr><td><code>tenant_id</code></td><td>Uniware tenant id — the grain of every count</td></tr>
-          <tr><td><code>user_id</code>, <code>persona</code></td><td><code>HQ</code> / <code>WH</code> from Uniware role</td></tr>
-          <tr><td><code>cohort</code></td><td><code>C1</code>–<code>C4</code> / <code>unassigned</code>, frozen at trial start (PRD 3a)</td></tr>
-          <tr><td><code>source_trigger</code>, <code>source_placement</code></td><td>last-touch, captured at the gate, stored on the trial record</td></tr>
-          <tr><td><code>intervention_id</code>, <code>variant</code></td><td><code>A.1</code>…<code>P.4</code>; SC variant where applicable</td></tr>
-          <tr><td><code>module</code>, <code>surface</code>, <code>ts</code>, <code>trial_day</code></td><td>R2S / SPF / PR; surface id; ISO timestamp; days since gate lifted</td></tr>
+          <tr><td><code>event_type</code></td><td><code>impression</code> · <code>login</code> · <code>gate_lifted</code> (= Landed) · <code>module_interaction</code> (module = R2S | SPF) · <code>creds_added</code> · <code>intervention_fired</code> / <code>_engaged</code> / <code>_dismissed</code> · <code>converted</code> · <code>trial_expired</code></td></tr>
+          <tr><td><code>tenant_id</code></td><td>Uniware tenant id — the grain of both widgets</td></tr>
+          <tr><td><code>cohort</code></td><td><code>C1</code>–<code>C4</code>, frozen at trial start (PRD 3a)</td></tr>
+          <tr><td><code>trial_id</code>, <code>trial_start_ts</code></td><td>a re-trial is a new trial_id and a new row in Widget 2</td></tr>
+          <tr><td><code>trial_day</code></td><td>integer 1–30 = floor((ts − trial_start_ts) / 1 day) + 1 in IST; the column the event lands in</td></tr>
+          <tr><td><code>intervention_id</code></td><td><code>I.1</code>…<code>I.9</code> (PRD 4)</td></tr>
+          <tr><td><code>ts</code></td><td>ISO timestamp, IST</td></tr>
         </tbody></table></div>
-      <div class="card spec"><h3>Stage rules (a tenant reaches a stage once, ever; stages are monotonic)</h3>
+      <div class="card spec"><h3>Stage rules — Widget 1 (tenant reaches a stage once, ever; monotonic)</h3>
         <table><thead><tr><th>Stage</th><th>Rule</th></tr></thead><tbody>
           <tr><td>Total</td><td>tenant in cohort per PRD 3a</td></tr>
-          <tr><td>Aware</td><td>≥1 <code>open</code> of digest / win-back OR ≥1 trigger <code>impression</code> (dwell irrelevant)</td></tr>
-          <tr><td>Landed</td><td><code>gate_lifted</code>, not <code>trial_started</code> — an abandoned gate is not Landed</td></tr>
-          <tr><td>Used·Returns</td><td>≥1 <code>module_interaction</code> module=R2S</td></tr>
-          <tr><td>Used·SPF / Used·Payout</td><td>≥1 <code>module_interaction</code> on SPF / PR <b>after</b> <code>creds_added</code>; clicks on the locked state never count</td></tr>
-          <tr><td>Paid</td><td><code>converted</code>, immediately on conversion</td></tr>
+          <tr><td>Aware</td><td>≥ 1 trigger <code>impression</code> or email <code>open</code></td></tr>
+          <tr><td>Landed</td><td><code>gate_lifted</code> — not <code>trial_started</code>; an abandoned gate is not Landed</td></tr>
+          <tr><td>Used·Returns</td><td>≥ 1 <code>module_interaction</code> module = R2S</td></tr>
+          <tr><td>Used·SPF</td><td>≥ 1 <code>module_interaction</code> module = SPF after <code>creds_added</code>; clicks on the locked state never count</td></tr>
+          <tr><td>Paid</td><td><code>converted</code></td></tr>
         </tbody></table>
-        <p style="margin-top:10px">Attribution: last-touch; 30-day window for in-product triggers, 7-day for email clicks. Cohort is snapshot at trial start. Lift shown only when fired and not-fired groups both have ≥ 10 tenants. Row-level security: CSM leads see drill-down rows only for tenants they own; read-only sees aggregates. Everything on this page is a function of the event log — a BI tool that cannot reproduce the Funnel table from the Drill-down rows is not implementing this spec.</p></div>
+        <p style="margin-top:10px">Used·Payout is not a trial stage — Payment Reco is available on go-live only (PRD 3b). Live-tenant Payment Reco usage is tracked outside this view.</p></div>
     </div>
+    <div class="card spec"><h3>Widget 2 rules</h3>
+      <table><thead><tr><th style="width:160px">Rule</th><th></th></tr></thead><tbody>
+        <tr><td>Rows</td><td>one per <code>trial_id</code> with <code>gate_lifted</code>, inside the start-date range and cohort filter; a Widget 1 cell click narrows to tenants at or past that stage</td></tr>
+        <tr><td>Columns</td><td>Day 1 … Day 30; Day 1 = the day the gate lifted</td></tr>
+        <tr><td>Cell content</td><td>every event whose <code>trial_day</code> equals the column, as chips in order: Login · Landed · Used Returns · Creds added · Used SPF · I.x · Converted · Expired. The same event repeated on one day is shown once</td></tr>
+        <tr><td>Current day</td><td>the column where <code>trial_day</code> = today, tinted light green; only for active trials</td></tr>
+        <tr><td>Lapsed days</td><td>columns before the current day, grey. Upcoming days white</td></tr>
+        <tr><td>After conversion</td><td>columns after the Converted day tinted green and labelled Live; the row keeps its position</td></tr>
+        <tr><td>After day 30</td><td>no conversion → Expired chip on day 30, row status Expired, all columns hatched</td></tr>
+        <tr><td>Status column</td><td>Active · day N &nbsp;|&nbsp; Inactive · Nd (no login in the last 5 trial days) &nbsp;|&nbsp; Converted · day N &nbsp;|&nbsp; Expired</td></tr>
+        <tr><td>Reconciliation</td><td>Widget 1 and Widget 2 are the same query with different aggregation: under the same filters, Widget 1's Landed count equals Widget 2's row count</td></tr>
+        <tr><td>Refresh &amp; access</td><td>15 minutes. Product/PLG and Business Head: all rows. CSM leads: rows for tenants they own. Read-only: Widget 1 only</td></tr>
+      </tbody></table></div>
   </section>
 </div>
 <div class="tip" id="tip"></div>
 
 <script>
-/* ───────────── synthetic data (deterministic, reseedable) ───────────── */
-let seed = 7;
-const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
-const pick = a => a[Math.floor(rnd()*a.length)];
-const TODAY = new Date('2026-09-09T09:00:00+05:30');
-const day = n => new Date(TODAY.getTime() - n*86400000);
-const daysAgo = d => Math.round((TODAY-d)/86400000);
-const COH = {C1:{n:28,name:'UniCapture Active'},C2:{n:99,name:'Ex-UniReco'},C3:{n:65,name:'High Return Rate'},C4:{n:51,name:'MP Leaning'}};
-const STAGES = ['Total','Aware','Landed','Used·Returns','Used·SPF','Used·Payout','Paid'];
-const SOURCES = {C1:['unicapture_c1·dashboard','unicapture_c1·export','poc_digest_c1','dm_forward'],C2:['hq_winback_c2'],C3:['uniware_c3','poc_digest_c3','dm_forward'],C4:['uniware_c4','poc_digest_c4','hq_spf_forward','finance_share']};
-const INT = [
- ['A.1','Forward-to-DM','A','SC.2',['C1'],'Aware'],['A.2','C3 ₹-anchored trigger copy','A','surface',['C3'],'Aware'],['A.3','C4 leakage-reveal trigger','A','surface',['C4'],'Aware'],['A.4','C2 win-back email','A','email',['C2'],'Aware'],['A.5','Ask Uniware Admin for access','A','SC.2',['C1','C3','C4'],'Landed'],['A.6','R2S feedback popup','A','SC.1',['C1','C4'],'Used·Returns'],['A.7','R2S data-source note','A','surface',['C3'],'Used·Returns'],
- ['U.1','No-credentials popup','U','SC.1',['C1','C2','C3'],'Used·SPF'],['U.2','Reco-Admin permission fallback','U','SC.2',[],'Used·SPF'],['U.3','C3 module ordering','U','surface',['C3'],'Used·Payout'],['U.4','Forward SPF to HQ','U','SC.2',['C4'],'Used·SPF'],['U.5',"C2 What's-changed note",'U','SC.3',['C2'],'Used·Payout'],['U.6','Share discrepancy with Finance','U','SC.2',['C4'],'Used·Payout'],
- ['P.1','C1 CSM outbound call','P','csm',['C1'],'Paid'],['P.2','C2 pricing popup','P','SC.1',['C2'],'Paid'],['P.3','C3 extension popup','P','SC.1',['C3'],'Paid'],['P.4','C4 procurement popup','P','SC.1',['C4'],'Paid']
-].map(([id,name,stage,mech,cohorts,at])=>({id,name,stage,mech,cohorts,at}));
-const NEED={Aware:1,Landed:2,'Used·Returns':3,'Used·SPF':3,'Used·Payout':4,Paid:3};
-const NAMES=['Accessories','Kraft','Nimbus','Bhavya','Orbit','Sutra','Vega','Lotus','Zenith','Tara','Meraki','Indus','Pehnava','Kavach','Aroha','Dhara','Nova','Ekta','Rangoli','Vastra'];
-const NAMES2=['Masters','Loom','Apparel','Home','Gadgets','Textiles','Sports','Living','Beauty','Foods','Decor','Kids','Footwear','Electronics','Crafts'];
+/* ───────── synthetic data ───────── */
+let seed=11; const rnd=()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;}; const pick=a=>a[Math.floor(rnd()*a.length)];
+const TODAY=new Date('2026-09-24T09:00:00+05:30'); const day=n=>new Date(TODAY.getTime()-n*86400000); const daysAgo=d=>Math.round((TODAY-d)/86400000);
+const COH={C1:{n:28,name:'UniCapture Active'},C2:{n:99,name:'Ex-UniReco'},C3:{n:65,name:'High Return Rate'},C4:{n:51,name:'MP Leaning'}};
+const STAGES=['Total','Aware','Landed','Used·Returns','Used·SPF','Paid'];
+const NAMES=['Accessories','Kraft','Nimbus','Bhavya','Orbit','Sutra','Vega','Lotus','Zenith','Tara','Meraki','Indus','Pehnava','Kavach','Aroha','Dhara','Nova','Ekta','Rangoli','Vastra'],NAMES2=['Masters','Loom','Apparel','Home','Gadgets','Textiles','Sports','Living','Beauty','Foods','Decor','Kids','Footwear','Electronics','Crafts'];
+const EV={login:'Login',landed:'Landed',r2s:'Used Returns',creds:'Creds added',spf:'Used SPF',conv:'Converted',exp:'Expired'};
 let TENANTS=[];
 function build(){
   TENANTS=[]; let id=1;
-  for (const [c,meta] of Object.entries(COH)) for (let i=0;i<meta.n;i++){
-    const t={id:'T'+String(id++).padStart(3,'0'),name:pick(NAMES)+' '+pick(NAMES2),cohort:c,persona:rnd()<0.6?'HQ':'WH',csm:pick(['Shubham','Rahul','—']),stage:0,events:[],ints:[],source:null,start:null,creds:[],converted:null};
-    const p={C1:[.75,.32,.78,.55,.7,.4],C2:[.62,.28,.6,.5,.75,.45],C3:[.68,.3,.8,.4,.35,.35],C4:[.6,.28,.55,.9,.95,.5]}[c];
-    const d=Math.floor(rnd()*60);
-    if (rnd()<p[0]){ t.stage=1; t.events.push(['impression',day(d)]); }
-    if (t.stage>=1 && rnd()<p[1]){ t.stage=2; t.source=pick(SOURCES[c]); t.start=day(Math.max(0,d-Math.floor(rnd()*5))); t.events.push(['gate_lifted',t.start]); }
-    if (t.stage>=2){ let dd=1; const s0=daysAgo(t.start);
-      if (rnd()<p[2]){ t.stage=3; t.events.push(['R2S',day(Math.max(0,s0-dd))]); dd+=1+Math.floor(rnd()*3); }
-      if (t.stage>=3 && rnd()<p[3]){ t.creds=[pick(['Amazon','Flipkart','Myntra'])]; if(rnd()<.4) t.creds.push('Meesho'); t.events.push(['creds_added',day(Math.max(0,s0-dd))]); t.stage=4; t.events.push(['SPF',day(Math.max(0,s0-dd-1))]); dd+=2; }
-      if (t.stage>=4 && rnd()<p[4]){ t.stage=5; t.events.push(['PR',day(Math.max(0,s0-dd))]); dd+=3; }
-      if (t.stage>=3 && s0>=18 && rnd()<p[5]*(t.stage>=5?1.4:0.5)){ t.stage=6; t.converted=day(Math.max(0,s0-dd-4)); t.events.push(['converted',t.converted]); }
+  for(const [c,meta] of Object.entries(COH)) for(let i=0;i<meta.n;i++){
+    const t={id:'T'+String(id++).padStart(3,'0'),name:pick(NAMES)+' '+pick(NAMES2),cohort:c,csm:pick(['Shubham','Rahul','—']),stage:0,start:null,days:{},conv:null,expired:false,elapsed:0,lastLogin:0};
+    const p={C1:[.75,.32,.8,.55,.4],C2:[.62,.28,.6,.5,.35],C3:[.68,.3,.8,.4,.3],C4:[.6,.28,.55,.7,.4]}[c];
+    if(rnd()<p[0]) t.stage=1;
+    if(t.stage>=1&&rnd()<p[1]){ t.stage=2; t.start=day(Math.floor(rnd()*44)); }
+    if(t.start){
+      const elapsed=Math.min(30,daysAgo(t.start)+1); const add=(d,e)=>{(t.days[d]=t.days[d]||new Set()).add(e);};
+      add(1,'login'); add(1,'landed'); let lastLogin=1;
+      const active=rnd()<.8;
+      const r2sDay=rnd()<p[2]?1+(rnd()<.6?0:Math.floor(rnd()*3)):null;
+      const credsDay=r2sDay&&rnd()<p[3]?r2sDay+1+Math.floor(rnd()*6):null;
+      const spfDay=credsDay?credsDay+(rnd()<.5?0:1+Math.floor(rnd()*3)):null;
+      const convDay=spfDay&&elapsed>=18&&rnd()<p[4]?Math.max(spfDay+3,12+Math.floor(rnd()*15)):null;
+      for(let d=1;d<=elapsed;d++){
+        if(convDay&&d>convDay) break;
+        const loginP=d===1?1:active?(d<8?.55:.3):(d<4?.4:.05);
+        if(rnd()<loginP){ add(d,'login'); lastLogin=d; }
+        if(r2sDay&&d>=r2sDay&&(d===r2sDay||(t.days[d]&&t.days[d].has('login')&&rnd()<.6))){ add(d,'login'); add(d,'r2s'); lastLogin=d; t.stage=Math.max(t.stage,3); }
+        if(credsDay&&d===credsDay){ add(d,'login'); add(d,'creds'); lastLogin=d; }
+        if(spfDay&&d>=spfDay&&(d===spfDay||(t.days[d]&&t.days[d].has('login')&&rnd()<.5))){ add(d,'login'); add(d,'spf'); lastLogin=d; t.stage=Math.max(t.stage,4); }
+        if(r2sDay&&d===r2sDay+1&&!(t.days[d]&&t.days[d].has('login'))&&rnd()<.3){ add(d,'I.3'); }
+        if(!credsDay&&r2sDay&&d===r2sDay+2&&rnd()<.4){ add(d,'login'); add(d,'I.4'); lastLogin=d; }
+        if(d===24&&!convDay){ add(d,{C1:'I.6',C2:'I.7',C3:'I.8',C4:'I.9'}[c]); }
+        if(convDay&&d===convDay){ add(d,'login'); add(d,'conv'); t.conv=d; t.stage=6; lastLogin=d; }
+      }
+      if(!t.conv&&daysAgo(t.start)>=30){ t.expired=true; add(30,'exp'); }
+      t.elapsed=elapsed; t.lastLogin=lastLogin;
     }
-    for (const iv of INT){
-      if (!iv.cohorts.includes(c) || t.stage<NEED[iv.at]) continue;
-      const late=t.start&&daysAgo(t.start)>=23;
-      const fireP={'A.1':t.persona==='WH'?.7:0,'A.2':.9,'A.3':.9,'A.4':1,'A.5':.12,'A.6':.35,'A.7':1,'U.1':.8,'U.3':1,'U.4':t.persona==='WH'?.6:0,'U.5':.95,'U.6':.5,'P.1':late?.8:0,'P.2':late?.85:0,'P.3':late?.85:0,'P.4':late?.85:0}[iv.id]||0;
-      if (rnd()<fireP){ const eng=rnd()<({surface:.08,email:.34,csm:.65,'SC.1':.45,'SC.2':.25,'SC.3':.8}[iv.mech]); t.ints.push({id:iv.id,engaged:eng,ttc:(iv.mech==='SC.1'||iv.mech==='csm')&&eng?Math.round(4+rnd()*40):null}); }
-    }
-    t.events.sort((a,b)=>a[1]-b[1]); t.last=t.events.length?t.events[t.events.length-1]:null;
     TENANTS.push(t);
   }
 }
+/* ───────── state ───────── */
+const S={cohort:'all',status:'all',from:day(45),to:TODAY,sel:null,sort:'day'};
+const fmtD=d=>d.toISOString().slice(0,10); const pct=(a,b)=>b?Math.round(100*a/b):0;
+const stageIdx=t=>t.stage>=6?5:t.stage;
+function filtered(){ const to=new Date(S.to.getTime()+86399000); return TENANTS.filter(t=>(S.cohort==='all'||t.cohort===S.cohort)&&(!t.start||(t.start>=S.from&&t.start<=to))); }
+function status(t){ if(t.conv) return 'converted'; if(t.expired) return 'expired'; if(t.elapsed-t.lastLogin>=5) return 'inactive'; return 'active'; }
+function funnel(rows){ const out={}; for(const c of Object.keys(COH)) out[c]=STAGES.map((_,i)=>rows.filter(t=>t.cohort===c&&stageIdx(t)>=i).length); out.Total=STAGES.map((_,i)=>rows.filter(t=>stageIdx(t)>=i).length); return out; }
 
-/* ───────────── state, filters, aggregation ───────────── */
-const S={cohort:'all',persona:'all',source:'all',from:day(60),to:TODAY,cmp:7,drill:{c:'all',stage:2},notReached:false,csm:false,sort:{}};
-const fmtD=d=>d.toISOString().slice(0,10);
-const pct=(a,b)=>b?Math.round(100*a/b):0;
-function filtered(){ const to=new Date(S.to.getTime()+86399000); return TENANTS.filter(t=>(S.cohort==='all'||t.cohort===S.cohort)&&(S.persona==='all'||t.persona===S.persona)&&(S.source==='all'||t.source===S.source)&&(!t.start||(t.start>=S.from&&t.start<=to))); }
-function stageAt(t,cutoff){ if(!cutoff) return t.stage; let s=0; for(const [e,d] of t.events){ if(d>cutoff) continue; s=Math.max(s,{impression:1,gate_lifted:2,R2S:3,SPF:4,PR:5,converted:6}[e]||0); } return s; }
-function funnel(rows,cutoff){ const out={}; for(const c of Object.keys(COH)) out[c]=STAGES.map((_,i)=>rows.filter(t=>t.cohort===c&&stageAt(t,cutoff)>=i).length); out.Total=STAGES.map((_,i)=>rows.filter(t=>stageAt(t,cutoff)>=i).length); return out; }
-
-/* ───────────── renderers ───────────── */
-function renderAll(){ document.getElementById('stamp').textContent='live · '+TENANTS.length+' tenants · computed '+new Date().toLocaleTimeString(); renderFunnel(); renderDrill(); renderInt(); renderSrc(); renderEmail(); }
-function renderFunnel(){
-  const rows=filtered(), F=funnel(rows), Fc=funnel(rows,day(S.cmp));
-  const creds=rows.filter(t=>t.creds.length).length;
-  const k=[['Tenants in cohorts',F.Total[0],Object.keys(COH).map(c=>F[c][0]).join(' · ')],['Trials started (Landed)',F.Total[2],(F.Total[2]-Fc.Total[2]>=0?'▲ ':'▼ ')+Math.abs(F.Total[2]-Fc.Total[2])+' vs '+S.cmp+' days ago'],['Aha (Used·Returns)',F.Total[3],pct(F.Total[3],F.Total[2])+'% of Landed'],['Credentials added',creds,pct(creds,F.Total[3])+'% of Aha'],['Paid',F.Total[6],pct(F.Total[6],F.Total[2])+'% of Landed · target 20%']];
+/* ───────── renderers ───────── */
+function renderAll(){ document.getElementById('stamp').textContent='live · '+TENANTS.length+' tenants · '+fmtD(TODAY); renderKpi(); renderFunnel(); renderGrid(); }
+function renderKpi(){
+  const rows=filtered(), F=funnel(rows), trials=rows.filter(t=>t.start);
+  const k=[['Tenants in cohorts',F.Total[0],Object.keys(COH).map(c=>F[c][0]).join(' · ')],['Trials started',F.Total[2],trials.filter(t=>status(t)==='active').length+' active · '+trials.filter(t=>status(t)==='inactive').length+' inactive 5d+'],['Aha (Used·Returns)',F.Total[3],pct(F.Total[3],F.Total[2])+'% of Landed'],['Used SPF',F.Total[4],pct(F.Total[4],F.Total[3])+'% of Aha'],['Converted',F.Total[5],pct(F.Total[5],F.Total[2])+'% of Landed · '+trials.filter(t=>t.expired).length+' expired']];
   document.getElementById('kpis').innerHTML=k.map(([l,v,d])=>`<div class="k"><div class="l">${l}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
-  const blended=STAGES.map((_,i)=>i?pct(F.Total[i],F.Total[i-1]):100);
+}
+function renderFunnel(){
+  const rows=filtered(), F=funnel(rows), blended=STAGES.map((_,i)=>i?pct(F.Total[i],F.Total[i-1]):100);
   let h='<thead><tr><th>Cohort</th>'+STAGES.map(s=>`<th class="n">${s}</th>`).join('')+'<th>Landed → Paid</th></tr></thead><tbody>';
-  for(const c of Object.keys(COH)){
-    h+=`<tr><td class="rowh" data-drill="${c}" data-stage="2">${c} ${COH[c].name}</td>`;
-    F[c].forEach((v,i)=>{ const r=i?pct(v,F[c][i-1]):100; const cls=i&&F[c][i-1]>=5?(r<blended[i]-10?'lo':r>blended[i]+10?'hi':''):''; h+=`<td class="n cell ${cls}" data-drill="${c}" data-stage="${i}" data-tip="${i?`${STAGES[i-1]} → ${STAGES[i]}: ${r}% · blended ${blended[i]}%`:'cohort base'}">${v}${i?`<span class="r">${r}%</span>`:''}</td>`; });
-    h+=`<td><div class="bar"><i style="width:${pct(F[c][6],F[c][2])}%"></i></div></td></tr>`;
-  }
-  h+=`<tr class="total"><td>Total</td>${F.Total.map((v,i)=>`<td class="n cell" data-drill="all" data-stage="${i}" data-tip="${i?STAGES[i-1]+' → '+STAGES[i]+': '+blended[i]+'%':'base'}">${v}${i?`<span class="r">${blended[i]}%</span>`:''}</td>`).join('')}<td><div class="bar"><i style="width:${pct(F.Total[6],F.Total[2])}%"></i></div></td></tr></tbody>`;
+  const cell=(c,i,v,prev)=>{const r=i?pct(v,prev):100;const cls=i&&prev>=5?(r<blended[i]-10?'lo':r>blended[i]+10?'hi':''):'';const sel=S.sel&&S.sel.c===c&&S.sel.stage===i?'sel':'';return `<td class="n cell ${cls} ${sel}" data-c="${c}" data-stage="${i}" data-tip="${i?`${STAGES[i-1]} → ${STAGES[i]}: ${r}% · blended ${blended[i]}%`:'cohort base'}\nclick to show these tenants in Widget 2">${v}${i?`<span class="r">${r}%</span>`:''}</td>`;};
+  for(const c of Object.keys(COH)){ h+=`<tr><td class="rowh" data-c="${c}" data-stage="2">${c} ${COH[c].name}</td>${F[c].map((v,i)=>cell(c,i,v,F[c][i-1])).join('')}<td><span class="pill">${pct(F[c][5],F[c][2])}%</span></td></tr>`; }
+  h+=`<tr class="total"><td>Total</td>${F.Total.map((v,i)=>cell('all',i,v,F.Total[i-1])).join('')}<td><span class="pill">${pct(F.Total[5],F.Total[2])}%</span></td></tr></tbody>`;
   document.getElementById('funnelTbl').innerHTML=h;
-  const weeks=[...Array(9)].map((_,i)=>day(56-i*7)); const cols=weeks.map(w=>{const wk=rows.filter(t=>t.start&&t.start>=w&&t.start<new Date(w.getTime()+7*86400000)); return Object.keys(COH).map(c=>wk.filter(t=>t.cohort===c).length);}); const mx=Math.max(1,...cols.map(a=>a.reduce((x,y)=>x+y,0)));
-  document.getElementById('weekly').innerHTML=cols.map((a,i)=>`<div class="col" data-tip="w/c ${fmtD(weeks[i])}: ${a.reduce((x,y)=>x+y,0)} starts · C1 ${a[0]} · C2 ${a[1]} · C3 ${a[2]} · C4 ${a[3]}">${a.map((v,j)=>`<i class="c${j+1}" style="height:${100*v/mx}%"></i>`).join('')}<span class="lbl">${fmtD(weeks[i]).slice(5)}</span></div>`).join('');
-  document.getElementById('cmpLbl').textContent=S.cmp+' days ago';
-  document.getElementById('deltaTbl').innerHTML='<thead><tr><th>Transition</th><th class="n">Now</th><th class="n">Then</th><th class="n">Δ pp</th></tr></thead><tbody>'+[[1,2],[2,3],[3,4],[4,5],[2,6]].map(([a,b])=>{const n=pct(F.Total[b],F.Total[a]),o=pct(Fc.Total[b],Fc.Total[a]),d=n-o;return `<tr><td>${STAGES[a]} → ${STAGES[b]}</td><td class="n">${n}%</td><td class="n">${o}%</td><td class="n"><span class="pill ${d>=2?'good':d<=-2?'bad':''}">${d>0?'+':''}${d}</span></td></tr>`;}).join('')+'</tbody>';
 }
-function renderDrill(){
-  const role=document.getElementById('role').value, wrap=document.getElementById('drillWrap'), d=S.drill;
-  document.getElementById('crumb').innerHTML=`<a data-d="all">All cohorts</a> › ${d.c==='all'?'':d.c+' › '}${STAGES[d.stage]}`;
-  if(role==='ro'){ wrap.innerHTML='<div class="locked">Per-tenant drill-down is restricted for read-only access. Aggregates remain available on the Funnel tab.</div>'; document.getElementById('drillTitle').textContent='Drill-down'; return; }
-  const rows=filtered().filter(t=>d.c==='all'||t.cohort===d.c);
-  const list=(S.notReached?rows.filter(t=>t.stage===d.stage-1):rows.filter(t=>t.stage>=d.stage)).filter(t=>role!=='csm'||t.csm==='Shubham');
-  document.getElementById('drillTitle').innerHTML=`${d.c==='all'?'All cohorts':d.c+' '+COH[d.c].name} · ${S.notReached?'at '+STAGES[d.stage-1]+', did not reach '+STAGES[d.stage]:'reached '+STAGES[d.stage]} <span>${list.length} tenants${role==='csm'?' · scoped to your callback records':''}</span>`;
-  document.getElementById('drillNote').textContent=S.notReached?'CSM work list — sorted by days since last event':'';
-  const cols=[['name','Tenant'],['cohort','Cohort'],['stage','Furthest stage'],['start','Trial start'],['left','Days left / converted'],['creds','Creds'],['source','Source'],['last','Last event'],['ints','Interventions'],['csm','CSM owner']];
-  const data=list.map(t=>({name:t.name,cohort:t.cohort,stage:t.stage,start:t.start?fmtD(t.start):'—',left:t.stage===6?'Converted '+fmtD(t.converted):t.start?Math.max(0,30-daysAgo(t.start))+' days':'—',creds:t.creds.join(', ')||'—',source:t.source||'—',last:t.last?t.last[0]+' · '+daysAgo(t.last[1])+'d ago':'—',ints:t.ints.map(i=>i.id+(i.engaged?'':'✕')).join(', ')||'—',csm:t.csm,_lastd:t.last?daysAgo(t.last[1]):999}));
-  const sk=S.sort.drill||(S.notReached?{k:'_lastd',dir:-1}:{k:'stage',dir:-1});
-  data.sort((a,b)=>(a[sk.k]>b[sk.k]?1:a[sk.k]<b[sk.k]?-1:0)*sk.dir);
-  S._csv=[cols.map(c=>c[1]).join(','),...data.map(r=>cols.map(c=>'"'+String(c[0]==='stage'?STAGES[r.stage]:r[c[0]]).replace(/"/g,'""')+'"').join(','))].join('\n');
-  wrap.innerHTML=`<table><thead><tr>${cols.map(c=>`<th class="s ${sk.k===c[0]?(sk.dir>0?'asc':'desc'):''}" data-sort="${c[0]}" data-tbl="drill">${c[1]}</th>`).join('')}</tr></thead><tbody>${data.slice(0,60).map(r=>`<tr>${cols.map(c=>`<td>${c[0]==='stage'?`<span class="pill ${r.stage===6?'good':r.stage<=2?'bad':r.stage===3?'warn':''}">${STAGES[r.stage]}</span>`:r[c[0]]}</td>`).join('')}</tr>`).join('')}${data.length>60?`<tr><td colspan="10" style="color:var(--ink3)">… ${data.length-60} more (paged in the BI tool)</td></tr>`:''}${data.length?'':'<tr><td colspan="10" style="color:var(--ink3)">no tenants match</td></tr>'}</tbody></table><div class="spec" style="margin-top:8px">✕ after an intervention ID = fired but not engaged.</div>`;
-}
-function renderInt(){
-  const rows=filtered(), stage=document.getElementById('iStage').value, mech=document.getElementById('iMech').value;
-  let list=INT.filter(i=>(stage==='all'||i.stage===stage)&&(mech==='all'||i.mech===mech)); if(S.csm) list=list.filter(i=>i.mech==='SC.1'||i.id==='P.1');
-  const data=list.map(iv=>{
-    const fired=rows.filter(t=>t.ints.some(i=>i.id===iv.id)), eng=fired.filter(t=>t.ints.find(i=>i.id===iv.id).engaged);
-    const elig=rows.filter(t=>iv.cohorts.includes(t.cohort)&&t.stage>=NEED[iv.at]), not=elig.filter(t=>!t.ints.some(i=>i.id===iv.id));
-    const next=fired.filter(t=>t.stage>STAGES.indexOf(iv.at)).length, paid=fired.filter(t=>t.stage===6).length;
-    const liftOK=fired.length>=10&&not.length>=10, lift=liftOK?pct(paid,fired.length)-pct(not.filter(t=>t.stage===6).length,not.length):null;
-    const ttc=fired.map(t=>t.ints.find(i=>i.id===iv.id).ttc).filter(x=>x), avgttc=ttc.length?Math.round(ttc.reduce((a,b)=>a+b,0)/ttc.length):null;
-    return {id:iv.id,name:iv.name,cohorts:iv.cohorts.join(' ')||'all',fired:fired.length,eng:eng.length,engp:pct(eng.length,fired.length),next,paid,lift,liftOK,queue:eng.length,ttc:avgttc,blocked:iv.id==='U.2'};
-  });
-  const sk=S.sort.int||{k:'fired',dir:-1};
-  data.sort((a,b)=>((b.fired===0)-(a.fired===0))||(((a[sk.k]??-1)>(b[sk.k]??-1)?1:(a[sk.k]??-1)<(b[sk.k]??-1)?-1:0)*sk.dir));
-  const cols=[['id','ID'],['name','Intervention'],['cohorts','Cohorts'],['fired','Fired'],['eng','Engaged'],['engp','Engage %'],['next','Next stage'],['paid','Paid ≤30d'],['lift','Lift']].concat(S.csm?[['queue','Queue vol'],['ttc','Avg h to callback']]:[]);
-  document.getElementById('intTbl').innerHTML=`<thead><tr>${cols.map(c=>`<th class="s ${['id','name','cohorts'].includes(c[0])?'':'n'} ${sk.k===c[0]?(sk.dir>0?'asc':'desc'):''}" data-sort="${c[0]}" data-tbl="int">${c[1]}</th>`).join('')}</tr></thead><tbody>${data.map(r=>r.blocked?`<tr><td>${r.id}</td><td>${r.name}</td><td colspan="${cols.length-2}" style="color:var(--ink3)">blocked on PRD 6a OQ.1 — row present, no data</td></tr>`:`<tr><td>${r.id}</td><td>${r.name}</td><td>${r.cohorts}</td><td class="n">${r.fired}</td><td class="n">${r.eng}</td><td class="n">${r.fired?r.engp+'%':'—'}</td><td class="n">${r.next}</td><td class="n">${r.paid}</td><td class="n">${r.fired===0?'<span class="pill">not fired yet</span>':r.liftOK?`<span class="pill ${r.lift>=3?'good':r.lift<=-3?'bad':''}">${r.lift>0?'+':''}${r.lift} pp</span>`:'<span class="pill">too few</span>'}</td>${S.csm?`<td class="n">${r.queue}</td><td class="n">${r.ttc??'—'}</td>`:''}</tr>`).join('')}</tbody>`;
-}
-function renderSrc(){
-  const rows=filtered(), srcs=[...new Set(Object.values(SOURCES).flat())];
-  const imp={'unicapture_c1·dashboard':1940,'unicapture_c1·export':412,'poc_digest_c1':1380,'dm_forward':41,'hq_winback_c2':99,'uniware_c3':3120,'poc_digest_c3':2100,'uniware_c4':2205,'poc_digest_c4':1130,'hq_spf_forward':14,'finance_share':9};
-  const data=srcs.map(s=>{const st=rows.filter(t=>t.source===s), paid=st.filter(t=>t.stage===6).length, clicks=Math.max(st.length,Math.round(imp[s]*({'hq_winback_c2':.34,'dm_forward':.29,'hq_spf_forward':.5,'finance_share':.5}[s]||.03)));return {s,imp:imp[s],clicks,ctr:pct(clicks,imp[s]),starts:st.length,c2s:pct(st.length,clicks),paid,s2p:pct(paid,st.length)};});
-  const sk=S.sort.src||{k:'starts',dir:-1}; data.sort((a,b)=>(a[sk.k]>b[sk.k]?1:a[sk.k]<b[sk.k]?-1:0)*sk.dir);
-  const tot=data.reduce((a,r)=>({imp:a.imp+r.imp,clicks:a.clicks+r.clicks,starts:a.starts+r.starts,paid:a.paid+r.paid}),{imp:0,clicks:0,starts:0,paid:0});
-  const cols=[['s','Source trigger'],['imp','Impressions / dispatches'],['clicks','Clicks'],['ctr','CTR'],['starts','Trial starts'],['c2s','Click → start'],['paid','Paid'],['s2p','Start → paid']];
-  document.getElementById('srcTbl').innerHTML=`<thead><tr>${cols.map(c=>`<th class="s ${c[0]==='s'?'':'n'} ${sk.k===c[0]?(sk.dir>0?'asc':'desc'):''}" data-sort="${c[0]}" data-tbl="src">${c[1]}</th>`).join('')}</tr></thead><tbody>${data.map(r=>`<tr><td>${r.s}</td><td class="n">${r.imp.toLocaleString('en-IN')}</td><td class="n">${r.clicks}</td><td class="n">${r.ctr}%</td><td class="n">${r.starts}</td><td class="n">${r.c2s}%</td><td class="n">${r.paid}</td><td class="n">${r.starts?r.s2p+'%':'—'}</td></tr>`).join('')}<tr class="total"><td>Total · reconciles to Landed = ${funnel(rows).Total[2]}</td><td class="n">${tot.imp.toLocaleString('en-IN')}</td><td class="n">${tot.clicks}</td><td class="n">${pct(tot.clicks,tot.imp)}%</td><td class="n">${tot.starts}</td><td class="n">${pct(tot.starts,tot.clicks)}%</td><td class="n">${tot.paid}</td><td class="n">${pct(tot.paid,tot.starts)}%</td></tr></tbody>`;
-  const weeks=[...Array(9)].map((_,i)=>day(56-i*7)), top=[...data].sort((a,b)=>b.starts-a.starts).slice(0,4).map(r=>r.s);
-  const cols2=weeks.map(w=>top.map(s=>rows.filter(t=>t.source===s&&t.start>=w&&t.start<new Date(w.getTime()+7*86400000)).length)), mx=Math.max(1,...cols2.map(a=>a.reduce((x,y)=>x+y,0)));
-  document.getElementById('srcWeekly').innerHTML=cols2.map((a,i)=>`<div class="col" data-tip="w/c ${fmtD(weeks[i])}: ${top.map((s,j)=>s+' '+a[j]).join(' · ')}">${a.map((v,j)=>`<i class="c${j+1}" style="height:${100*v/mx}%"></i>`).join('')}<span class="lbl">${fmtD(weeks[i]).slice(5)}</span></div>`).join('');
-  document.getElementById('srcLegend').innerHTML=top.map((s,j)=>`<span><i class="c${j+1}"></i>${s}</span>`).join('');
-}
-function renderEmail(){
-  const all=TENANTS, F=funnel(all), Fw=funnel(all,day(7)), wk=all.filter(t=>t.start&&daysAgo(t.start)<7), wkP=all.filter(t=>t.stage===6&&daysAgo(t.converted)<7);
-  const rowsC=Object.keys(COH).map(c=>`<span>${c} ${COH[c].name}</span><b>${wk.filter(t=>t.cohort===c).length} started</b><b>${wkP.filter(t=>t.cohort===c).length} paid</b>`).join('');
-  const lifts=INT.map(iv=>{const f=all.filter(t=>t.ints.some(i=>i.id===iv.id));return {id:iv.id,name:iv.name,n:f.length,rate:pct(f.filter(t=>t.stage===6).length,f.length)};}).filter(x=>x.n>=10).sort((a,b)=>b.rate-a.rate).slice(0,3);
-  const lp=pct(F.Total[6],F.Total[2]), lpw=pct(Fw.Total[6],Fw.Total[2]);
-  document.getElementById('email').innerHTML=`<div style="font-size:11px;color:var(--ink3)">To: Business Head, Product/PLG leads · Mon ${fmtD(TODAY)} 09:00 IST</div><h4>PLG weekly — ${wk.length} trials started, ${wkP.length} converted</h4><div class="kv">${rowsC}</div><p>Landed → Paid is ${lp}% (${lp-lpw>=0?'+':''}${lp-lpw} pp WoW). Aha rate ${pct(F.Total[3],F.Total[2])}%. Credentials added in ${pct(all.filter(t=>t.creds.length).length,F.Total[3])}% of Aha trials.</p><p><b>Top interventions by paid rate (n ≥ 10):</b><br>${lifts.map(l=>`${l.id} ${l.name} — ${l.rate}% (n=${l.n})`).join('<br>')||'none with n ≥ 10 yet'}</p><p style="color:var(--ink3);font-size:11px">Open the full view → · same query as the Funnel tab, unfiltered</p>`;
+function renderGrid(){
+  let rows=filtered().filter(t=>t.start);
+  if(S.sel){ rows=rows.filter(t=>(S.sel.c==='all'||t.cohort===S.sel.c)&&stageIdx(t)>=Math.max(2,S.sel.stage)); }
+  if(S.status!=='all') rows=rows.filter(t=>status(t)===S.status);
+  const sorters={day:(a,b)=>b.elapsed-a.elapsed,start:(a,b)=>b.start-a.start,last:(a,b)=>(b.elapsed-b.lastLogin)-(a.elapsed-a.lastLogin),cohort:(a,b)=>a.cohort.localeCompare(b.cohort)||b.elapsed-a.elapsed};
+  rows.sort(sorters[S.sort]);
+  document.getElementById('gridTitle').innerHTML=`Widget 2 · Trial day grid — ${S.sel?(S.sel.c==='all'?'all cohorts':S.sel.c)+' · at or past '+STAGES[Math.max(2,S.sel.stage)]:'tenants who started a trial'} <span>${rows.length} trials${S.sel?' · <a style="color:var(--hi2);cursor:pointer" id="clearSel">clear Widget 1 selection</a>':''}</span>`;
+  const days=[...Array(30)].map((_,i)=>i+1);
+  let h='<thead><tr><th class="fix c1">Tenant</th><th class="fix c2">Cohort</th><th class="fix c3">Start</th><th class="fix c4">Status</th>'+days.map(d=>`<th class="day">Day ${d}</th>`).join('')+'</tr></thead><tbody>';
+  const order=['login','landed','r2s','creds','spf','I.1','I.2','I.3','I.4','I.5','I.6','I.7','I.8','I.9','conv','exp'];
+  const csv=[['Tenant','Cohort','Start','Status',...days.map(d=>'Day '+d)].join(',')];
+  for(const t of rows){
+    const st=status(t); const cur=(t.conv||t.expired)?null:t.elapsed;
+    const stTxt={active:`<span class="pill good">Active · day ${t.elapsed}</span>`,inactive:`<span class="pill warn">Inactive · ${t.elapsed-t.lastLogin}d · day ${t.elapsed}</span>`,converted:`<span class="pill" style="background:var(--conv);color:#fff">Converted · day ${t.conv}</span>`,expired:`<span class="pill bad">Expired</span>`}[st];
+    h+=`<tr><td class="fix c1">${t.name}<div style="font-size:10px;color:var(--ink3)">${t.id} · CSM ${t.csm}</div></td><td class="fix c2">${t.cohort}</td><td class="fix c3">${fmtD(t.start)}</td><td class="fix c4">${stTxt}</td>`;
+    const csvRow=[t.name,t.cohort,fmtD(t.start),st];
+    for(const d of days){
+      const ev=[...(t.days[d]||[])].sort((a,b)=>order.indexOf(a)-order.indexOf(b));
+      const cls=t.conv?(d<=t.conv?'lapsed':'live'):t.expired?'ended':d<cur?'lapsed':d===cur?'today':'after';
+      const chips=ev.map(e=>e.startsWith('I.')?`<span class="ev int">${e}</span>`:`<span class="ev ${e}">${EV[e]}</span>`).join('');
+      const live=(t.conv&&d>t.conv)?'<span style="font-size:10px;color:#1d6b3a">Live</span>':'';
+      h+=`<td class="day ${cls}" data-tip="${t.name} · Day ${d}${ev.length?'\n'+ev.map(e=>EV[e]||e+' fired').join(', '):'\nno events'}">${chips}${live}</td>`;
+      csvRow.push('"'+ev.map(e=>EV[e]||e).join('; ')+'"');
+    }
+    h+='</tr>'; csv.push(csvRow.join(','));
+  }
+  if(!rows.length) h+='<tr><td colspan="34" style="color:var(--ink3)">no trials match</td></tr>';
+  document.getElementById('gridTbl').innerHTML=h+'</tbody>'; S._csv=csv.join('\n');
+  const cs=document.getElementById('clearSel'); if(cs) cs.addEventListener('click',e=>{e.stopPropagation();S.sel=null;renderFunnel();renderGrid();});
 }
 
-/* ───────────── wiring ───────────── */
+/* ───────── wiring ───────── */
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.tab).classList.add('active');}));
-document.querySelectorAll('.f .chip[data-c]').forEach(ch=>ch.addEventListener('click',()=>{document.querySelectorAll('.f .chip[data-c]').forEach(x=>x.classList.remove('on'));ch.classList.add('on');S.cohort=ch.dataset.c;renderAll();}));
-document.getElementById('fPersona').addEventListener('change',e=>{S.persona=e.target.value;renderAll();});
-document.getElementById('fSource').addEventListener('change',e=>{S.source=e.target.value;renderAll();});
-document.getElementById('fCmp').addEventListener('change',e=>{S.cmp=+e.target.value;renderAll();});
+document.querySelectorAll('.chip[data-c]').forEach(ch=>ch.addEventListener('click',()=>{document.querySelectorAll('.chip[data-c]').forEach(x=>x.classList.remove('on'));ch.classList.add('on');S.cohort=ch.dataset.c;S.sel=null;renderAll();}));
+document.getElementById('fStatus').addEventListener('change',e=>{S.status=e.target.value;renderGrid();});
+document.getElementById('gSort').addEventListener('change',e=>{S.sort=e.target.value;renderGrid();});
 document.getElementById('fFrom').addEventListener('change',e=>{if(e.target.value){S.from=new Date(e.target.value);renderAll();}});
 document.getElementById('fTo').addEventListener('change',e=>{if(e.target.value){S.to=new Date(e.target.value);renderAll();}});
-document.getElementById('role').addEventListener('change',()=>{renderDrill();document.getElementById('csv').style.display=document.getElementById('role').value==='ro'?'none':'';});
-document.getElementById('iStage').addEventListener('change',renderInt);document.getElementById('iMech').addEventListener('change',renderInt);
-document.getElementById('csmView').addEventListener('click',e=>{S.csm=!S.csm;e.target.classList.toggle('on',S.csm);renderInt();});
-document.getElementById('reached').addEventListener('click',()=>{S.notReached=false;document.getElementById('reached').classList.add('on');document.getElementById('notReached').classList.remove('on');renderDrill();});
-document.getElementById('notReached').addEventListener('click',()=>{S.notReached=true;document.getElementById('notReached').classList.add('on');document.getElementById('reached').classList.remove('on');renderDrill();});
-document.getElementById('csv').addEventListener('click',()=>{const b=new Blob([S._csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='plg_drilldown.csv';a.click();});
-document.getElementById('reset').addEventListener('click',()=>{Object.assign(S,{cohort:'all',persona:'all',source:'all',from:day(60),to:TODAY,cmp:7,drill:{c:'all',stage:2},notReached:false,csm:false,sort:{}});init(false);});
+document.getElementById('csv').addEventListener('click',()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([S._csv],{type:'text/csv'}));a.download='plg_trial_day_grid.csv';a.click();});
+document.getElementById('reset').addEventListener('click',()=>{Object.assign(S,{cohort:'all',status:'all',from:day(45),to:TODAY,sel:null,sort:'day'});init(false);});
 document.getElementById('reseed').addEventListener('click',()=>{seed=Math.floor(Math.random()*1e6)+1;build();renderAll();});
-document.addEventListener('click',e=>{
-  const d=e.target.closest('[data-drill]'); if(d){S.drill={c:d.dataset.drill,stage:Math.max(1,+d.dataset.stage)};S.notReached=false;document.getElementById('reached').classList.add('on');document.getElementById('notReached').classList.remove('on');document.querySelector('.tab[data-tab="drill"]').click();renderDrill();return;}
-  if(e.target.closest('[data-d]')){S.drill={c:'all',stage:2};renderDrill();return;}
-  const th=e.target.closest('th[data-sort]'); if(th){const k=th.dataset.tbl,cur=S.sort[k]||{};S.sort[k]={k:th.dataset.sort,dir:cur.k===th.dataset.sort?-cur.dir:1};({drill:renderDrill,int:renderInt,src:renderSrc})[k]();}
-});
+document.addEventListener('click',e=>{const c=e.target.closest('td[data-c]');if(c){S.sel={c:c.dataset.c,stage:+c.dataset.stage};renderFunnel();renderGrid();document.getElementById('gridTitle').scrollIntoView({behavior:'smooth',block:'start'});}});
 const tip=document.getElementById('tip');
-document.addEventListener('mousemove',e=>{const el=e.target.closest('[data-tip]');if(el){tip.textContent=el.dataset.tip;tip.style.display='block';tip.style.left=Math.min(e.clientX+12,window.innerWidth-300)+'px';tip.style.top=(e.clientY+12)+'px';}else tip.style.display='none';});
-function init(rebuild=true){ if(rebuild) build(); document.getElementById('fFrom').value=fmtD(S.from); document.getElementById('fTo').value=fmtD(S.to); document.getElementById('fCmp').value=S.cmp; document.getElementById('fPersona').value=S.persona; const fs=document.getElementById('fSource'); fs.innerHTML='<option value="all">All</option>'+[...new Set(Object.values(SOURCES).flat())].map(s=>`<option>${s}</option>`).join(''); fs.value=S.source; document.querySelectorAll('.f .chip[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===S.cohort)); document.getElementById('csmView').classList.toggle('on',S.csm); document.getElementById('reached').classList.add('on'); document.getElementById('notReached').classList.remove('on'); renderAll(); }
+document.addEventListener('mousemove',e=>{const el=e.target.closest('[data-tip]');if(el){tip.textContent=el.dataset.tip;tip.style.display='block';tip.style.left=Math.min(e.clientX+12,window.innerWidth-320)+'px';tip.style.top=(e.clientY+12)+'px';}else tip.style.display='none';});
+function init(rebuild=true){ if(rebuild) build(); document.getElementById('fFrom').value=fmtD(S.from); document.getElementById('fTo').value=fmtD(S.to); document.getElementById('fStatus').value=S.status; document.getElementById('gSort').value=S.sort; document.querySelectorAll('.chip[data-c]').forEach(x=>x.classList.toggle('on',x.dataset.c===S.cohort)); renderAll(); }
 init();
 </script>
 </body>

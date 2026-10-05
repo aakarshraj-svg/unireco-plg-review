@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Uniware Smart Dashboard v2 · UniReco trial entry point (PRD 2c)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+
+
+body { background: var(--bg-secondary); }
+.mock-nav { position: sticky; top:0; z-index: 20; background: var(--bg-inverse); padding: var(--gap-12) var(--gap-24); display:flex; align-items:center; gap: var(--gap-16); flex-wrap:wrap; }
+.mock-nav .brand { color: var(--text-primary-inverse); }
+.mtab { padding: var(--gap-8) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid transparent; border-radius: var(--radius-md); font-family: inherit; cursor:pointer; opacity:.7; }
+.mtab.active { opacity:1; background: var(--bg-brand-subtle); border-color: var(--border-brand-subtle); }
+.mock-nav .chip { margin-left:auto; display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary-inverse); }
+.mock-nav .chip label { display:flex; align-items:center; gap: var(--gap-4); cursor:pointer; }
+.cap { padding: var(--gap-12) var(--gap-24); color: var(--text-secondary); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.cap strong { color: var(--text-primary); }
+.screen { display:none; } .screen.active { display:block; }
+.info { display:flex; align-items:center; background: var(--bg-inverse); color: var(--text-primary-inverse); }
+.info .tag { display:flex; align-items:center; gap: var(--gap-8); padding: var(--gap-12) var(--gap-24); background: var(--bg-brand-base); }
+.info .msg { padding: var(--gap-12) var(--gap-16); } .info .msg u { margin-left: var(--gap-4); }
+.info .x { margin-left:auto; padding: 0 var(--gap-24); opacity:.8; }
+.top { display:flex; align-items:center; gap: var(--gap-32); padding: var(--gap-12) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.top .apps { color: var(--icon-secondary); } .top .logo { color: var(--text-brand-base); } .top .logo b { color: var(--text-success-base); }
+.top .search { flex:1; max-width: 480px; margin: 0 auto; padding: var(--gap-12) var(--gap-16); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); color: var(--text-tertiary); }
+.top .askai { padding: var(--gap-8) var(--gap-16); border: var(--stroke-regular) solid var(--border-brand-base); color: var(--text-primary); border-radius: var(--radius-md); }
+.top .ic { color: var(--icon-secondary); }
+.shell { display:grid; grid-template-columns: 56px 1fr; }
+.rail { background: var(--bg-primary); border-right: var(--stroke-regular) solid var(--border-primary); min-height: 900px; display:flex; flex-direction:column; align-items:center; gap: var(--gap-24); padding-top: var(--gap-20); color: var(--icon-secondary); }
+.rail i { width: var(--gap-20); height: var(--gap-20); border: var(--stroke-medium) solid currentColor; border-radius: var(--radius-sm); display:block; }
+.tabrow { display:flex; align-items:center; padding: var(--gap-12) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); gap: var(--gap-24); }
+.tabs { display:flex; gap: var(--gap-4); padding: var(--gap-4); background: var(--bg-secondary); border-radius: var(--radius-lg); }
+.tab { padding: var(--gap-8) var(--gap-20); border-radius: var(--radius-md); color: var(--text-secondary); }
+.tab.active { background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow-low); }
+.tab .new { background: var(--bg-brand-subtle); color: var(--text-brand-base); border-radius: var(--radius-sm); padding: var(--gap-4) var(--gap-8); margin-left: var(--gap-8); }
+.spark { color: var(--icon-brand-base); position:relative; }
+.spark .n { position:absolute; top:-10px; right:-10px; background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); padding: 0 var(--gap-4); }
+.filters { display:flex; align-items:center; gap: var(--gap-12); padding: var(--gap-16) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.fchip { padding: var(--gap-8) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); color: var(--text-primary); }
+.fchip.on { border-color: var(--border-brand-subtle); color: var(--text-brand-base); background: var(--bg-brand-subtler); }
+.fchip .b { background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-sm); padding: 0 var(--gap-4); }
+.apply { padding: var(--gap-8) var(--gap-20); background: var(--bg-inverse); color: var(--text-primary-inverse); border-radius: var(--radius-md); }
+.facsel { padding: var(--gap-12) var(--gap-32); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); color: var(--text-primary); }
+.content { padding: var(--gap-24); }
+.oh { display:flex; align-items:center; gap: var(--gap-12); margin-bottom: var(--gap-16); }
+.oh .live { display:inline-flex; align-items:center; gap: var(--gap-8); padding: var(--gap-4) var(--gap-12); border: var(--stroke-regular) solid var(--border-brand-base); color: var(--text-brand-base); border-radius: var(--radius-sm); letter-spacing:.06em; }
+.oh .live i { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--bg-brand-base); display:inline-block; }
+.cols3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap: var(--gap-24); align-items:start; }
+.col { display:flex; flex-direction:column; gap: var(--gap-24); }
+.al { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); overflow:hidden; }
+.al-h { display:flex; justify-content:space-between; align-items:center; padding: var(--gap-16) var(--gap-20); }
+.pill { padding: var(--gap-4) var(--gap-12); border-radius: var(--radius-sm); }
+.pill.bad { background: var(--bg-danger-subtle); color: var(--text-danger-base); } .pill.ok { background: var(--bg-success-subtle); color: var(--text-success-base); }
+.al table { width:100%; border-collapse:collapse; }
+.al th { text-align:left; padding: var(--gap-12) var(--gap-20); background: var(--bg-secondary); color: var(--text-primary); font-weight: var(--font-weight-regular); }
+.al th.n, .al td.n { text-align:right; }
+.al td { padding: var(--gap-12) var(--gap-20); border-top: var(--stroke-regular) solid var(--border-primary); color: var(--text-primary); }
+.al tr.off td { color: var(--text-tertiary); }
+.al td .d { display:inline-block; width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--bg-brand-base); margin-right: var(--gap-12); }
+.al td .d.r { background: var(--bg-danger-base); } .al td .d.o { background: var(--bg-warning-base); } .al tr.off td .d { background: var(--border-secondary); }
+.kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: var(--gap-24); margin-bottom: var(--gap-24); }
+.kpi { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-24); }
+.kpi .t { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary); margin-bottom: var(--gap-16); } .kpi .v { color: var(--text-primary); margin-bottom: var(--gap-20); } .kpi .as { color: var(--text-tertiary); }
+.i { width: var(--gap-20); height: var(--gap-20); border-radius: var(--radius-full); border: var(--stroke-regular) solid var(--border-secondary); color: var(--text-tertiary); display:inline-grid; place-items:center; }
+.wgrid { display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap-24); }
+.w { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-24); min-height: 240px; display:flex; flex-direction:column; }
+.w .t { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary); } .w .nd { flex:1; display:grid; place-items:center; color: var(--text-secondary); } .w .as { color: var(--text-tertiary); }
+.slot { flex:1; display:flex; justify-content:flex-end; padding-left: var(--gap-24); }
+.ur-strip { display:flex; width:100%; max-width: 620px; height: var(--gap-40); box-sizing:border-box; align-items:center; gap: var(--gap-12); padding: var(--gap-4) var(--gap-4) var(--gap-4) var(--gap-16); background: var(--bg-brand-subtler); border: var(--stroke-regular) solid var(--border-brand-subtle); border-radius: var(--radius-full); position:relative; }
+.ur-strip .badge { padding: var(--gap-4) var(--gap-8); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); letter-spacing:.06em; text-transform:uppercase; }
+.ur-strip .h { color: var(--text-primary); white-space:nowrap; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.ur-strip .h b { color: var(--text-danger-base); }
+.ur-strip .badge, .ur-strip .cta, .ur-strip .x { flex-shrink:0; }
+.ur-strip .cta { height: var(--gap-32); padding: 0 var(--gap-16); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); border:none; font-family:inherit; cursor:pointer; white-space:nowrap; }
+.ur-strip .x { background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-32); height: var(--gap-32); border-radius: var(--radius-full); }
+.ur-strip .x:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.ur-fly { display:none; position:absolute; top: var(--gap-40); right:0; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); box-shadow: var(--shadow-medium); padding: var(--gap-8); z-index:5; min-width: 220px; }
+.ur-fly button { display:block; width:100%; text-align:left; padding: var(--gap-8) var(--gap-12); background:transparent; border:none; font-family:inherit; cursor:pointer; color: var(--text-primary); border-radius: var(--radius-sm); }
+.ur-fly button:hover { background: var(--bg-tertiary); } .ur-fly button.muted { color: var(--text-tertiary); }
+.ur-strip.open .ur-fly { display:block; }
+.ur-gone { display:none; color: var(--text-tertiary); } .ur-gone .undo { color: var(--text-brand-base); cursor:pointer; margin-left: var(--gap-8); }
+</style></head>
+<body>
+<div class="mock-nav"><span class="brand text-label-md">UniReco PLG · Uniware Smart Dashboard <b>v2</b> entry point <span style="opacity:.6">(PRD 2c)</span></span><button class="mtab active text-label-sm" data-t="ov">Overview</button><button class="mtab text-label-sm" data-t="rt">Returns</button><div class="chip text-caption-md"><label><input type="checkbox" id="nodata"> No-data fallback</label></div></div>
+<div class="cap text-caption-md"><strong>One placement for every tab</strong> · the strip lives in the tab row, in the empty slot between the tab group and ✦. It stays put when the user switches tabs — one build, never jumps. Copy changes per tab: C4 leakage-reveal on Overview, C3 ₹-anchored on Returns. 40px, right-aligned, capped at 620px. × = PRD 2c snooze. CTA → trial gate, or the PRD 4 I.1 popup when the user has no trial access.</div>
+<div class="info"><span class="tag text-label-md">ⓘ Information</span><span class="msg text-body-md">Every dashboard shows numbers. Yours now explains them. <u>Open Smart Dashboard</u></span><span class="x">×</span></div>
+<div class="top"><span class="apps">⋮⋮⋮</span><span class="logo text-heading-h2">uni<b>ware</b></span><span class="search text-body-md">⌕ Sale Order</span><span class="askai text-label-md">✦ Ask AI</span><span class="ic">⇅</span><span class="ic">🔔</span></div>
+<div class="shell"><aside class="rail"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i style="margin-top:auto;margin-bottom:var(--gap-20)"></i></aside><div class="main">
+<section id="ov" class="screen active"><div class="tabrow"><div class="tabs text-label-md"><span class="tab active">Overview</span><span class="tab ">Sales</span><span class="tab ">Inventory</span><span class="tab ">Returns</span><span class="tab ">Trends</span><span class="tab ">Fulfillment<span class="new text-caption-sm">New</span></span></div><div class="slot"><div class="ur-strip" id="ura"><span class="badge text-caption-sm">UniReco</span><span class="h text-body-md" data-live><b>₹8.42 L</b> at risk in returns this month · <b>47</b> past SLA</span><span class="h text-body-md" data-nodata style="display:none">See what your returns are costing</span><button class="cta text-label-sm" onclick="go('uniware_v2_overview')">Start free trial →</button><button class="x" onclick="document.getElementById('ura').classList.toggle('open')" title="Dismiss">×</button><div class="ur-fly"><button class="text-body-sm" onclick="gone('ura','urag','Hidden for 30 days')">Hide for 30 days</button><button class="text-body-sm muted" onclick="gone('ura','urag','Won\'t show again')">Not interested, don't show again</button></div></div><span class="ur-gone text-caption-md" id="urag"></span></div><span class="spark">✦<span class="n text-caption-sm">7</span></span></div>
+<div class="filters"><span class="facsel text-label-md">Q1k ⌄</span></div>
+<div class="content"><div class="oh"><span class="text-heading-h4">Operational summary</span><span class="text-body-md" style="color:var(--text-secondary)">selected facility</span><span class="live text-caption-sm"><i></i>LIVE</span></div>
+<div class="cols3">
+<div class="col"><div class="al"><div class="al-h"><span class="text-label-lg">B2C order alerts</span><span class="pill bad text-caption-md">4 issues</span></div><table class="text-body-md"><tr><th>Alert</th><th class="n">Count</th></tr><tr class=""><td><span class="d r"></span>SLA Breach</td><td class="n">33,259</td></tr><tr class=""><td><span class="d "></span>Pending Orders</td><td class="n">23,711</td></tr><tr class=""><td><span class="d "></span>Unverified Orders</td><td class="n">1,821</td></tr><tr class=""><td><span class="d "></span>Failed Notification Count</td><td class="n">326</td></tr><tr class="off"><td><span class="d "></span>Near SLA Breach</td><td class="n">0</td></tr><tr class="off"><td><span class="d "></span>Shipment Errors</td><td class="n">0</td></tr><tr class="off"><td><span class="d "></span>Channel Pendency</td><td class="n">0</td></tr><tr class="off"><td><span class="d "></span>Dispatched Today</td><td class="n">0</td></tr></table></div></div>
+<div class="col"><div class="al"><div class="al-h"><span class="text-label-lg">B2B order alerts</span><span class="pill bad text-caption-md">7 issues</span></div><table class="text-body-md"><tr><th>Alert</th><th class="n">Count</th></tr><tr class=""><td><span class="d r"></span>Unfulfillable Business Order Items</td><td class="n">148</td></tr><tr class=""><td><span class="d "></span>Pending Orders</td><td class="n">51</td></tr><tr class=""><td><span class="d "></span>Dispatched Shipments</td><td class="n">22</td></tr><tr class=""><td><span class="d o"></span>Pending Invoice Or Label Shipments</td><td class="n">21</td></tr><tr class=""><td><span class="d "></span>Pick Released Shipments</td><td class="n">13</td></tr><tr class=""><td><span class="d "></span>Unverified Orders</td><td class="n">11</td></tr><tr class=""><td><span class="d "></span>Allocated Orders</td><td class="n">6</td></tr><tr class=""><td><span class="d "></span>Ready To Ship Shipments</td><td class="n">4</td></tr><tr class="off"><td><span class="d "></span>Unallocated Orders</td><td class="n">0</td></tr></table></div></div>
+<div class="col"><div class="al"><div class="al-h"><span class="text-label-lg">Pending B2C orders</span><span class="pill ok text-caption-md">healthy</span></div><table class="text-body-md"><tr><th>Alert</th><th class="n">Count</th></tr><tr class="off"><td><span class="d "></span>Pending Verification Orders</td><td class="n">0</td></tr><tr class="off"><td><span class="d "></span>Yet To Be Packed Shipments</td><td class="n">0</td></tr><tr class="off"><td><span class="d "></span>Label Generated Shipments</td><td class="n">0</td></tr></table></div><div class="al"><div class="al-h"><span class="text-label-lg">Inventory Alerts</span><span class="pill bad text-caption-md">3 issues</span></div><table class="text-body-md"><tr><th>Alert</th><th class="n">Count</th></tr><tr class=""><td><span class="d "></span>Disabled Inventory</td><td class="n">201</td></tr><tr class=""><td><span class="d o"></span>Failed Inventory</td><td class="n">210</td></tr><tr class=""><td><span class="d "></span>Putaway Cancelled</td><td class="n">131</td></tr></table></div></div>
+</div></div></section>
+<section id="rt" class="screen"><div class="tabrow"><div class="tabs text-label-md"><span class="tab ">Overview</span><span class="tab ">Sales</span><span class="tab ">Inventory</span><span class="tab active">Returns</span><span class="tab ">Trends</span><span class="tab ">Fulfillment<span class="new text-caption-sm">New</span></span></div><div class="slot"><div class="ur-strip" id="urb"><span class="badge text-caption-sm">UniReco</span><span class="h text-body-md" data-live><b>47</b> past SLA · <b>₹8.42 L</b> at risk</span><span class="h text-body-md" data-nodata style="display:none">See what your returns are costing</span><button class="cta text-label-sm" onclick="go('uniware_v2_returns')">Start free trial →</button><button class="x" onclick="document.getElementById('urb').classList.toggle('open')" title="Dismiss">×</button><div class="ur-fly"><button class="text-body-sm" onclick="gone('urb','urbg','Hidden for 30 days')">Hide for 30 days</button><button class="text-body-sm muted" onclick="gone('urb','urbg','Won\'t show again')">Not interested, don't show again</button></div></div><span class="ur-gone text-caption-md" id="urbg"></span></div><span class="spark">✦<span class="n text-caption-sm">7</span></span></div>
+<div class="filters text-label-md"><span class="fchip on">⇄ Date range: Last 7 days ⌄</span><span class="fchip">⇄ Channel type: All ⌄</span><span class="fchip">⇄ All sources ⌄</span><span class="fchip">⇄ All channels ⌄</span><span class="fchip">⇄ All facilities ⌄</span><span class="fchip on">⇄ More <span class="b">1</span> ⌄</span><span class="apply">Apply</span></div>
+<div class="content"><div class="kpis"><div class="kpi"><div class="t text-label-lg">Return Items <span class="i text-caption-sm">i</span></div><div class="v text-heading-h1">0</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="kpi"><div class="t text-label-lg">Value of Return Items <span class="i text-caption-sm">i</span></div><div class="v text-heading-h1">₹ 0</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="kpi"><div class="t text-label-lg">RTO % — Return to Origin <span class="i text-caption-sm">i</span></div><div class="v text-heading-h1">-</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="kpi"><div class="t text-label-lg">CIR % — Customer Returns <span class="i text-caption-sm">i</span></div><div class="v text-heading-h1">-</div><div class="as text-caption-md">as of 15:59 IST</div></div></div>
+<div class="wgrid"><div class="w"><div class="t text-label-lg">Return Items by Date <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Return Items by Courier <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Pending Items Heading to High-return Pincodes <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div><div class="w"><div class="t text-label-lg">Return Rate: COD vs Prepaid <span class="i text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 15:59 IST</div></div></div></div></section>
+</div></div>
+<script>
+document.querySelectorAll('.mtab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.t).classList.add('active');}));
+document.getElementById('nodata').addEventListener('change',e=>{const nd=e.target.checked;document.querySelectorAll('[data-live]').forEach(x=>x.style.display=nd?'none':'');document.querySelectorAll('[data-nodata]').forEach(x=>x.style.display=nd?'':'none');});
+function go(src){ alert('Opens the UniReco trial start gate (PRD 3a) with source_trigger='+src+'. If the user has no trial access → PRD 4 I.1 popup instead.'); }
+function gone(id,gid,txt){ const c=document.getElementById(id); c.style.display='none'; c.classList.remove('open'); const m=document.getElementById(gid); m.innerHTML=txt+' <span class="undo" onclick="undo(\''+id+'\',\''+gid+'\')">Undo</span>'; m.style.display='inline'; }
+function undo(id,gid){ document.getElementById(id).style.display=''; document.getElementById(gid).style.display='none'; }
+</script></body></html>
