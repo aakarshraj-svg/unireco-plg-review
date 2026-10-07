@@ -246,10 +246,34 @@ textarea { min-height: 72px; resize: vertical; }
 .ft .vig { width: 96px; height: 44px; flex-shrink:0; border-radius: var(--radius-sm); background: rgba(255,255,255,.08); position:relative; overflow:hidden; }
 .ft .tx b { display:block; color: var(--text-primary-inverse); }
 .ft .tx span { color: rgba(255,255,255,.65); }
-/* vignettes */
 .v-tl { display:flex; align-items:center; gap:4px; padding: 0 8px; height:100%; }
 .v-tl i { width:8px; height:8px; border-radius:50%; background: var(--bg-success-base); } .v-tl i.o { background: var(--bg-warning-base); } .v-tl i.g { background: rgba(255,255,255,.3); } .v-tl s { flex:1; height:2px; background: rgba(255,255,255,.3); text-decoration:none; }
-.v-bar { display:flex; align-items:flex-end; ga<section id="i1" class="screen">
+.v-bar { display:flex; align-items:flex-end; gap:4px; padding: 6px 10px; height:100%; }
+.v-bar i { flex:1; background: var(--bg-brand-base); border-radius:2px 2px 0 0; } .v-bar i.d { background: var(--bg-success-base); } .v-bar i.m { background: var(--bg-danger-base); }
+.v-cl { display:grid; grid-template-columns: repeat(4,1fr); gap:3px; padding: 6px; height:100%; }
+.v-cl i { border-radius:3px; background: rgba(255,255,255,.18); } .v-cl i.a { background: var(--bg-success-base); } .v-cl i.r { background: var(--bg-danger-base); } .v-cl i.p { background: var(--bg-warning-base); }
+.v-cam { display:grid; place-items:center; height:100%; } .v-cam i { width: 36px; height: 24px; border: 2px solid rgba(255,255,255,.6); border-radius:4px; position:relative; } .v-cam i::after { content:''; position:absolute; right:-9px; top:5px; border-left:8px solid rgba(255,255,255,.6); border-top:6px solid transparent; border-bottom:6px solid transparent; } .v-cam b { position:absolute; width:8px; height:8px; border-radius:50%; background: var(--bg-danger-base); top:8px; right:12px; }
+.v-led { display:flex; flex-direction:column; justify-content:center; gap:4px; padding: 0 10px; height:100%; }
+.v-led i { display:flex; gap:6px; align-items:center; } .v-led i::before { content:''; flex:1; height:3px; background: rgba(255,255,255,.3); border-radius:2px; } .v-led i::after { content:''; width: 22px; height:3px; background: var(--bg-success-base); border-radius:2px; } .v-led i.x::after { background: var(--bg-danger-base); }
+.ask { padding: var(--gap-24); display:flex; flex-direction:column; }
+.ask .num { display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap: var(--gap-8); margin: 0 0 var(--gap-16); }
+.ask .q { color: var(--text-primary); margin: 0 0 var(--gap-4); }
+.ask .qs { color: var(--text-secondary); margin-bottom: var(--gap-16); }
+.ask .m-foot { margin-top:auto; }
+.conf { display:none; }
+.conf .dm { display:flex; align-items:center; gap: var(--gap-12); padding: var(--gap-12) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); margin: var(--gap-8) 0 var(--gap-16); }
+.conf .dm input { accent-color: var(--bg-brand-base); }
+.conf .dm .who b { color: var(--text-primary); display:block; } .conf .dm .who span { color: var(--text-tertiary); }
+.modal.wide .success { padding: var(--gap-24); grid-column: 1 / -1; }
+.modal.wide.done .ad, .modal.wide.done .ask { display:none; }
+</style><style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
+<body>
+<div class="nav"><span class="brand text-label-md">UniReco PLG · Intervention mocks <span style="opacity:.6">(PRD 4)</span></span>
+<button class="tab active text-label-sm" data-t="i1">I.1 · No-trial-access · demo ask</button><button class="tab  text-label-sm" data-t="i2">I.2 · What's new (ex-UniReco tenants)</button><button class="tab  text-label-sm" data-t="i3">I.3 · R2S feedback popup</button><button class="tab  text-label-sm" data-t="i4">I.4 · No-credentials popup</button><button class="tab  text-label-sm" data-t="i5">I.5 · Share trial with a teammate</button><button class="tab  text-label-sm" data-t="i6">I.6 · C1 CSM outbound — queue record</button><button class="tab  text-label-sm" data-t="i7">I.7 · C2 pricing popup</button><button class="tab  text-label-sm" data-t="i8">I.8 · C3 trial-extension popup</button><button class="tab  text-label-sm" data-t="i9">I.9 · C4 procurement popup</button>
+<button class="theme text-caption-md" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">Theme</button></div>
+
+
+<section id="i1" class="screen">
   <div class="stage">
     <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
     <div class="overlay"><div class="modal wide">
