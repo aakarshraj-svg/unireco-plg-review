@@ -236,27 +236,54 @@ textarea { min-height: 72px; resize: vertical; }
 .s-next b { color: var(--text-primary); font-weight: 500; }
 .s-foot { display:flex; justify-content:center; gap: var(--gap-8); }
 .q-foot { display:flex; justify-content:space-between; align-items:center; border-top: var(--stroke-regular) solid var(--border-primary); padding-top: var(--gap-16); }
-</style><style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
-<body>
-<div class="nav"><span class="brand text-label-md">UniReco PLG · Intervention mocks <span style="opacity:.6">(PRD 4)</span></span>
-<button class="tab active text-label-sm" data-t="i1">I.1 · No-trial-access popup</button><button class="tab  text-label-sm" data-t="i2">I.2 · What's new (ex-UniReco tenants)</button><button class="tab  text-label-sm" data-t="i3">I.3 · R2S feedback popup</button><button class="tab  text-label-sm" data-t="i4">I.4 · No-credentials popup</button><button class="tab  text-label-sm" data-t="i5">I.5 · Share trial with a teammate</button><button class="tab  text-label-sm" data-t="i6">I.6 · C1 CSM outbound — queue record</button><button class="tab  text-label-sm" data-t="i7">I.7 · C2 pricing popup</button><button class="tab  text-label-sm" data-t="i8">I.8 · C3 trial-extension popup</button><button class="tab  text-label-sm" data-t="i9">I.9 · C4 procurement popup</button>
-<button class="theme text-caption-md" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">Theme</button></div>
 
-
-<section id="i1" class="screen">
+/* ── I.1 wide ad popup ── */
+.modal.wide { width: 880px; max-width: 94vw; padding: 0; overflow:hidden; display:grid; grid-template-columns: 1.15fr 1fr; }
+.ad { background: var(--bg-inverse); color: var(--text-primary-inverse); padding: var(--gap-24); display:flex; flex-direction:column; gap: var(--gap-12); }
+.ad .k { color: var(--text-brand-base); text-transform:uppercase; letter-spacing:.08em; }
+.ad .t { color: var(--text-primary-inverse); margin-bottom: var(--gap-4); }
+.ft { display:flex; gap: var(--gap-12); align-items:center; padding: var(--gap-8) var(--gap-12); background: rgba(255,255,255,.06); border: var(--stroke-regular) solid rgba(255,255,255,.1); border-radius: var(--radius-md); }
+.ft .vig { width: 96px; height: 44px; flex-shrink:0; border-radius: var(--radius-sm); background: rgba(255,255,255,.08); position:relative; overflow:hidden; }
+.ft .tx b { display:block; color: var(--text-primary-inverse); }
+.ft .tx span { color: rgba(255,255,255,.65); }
+/* vignettes */
+.v-tl { display:flex; align-items:center; gap:4px; padding: 0 8px; height:100%; }
+.v-tl i { width:8px; height:8px; border-radius:50%; background: var(--bg-success-base); } .v-tl i.o { background: var(--bg-warning-base); } .v-tl i.g { background: rgba(255,255,255,.3); } .v-tl s { flex:1; height:2px; background: rgba(255,255,255,.3); text-decoration:none; }
+.v-bar { display:flex; align-items:flex-end; ga<section id="i1" class="screen">
   <div class="stage">
     <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
-    <div class="overlay"><div class="modal">
-      <div class="m-head"><div><div class="eyebrow text-caption-sm">UniReco trial</div><div class="text-heading-h3">Here's what your returns are costing</div></div><button class="x">×</button></div>
-      <p class="desc text-body-sm">Based on your Uniware returns data, this month:</p>
-      <div class="stats"><div class="stat risk"><div class="v text-heading-h4">₹8.42 L</div><div class="l text-caption-sm">at risk in returns this month</div></div><div class="stat"><div class="v text-heading-h4">47</div><div class="l text-caption-sm">returns past the restocking SLA</div></div><div class="stat"><div class="v text-heading-h4">312</div><div class="l text-caption-sm">received, not yet restocked</div></div></div>
-      <div class="offer text-caption-md"><span><b>What UniReco does:</b> tracks every return to restock and flags the breaches (live now, from your Uniware data) · finds the SPF claims you can raise and files them in one click (connect a marketplace) · reconciles marketplace payouts line by line (on go-live).</span></div>
-      <p class="desc text-body-sm" style="margin-top: var(--gap-4)">The trial is set up for your decision maker — your admin account isn't on the access list. Two ways forward:</p>
-      <div class="opts" id="i1o"><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Mail the DM/POC</div><div class="text-caption-md sub">An automatic invite goes to <b>Rahul Sharma</b> (rahul.sharma@accessoriesmasters.com) with the trial link. You'll be cc'd.</div></div></label><label class="opt"><input type="radio" name="o"><div><div class="text-label-md">Talk to a CSM</div><div class="text-caption-md sub">Leave your details — a CSM will call within 24 hours and can set up access for the right person.</div><div class="fields two hide"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div></div></div></label></div>
-      <div class="success" data-s="i1_mail"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Invite sent.</div><p class="s-body text-body-sm">We've emailed your DM/POC the trial link and a summary of the leakage found. You're cc'd.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>Your decision maker opens the link and starts the trial — it takes under a minute.</li><li>You'll get a copy of the email now.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:'+this.closest('.success').dataset.s); reset(this)">Done</button></div></div><div class="success" data-s="i1_csm"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">A CSM will call you within 24 hours</div><p class="s-body text-body-sm">We've logged your request. The CSM can set up trial access for the right person on your team.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A CSM calls the number you gave during business hours</li><li>Keep your Uniware admin login handy for the call</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:'+this.closest('.success').dataset.s); reset(this)">Done</button></div></div><div class="m-foot"><button class="btn " >Not now</button><button class="btn primary" onclick="done(this, ['i1_mail','i1_csm'])">Continue →</button></div>
+    <div class="overlay"><div class="modal wide">
+      <div class="ad">
+        <div class="k text-caption-sm">UniReco · returns and claims recovery, built on Uniware</div>
+        <div class="t text-heading-h3">The money that leaks after the order ships</div>
+        <div class="ft"><div class="vig"><div class="v-tl"><i></i><s></s><i></i><s></s><i class="o"></i><s></s><i class="g"></i></div></div><div class="tx text-caption-md"><b>Return visibility, initiation to restock</b><span>Every return tracked from pickup to the shelf — and flagged when it stalls.</span></div></div>
+        <div class="ft"><div class="vig"><div class="v-bar"><i style="height:60%"></i><i class="d" style="height:45%"></i><i style="height:80%"></i><i class="m" style="height:30%"></i><i style="height:70%"></i><i class="d" style="height:55%"></i></div></div><div class="tx text-caption-md"><b>Out-for-delivery vs delivered</b><span>See which "delivered" returns never actually reached you.</span></div></div>
+        <div class="ft"><div class="vig"><div class="v-cl"><i class="a"></i><i class="a"></i><i class="p"></i><i></i><i class="a"></i><i class="r"></i><i class="p"></i><i></i><i class="a"></i><i></i><i class="r"></i><i class="p"></i></div></div><div class="tx text-caption-md"><b>Claims on every major marketplace</b><span>What to raise, what was raised, approved or rejected — and where to respond or reopen.</span></div></div>
+        <div class="ft"><div class="vig"><div class="v-cam"><i></i><b></b></div></div><div class="tx text-caption-md"><b>UniCapture proof, attached</b><span>Video and image evidence for each return, ready when you raise the claim.</span></div></div>
+        <div class="ft"><div class="vig"><div class="v-led"><i></i><i class="x"></i><i></i></div></div><div class="tx text-caption-md"><b>Payments matched to orders</b><span>Every payout line against its order, so the leakage has a name.</span></div></div>
+      </div>
+      <div class="ask">
+        <div id="ask-main">
+          <div class="eyebrow text-caption-sm">Based on your Uniware returns data · this month</div>
+          <div class="num"><div class="stat risk"><div class="v text-heading-h4">₹8.42 L</div><div class="l text-caption-sm">at risk in returns</div></div><div class="stat"><div class="v text-heading-h4">47</div><div class="l text-caption-sm">past the restocking SLA</div></div><div class="stat"><div class="v text-heading-h4">312</div><div class="l text-caption-sm">not yet restocked</div></div></div>
+          <div class="q text-heading-h3">Would you like to see this working on your own data?</div>
+          <div class="qs text-body-sm">A 20-minute demo on your returns, with the people who should see it. We set it up; you just say yes.</div>
+          <div class="m-foot"><button class="btn " onclick="flowNav('dismiss')">Not now</button><button class="btn primary" onclick="askStep2(this)">Yes, set up a demo →</button></div>
+        </div>
+        <div id="ask-conf" class="conf">
+          <div class="eyebrow text-caption-sm">One more thing</div>
+          <div class="q text-heading-h3">Should your decision maker join?</div>
+          <div class="qs text-body-sm">We'll invite them with you, with the numbers above in the invite.</div>
+          <label class="dm text-body-sm"><input type="checkbox" checked><div class="who"><b>Rahul Sharma</b><span>DM/POC on record for AccessoriesMasters</span></div></label>
+          <div class="fields two" style="margin-bottom: var(--gap-12)"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div></div>
+          <div class="m-foot"><button class="btn " onclick="askBack(this)">Back</button><button class="btn primary" onclick="show(this,'i1_demo')">Set up the demo →</button></div>
+        </div>
+      </div>
+      <div class="success" data-s="i1_demo"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Demo requested.</div><p class="s-body text-body-sm">A CSM will reach out within 24 hours to fix a time. Your decision maker is on the invite.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>You and your decision maker get a confirmation email now.</li><li>A CSM calls the number you gave to fix a time.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:i1_demo'); reset(this)">Done</button></div></div>
     </div></div>
   </div>
 </section>
+
 <section id="i2" class="screen">
   <div class="stage">
     <div class="ghost"><div class="ghost-bar"></div><div class="ghost-row"><i></i><i></i><i></i><i></i></div><div class="ghost-row"><i class="w"></i><i class="n"></i></div></div>
@@ -357,6 +384,8 @@ function show(btn,key){ const m=btn.closest('.modal'); m.querySelectorAll('.succ
 function done(btn,keys){ const m=btn.closest('.modal'); const opts=[...m.querySelectorAll('.opt input')]; const i=opts.findIndex(o=>o.checked); if(i<0){ alert('Pick an option first'); return; } const k=keys[i];
   if(k==='__nav'){ flowNav('connectors'); return; }
   show(btn,k); }
-function reset(btn){ const m=btn.closest('.modal'); m.classList.remove('done'); m.querySelectorAll('.success').forEach(x=>x.style.display='none'); m.querySelectorAll('.opt input').forEach(o=>o.checked=false); }
+function askStep2(b){ const m=b.closest('.modal'); m.querySelector('#ask-main').style.display='none'; m.querySelector('#ask-conf').style.display='block'; }
+function askBack(b){ const m=b.closest('.modal'); m.querySelector('#ask-conf').style.display='none'; m.querySelector('#ask-main').style.display='block'; }
+function reset(btn){ const m=btn.closest('.modal'); m.classList.remove('done'); const c=m.querySelector('#ask-conf'); if(c){ c.style.display='none'; m.querySelector('#ask-main').style.display='block'; } m.querySelectorAll('.success').forEach(x=>x.style.display='none'); m.querySelectorAll('.opt input').forEach(o=>o.checked=false); }
 </script>
 </body></html>
