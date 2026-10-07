@@ -839,6 +839,25 @@ a { color: var(--text-brand-base); text-decoration: none; }
 .cm-ask button { height: var(--gap-32); padding: 0 var(--gap-12); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; border: var(--stroke-regular) solid var(--border-secondary); background: var(--bg-primary); color: var(--text-primary); }
 .cm-ask button.primary { background: var(--bg-brand-base); color: var(--text-on-fill); border-color: transparent; }
 </style>
+<style id="tchip-css">
+/* ── Trial chip: follows the user on every trial page ── */
+.tchip{position:relative;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px 0 10px;border:1px solid var(--border-brand-subtle,#bfdbfe);background:var(--bg-brand-subtler,#eff6ff);border-radius:999px;color:var(--text-primary,#111827);font-family:inherit;font-size:12px;cursor:pointer;margin-right:8px;white-space:nowrap}
+.tchip .dot{width:8px;height:8px;border-radius:50%;background:var(--bg-success-base,#16a34a)}
+.tchip b{font-weight:600}.tchip .prog{color:var(--text-brand-base,#1d4ed8)}
+.tchip .dd{display:none;position:absolute;top:40px;right:0;width:320px;background:var(--bg-primary,#fff);border:1px solid var(--border-primary,#e5e7eb);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.14);padding:12px;z-index:950;text-align:left;cursor:default}
+.tchip.open .dd{display:block}
+.tchip .dd .hd{display:flex;justify-content:space-between;color:var(--text-tertiary,#9ca3af);font-size:11px;padding:0 6px 8px}
+.tchip .st{display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:8px;color:var(--text-secondary,#4b5563);font-size:13px}
+.tchip .st .n{width:20px;height:20px;border-radius:50%;border:1px solid var(--border-secondary,#d1d5db);display:grid;place-items:center;font-size:11px;color:var(--text-tertiary,#9ca3af);flex-shrink:0}
+.tchip .st.done .n{background:var(--bg-success-base,#16a34a);border-color:var(--bg-success-base,#16a34a);color:#fff}
+.tchip .st.next{background:var(--bg-brand-subtler,#eff6ff);color:var(--text-brand-base,#1d4ed8);font-weight:500;cursor:pointer}.tchip .st.next .n{border-color:var(--text-brand-base,#1d4ed8);color:var(--text-brand-base,#1d4ed8)}
+.tchip .st.locked{color:var(--text-disabled,#9ca3af)}
+/* ── Step-complete toast ── */
+.ttoast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);opacity:0;background:#111827;color:#fff;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.25);z-index:960;font-family:inherit;font-size:13px;transition:all .25s ease;pointer-events:none;white-space:nowrap}
+.ttoast.on{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.ttoast .ok{width:22px;height:22px;border-radius:50%;background:#16a34a;display:grid;place-items:center;flex-shrink:0}
+.ttoast a{color:#93c5fd;font-weight:600;cursor:pointer;text-decoration:none}
+</style>
 <style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="shell">
@@ -887,6 +906,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
         <span class="trial-badge text-caption-sm">TRIAL</span>
       </div>
       <div class="spacer"></div>
+      <div class="tchip" id="tchip" onclick="this.classList.toggle('open')"><span class="dot"></span><b>Trial</b> · Day 6 · <span class="prog">1 of 3 done</span><span style="color:var(--text-tertiary,#9ca3af)">▾</span><div class="dd" onclick="event.stopPropagation()"><div class="hd"><span>Day 6 of 30 · ends 28 Oct</span><span>1 of 3</span></div><div class="st done" ><span class="n">✓</span>See your returns leakage</div><div class="st next" onclick="openConnectors()"><span class="n">2</span>Connect a marketplace →</div><div class="st locked" ><span class="n">3</span>Raise your first SPF claim</div></div></div>
       <button class="cm-btn text-label-sm" id="cm-restart" onclick="startTour()" title="Show me around this page"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Show me around</button>
       <button class="icon-btn" title="Toggle theme" onclick="toggleTheme()">
         <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -1341,7 +1361,7 @@ function openConnectors(){ flowNav('spf-card'); }
 // ── Coachmarks: three stops, first landing only; restart from the top-right button ──
 const CM=[
   {el:'#cm-kpi', k:'1 of 3', t:'This is what your returns are costing', b:'₹ at risk this month, from your Uniware returns data. Return To Stock is live already — nothing to set up.'},
-  {el:'#tc', k:'2 of 3', t:'Your three steps for the trial', b:'This bar always shows where you are and what to do next. The highlighted step is a link.'},
+  {el:'#tc', k:'2 of 3', t:'Your three steps for the trial', b:'The highlighted step is a link. The same three steps follow you on every page as the Trial chip in the top bar, so you always know where you are.'},
   {el:'#cm-spf', k:'3 of 3', t:'SPF Claims switches on here', b:'Connect one marketplace and this card fills with the claims you can raise. One connection, about a minute.'}
 ];
 let cmI=0, firstVisit=true;
