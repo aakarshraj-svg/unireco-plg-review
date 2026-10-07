@@ -872,6 +872,21 @@ a { color: var(--text-brand-base); text-decoration: none; }
 .ttoast .ok{width:22px;height:22px;border-radius:50%;background:#16a34a;display:grid;place-items:center;flex-shrink:0}
 .ttoast a{color:#93c5fd;font-weight:600;cursor:pointer;text-decoration:none}
 </style>
+<style id="guide-css">
+/* ── Guide card: next action + why; replaces checklist bar + chip ── */
+.guide{display:flex;align-items:center;gap:14px;padding:10px 14px;background:var(--bg-brand-subtler,#eff6ff);border:1px solid var(--border-brand-subtle,#bfdbfe);border-radius:12px;margin-bottom:16px;font-family:inherit}
+.guide .n{width:28px;height:28px;border-radius:50%;background:var(--bg-brand-base,#1d4ed8);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:600;flex-shrink:0}
+.guide .tx{flex:1;min-width:0}
+.guide .a{color:var(--text-primary,#111827);font-size:14px;font-weight:600}
+.guide .w{color:var(--text-secondary,#4b5563);font-size:12px;margin-top:2px}
+.guide .p{color:var(--text-tertiary,#9ca3af);font-size:11px;white-space:nowrap}
+.guide .go{height:32px;padding:0 14px;border-radius:8px;border:none;background:var(--bg-brand-base,#1d4ed8);color:#fff;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.guide .show{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--border-brand-subtle,#bfdbfe);background:var(--bg-primary,#fff);color:var(--text-brand-base,#1d4ed8);font-family:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.guide.sync .n{border:2px solid var(--border-brand-base,#1d4ed8);border-top-color:transparent;background:transparent;color:transparent;animation:spin .9s linear infinite}
+.guide.compact{margin:0 8px 0 0;padding:6px 10px;border-radius:999px;gap:10px;max-width:560px}
+.guide.compact .n{width:22px;height:22px;font-size:11px}.guide.compact .a{font-size:12px}.guide.compact .w{display:none}.guide.compact .p{display:none}.guide.compact .go,.guide.compact .show{height:26px;font-size:11px;padding:0 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
 <style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="shell">
@@ -949,17 +964,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
       <div class="content-pane">
 
         <!-- ─── TRIAL CHECKLIST: what to do next ─── -->
-        <div class="tc" id="tc">
-          <div class="day"><b class="text-label-md">Day 6 of 30</b><span class="text-caption-md">trial ends 28 Oct</span></div>
-          <div class="steps">
-            <div class="step next text-label-sm" id="tc-step1" onclick="flowNav('r2s-card')"><span class="n text-caption-sm">1</span>Open Return To Stock →</div>
-            <span class="arrow">›</span>
-            <div class="step text-label-sm" id="tc-step2" onclick="openConnectors()" style="cursor:pointer"><span class="n text-caption-sm">2</span>Connect a marketplace</div>
-            <span class="arrow">›</span>
-            <div class="step locked text-label-sm"><span class="n text-caption-sm">3</span>Raise your first SPF claim</div>
-          </div>
-          <div class="prog text-caption-md"><span id="tc-count">0 of 3</span><span class="bar"><i id="tc-bar" style="width:0%"></i></span></div>
-        </div>
+        <div class="guide" id="guide"><span class="n">1</span><div class="tx"><div class="a">Open Return To Stock</div><div class="w">This is where your ₹ at risk comes from — returns stuck between pickup and the shelf. Nothing to set up; it's live from Uniware.</div></div><span class="p">Step 1 of 3 · Day 6 of 30</span><button class="show" onclick="showStep(0)">Show me</button><button class="go" onclick="flowNav('r2s-card')">Open Return To Stock →</button></div>
         <div class="tc done-all" id="tc-done" style="display:none">
           <div class="day"><b class="text-label-md">Day 6 of 30</b><span class="text-caption-md">24 days left</span></div>
           <div class="msg text-label-sm">✓ You've seen the whole trial — leakage, a connected marketplace, your first claim. <span>Keep raising claims; a CSM will check in before it ends.</span></div>
@@ -1384,15 +1389,17 @@ function openConnectors(){ flowNav('spf-card'); }
 <div class="cm-overlay" id="cm-ov"><div class="cm-hole" id="cm-hole"></div><div class="cm-tip" id="cm-tip"></div></div>
 <div class="cm-ask" id="cm-ask">
   <button class="x" onclick="askClose()">×</button>
-  <div class="t text-label-md">New here? We can show you around.</div>
-  <div class="b text-body-sm">Three quick stops: your ₹ at risk, what to do next, and where SPF Claims switches on.</div>
-  <div class="f"><button class="primary text-label-sm" onclick="askClose(); startTour()">Show me around</button><button class="text-label-sm" onclick="askClose()">No thanks</button></div>
+  <div class="t text-label-md">New here? Start with step 1.</div>
+  <div class="b text-body-sm">The guide above the numbers shows what to do and why. Show me points at it; the button takes you there. Full page tour any time from Show me around.</div>
+  <div class="f"><button class="primary text-label-sm" onclick="askClose(); showStep(0)">Show me step 1</button><button class="text-label-sm" onclick="askClose()">No thanks</button></div>
 </div>
 <script>
 // ── Coachmarks: three stops, first landing only; restart from the top-right button ──
+const STEPCM={0:{el:'#cm-r2s',k:'Step 1 of 3',t:'Open Return To Stock',b:'This card is your ₹ at risk. Open it to see every return that is late to restock — that is the first thing the trial shows you.',go:"flowNav('r2s-card')"},1:{el:'#cm-spf',k:'Step 2 of 3',t:'Connect a marketplace',b:'SPF Claims is locked until one marketplace is connected. Click here and choose Connect it now, or ask your admin.',go:"openConnectors()"}};
+function showStep(i){ const st=STEPCM[i]; if(!st) return; const el=document.querySelector(st.el); el.scrollIntoView({block:'center',behavior:'instant'}); const r=el.getBoundingClientRect(), pad=8, hole=document.getElementById('cm-hole'), tip=document.getElementById('cm-tip'); document.getElementById('cm-ov').classList.add('on'); Object.assign(hole.style,{left:(r.left-pad)+'px',top:(r.top-pad)+'px',width:(r.width+2*pad)+'px',height:(r.height+2*pad)+'px'}); tip.innerHTML='<div class="k text-caption-sm">'+st.k+'</div><div class="t text-heading-h4">'+st.t+'</div><div class="b text-body-sm">'+st.b+'</div><div class="f"><span class="skip text-caption-md" onclick="endTour()">Close</span><button class="primary text-label-sm" onclick="endTour(); '+st.go+'">Do it →</button></div>'; const below=r.bottom+pad+12; Object.assign(tip.style,{top:(below+200<window.innerHeight?below:Math.max(16,r.top-pad-12-160))+'px',left:Math.min(Math.max(16,r.left),window.innerWidth-340)+'px'}); }
 const CM=[
   {el:'#cm-kpi', k:'1 of 3', t:'This is what your returns are costing', b:'₹ at risk this month, from your Uniware returns data. Return To Stock is live already — nothing to set up.'},
-  {el:'#tc', k:'2 of 3', t:'Your three steps for the trial', b:'Open Return To Stock, connect a marketplace, raise a claim. The highlighted step is a link. The same three steps follow you on every page as the Trial chip in the top bar, so you always know where you are.'},
+  {el:'#guide', k:'2 of 3', t:'Your guide for the trial', b:'It always shows the next thing to do and why. Show me points at it on the page; the button takes you there. It follows you to every page.'},
   {el:'#cm-spf', k:'3 of 3', t:'SPF Claims switches on here', b:'Connect one marketplace and this card fills with the claims you can raise. One connection, about a minute.'}
 ];
 let cmI=0, firstVisit=true;
@@ -1409,9 +1416,11 @@ function showStop(){
 }
 function askClose(){ document.getElementById('cm-ask').classList.remove('on'); }
 // first-visit prompt: fires on every landing until the user takes the tour or dismisses it (persisted per user in production; in this mock, once per load)
-function setDone(n){ const ids=['tc-step1','tc-step2']; const labels=['Open Return To Stock','Connect a marketplace']; ids.forEach((id,i)=>{ const el=document.getElementById(id); if(!el) return; if(i<n){ el.className='step done text-label-sm'; el.removeAttribute('onclick'); el.innerHTML='<span class="n text-caption-sm">✓</span>'+labels[i]; } else if(i===n){ el.className='step next text-label-sm'; el.innerHTML='<span class="n text-caption-sm">'+(i+1)+'</span>'+labels[i]+' →'; } }); document.getElementById('tc-count').textContent=n+' of 3'; document.getElementById('tc-bar').style.width=Math.round(100*n/3)+'%'; }
+function setGuide(step,sync){ const g=document.getElementById('guide'); if(!g) return; const S=[['Open Return To Stock','This is where your ₹ at risk comes from — returns stuck between pickup and the shelf. Nothing to set up; it\'s live from Uniware.',"flowNav('r2s-card')",'showStep(0)'],['Connect a marketplace','SPF Claims needs one marketplace login. One connection, about a minute, and UniReco starts finding the claims you can raise.',"openConnectors()",'showStep(1)'],['Raise your first SPF claim','Each eligible claim is drafted with the evidence attached. Raise one and you\'ve seen the whole trial.',"flowNav('spf-card')",'showStep(1)']][step-1]; g.className='guide'+(sync?' sync':''); g.querySelector('.n').textContent=step; g.querySelector('.a').textContent=sync?'Flipkart connected · syncing your claims':S[0]; g.querySelector('.w').textContent=sync?'Usually about 15 minutes. You don\'t need to wait — we\'ll email you when they\'re ready.':S[1]; g.querySelector('.p').textContent='Step '+step+' of 3 · Day 6 of 30'; const sh=g.querySelector('.show'), go=g.querySelector('.go'); sh.style.display=sync?'none':''; go.style.display=sync?'none':''; if(!sync){ sh.setAttribute('onclick',S[3]); go.setAttribute('onclick',S[2]); go.textContent=S[0]+' →'; } }
+function setDone(n){ setGuide(Math.min(3,n+1)); }
+function _oldSetDone(n){ const ids=['tc-step1','tc-step2']; const labels=['Open Return To Stock','Connect a marketplace']; ids.forEach((id,i)=>{ const el=document.getElementById(id); if(!el) return; if(i<n){ el.className='step done text-label-sm'; el.removeAttribute('onclick'); el.innerHTML='<span class="n text-caption-sm">✓</span>'+labels[i]; } else if(i===n){ el.className='step next text-label-sm'; el.innerHTML='<span class="n text-caption-sm">'+(i+1)+'</span>'+labels[i]+' →'; } }); document.getElementById('tc-count').textContent=n+' of 3'; document.getElementById('tc-bar').style.width=Math.round(100*n/3)+'%'; }
 function noCreds(){ document.querySelectorAll('[data-creds-hide]').forEach(x=>x.style.display='none'); document.querySelectorAll('[data-creds-show]').forEach(x=>x.style.display=''); document.getElementById('kpi-total').textContent='₹8.42 L'; document.getElementById('kpi-total-sub').textContent='Return To Stock · no marketplace connected yet'; const t=document.getElementById('spf-tag'); if(t) t.innerHTML=t.innerHTML.replace('Credentials of 4 channels missing →','Connect a marketplace to see your claims →'); document.querySelectorAll('table.data-tbl tbody tr').forEach(tr=>{ if(tr.textContent.includes('Amazon India')){ tr.style.opacity='.55'; tr.querySelectorAll('td').forEach((td,i)=>{ if(i>0) td.textContent='—'; }); } }); document.querySelectorAll('.card-foot-note span').forEach(sp=>{ if(sp.textContent.includes('4 channels')) sp.textContent='No marketplace connected yet'; }); }
-window.addEventListener('load',()=>{ const q=new URLSearchParams(location.search); const d=parseInt(q.get('done')||'0',10); if(q.get('creds')==='0'||q.get('sync')==='1') noCreds(); if(q.get('sync')==='1'){ setDone(1); document.querySelectorAll('[data-sync-hide]').forEach(x=>x.style.display='none'); document.querySelectorAll('[data-sync-show]').forEach(x=>x.style.display=''); const st=document.getElementById('tc-step2'); st.className='step sync text-label-sm'; st.removeAttribute('onclick'); st.innerHTML='<span class="n text-caption-sm">2</span>Flipkart connected · syncing'; const lines=['Settlements pulled…','1,204 returns matched…','Checking SPF eligibility…','Almost there…']; let li=0; setInterval(()=>{ li=(li+1)%lines.length; document.getElementById('sync-line').textContent=lines[li]; }, 2200); } else if(d===1){ setDone(1); } if(d===3){ document.getElementById('tc').style.display='none'; document.getElementById('tc-done').style.display='flex'; } if(q.get('tour')==='1'){ setTimeout(startTour, 400); } else if(firstVisit){ setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 700); } });
+window.addEventListener('load',()=>{ const q=new URLSearchParams(location.search); const d=parseInt(q.get('done')||'0',10); if(q.get('creds')==='0'||q.get('sync')==='1') noCreds(); if(q.get('sync')==='1'){ setDone(1); document.querySelectorAll('[data-sync-hide]').forEach(x=>x.style.display='none'); document.querySelectorAll('[data-sync-show]').forEach(x=>x.style.display=''); const lines=['Settlements pulled…','1,204 returns matched…','Checking SPF eligibility…','Almost there…']; let li=0; setInterval(()=>{ li=(li+1)%lines.length; document.getElementById('sync-line').textContent=lines[li]; }, 2200); } else if(d===1){ setDone(1); } if(d===3){ document.getElementById('guide').style.display='none'; document.getElementById('tc-done').style.display='flex'; } if(q.get('tour')==='1'){ setTimeout(startTour, 400); } else if(firstVisit){ setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 700); } });
 window.addEventListener('resize',()=>{ if(document.getElementById('cm-ov').classList.contains('on')) showStop(); });
 </script>
 </body>
