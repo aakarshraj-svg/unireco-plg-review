@@ -45,7 +45,7 @@
   <p>Every screen is the real mock, loaded live from this site. Click the same buttons a user would; the flow moves on its own. The left rail shows where you are and lets you jump.</p>
   <div class="personas">
     <div class="pc" onclick="start('admin')"><div class="k">Path A</div><h2>Uniware Admin — not the DM/POC</h2><p>Sees the trigger, has no trial access, hands it to the decision maker.</p><ol><li>Uniware Smart Dashboard · strip</li><li>No-trial-access popup</li><li>Mails the DM/POC · success</li><li>The DM/POC's inbox</li><li>→ hands over to Path B</li></ol><span class="go">Start Path A →</span></div>
-    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>SPF Claims · Raise Claim</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
+    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>Return To Stock · step 1</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>Syncing · "claims ready" email</li><li>SPF Claims · Raise Claim</li><li>Dashboard · all done</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
   </div>
 </div></div>
 
@@ -72,11 +72,15 @@ const F={
  dm:[
   {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
   {t:'Trial start gate',d:'Dashboard behind a blur · accept · Start My Trial · Show me my leakage',src:'unireco_trial_start_5.html?embed=1',on:{'trial-started':1}},
-  {t:'Trial dashboard',d:'Checklist + tour · click the SPF card or step 2',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1',on:{'spf-card':1}},
+  {t:'Trial dashboard',d:'₹8.42 L — same number as the strip · checklist at 0 of 3 · click step 1 or the Return To Stock card',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&creds=0',on:{'r2s-card':1,'spf-card':2}},
+  {t:'Return To Stock',d:'Step 1 done · use the Trial chip → Connect a marketplace',src:'unireco_c2_journey_mocks_5.html?embed=1#s3',on:{'spf-card':1}},
   {t:'Connect credentials',d:'Connect it now, or Ask an admin',src:'unireco_intervention_mocks.html?embed=1#i4',on:{'connectors':2,'done:i4_admin':1,'done:i4_csm':'hand-csm','dismiss':-1}},
   {t:'The admin receives the request',d:'What the Uniware Admin sees · click Open Connectors',src:'unireco_creds_request_email_preview.html?embed=1',on:{'email-cta':1}},
-  {t:'Connectors tab',d:'UniReco channel page · Connect',src:'unireco_c2_journey_mocks_5.html?embed=1#s5',on:{'journey:s6':1}},
-  {t:'SPF Claims live',d:'Raise Claim on an eligible return',src:'unireco_c2_journey_mocks_5.html?embed=1#s6',on:{'journey:s7':'hand-pr'}},
+  {t:'Connectors tab',d:'Connect · toast says syncing, email on the way',src:'unireco_c2_journey_mocks_5.html?embed=1#s5',on:{'journey:s6':1}},
+  {t:'Back on the dashboard · syncing',d:'SPF card in its Syncing state · "we\'ll email you when it\'s ready"',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&sync=1',on:{}},
+  {t:'The DM receives "claims ready"',d:'Sent once when the sync finishes · click Raise your first claim',src:'unireco_spf_ready_email_preview.html?embed=1',on:{'email-cta':1}},
+  {t:'SPF Claims live',d:'Raise Claim on an eligible return · step 3 done',src:'unireco_c2_journey_mocks_5.html?embed=1#s6',on:{'journey:s7':'hand-pr','golive':'hand-golive'}},
+  {t:'Back on the dashboard · all three done',d:'Completion state replaces the checklist · dismiss, or Talk to us about going live',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&done=3',on:{'golive':'hand-golive','spf-card':0}},
   {t:'Day 23 · trial-end popup',d:'C3 extension ask · Book callback · Done',src:'unireco_intervention_mocks.html?embed=1#i8',on:{'done:i8_book':1,'dismiss':1}},
   {t:'Day 31 · trial ended',d:'User opens UniReco after the trial · read-only dashboard behind a gate · go live or leave',src:'unireco_trial_expired.html?embed=1',on:{'expired:booked':1,'expired:leave':'hand-expired'}},
   {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
@@ -86,6 +90,7 @@ const HAND={
  'hand-csm':{h:'CSM takes it from here',p:'A callback is logged. The next thing this user sees is a phone call within 24 hours — nothing further in product.',b:[['Back to start',home],['Continue anyway',()=>nav(1)]]},
  'hand-dismiss':{h:'Dismissed',p:'The user closed the popup. Nothing is sent; the strip stays on the Uniware dashboard and the popup fires again on the next click.',b:[['Try again',()=>load(1)],['Back to start',home]]},
  'hand-expired':{h:'The user leaves',p:'Nothing further in product. The trial record stays Expired in the funnel; the CSM queue still has the day-23 record if one was created.',b:[['Back to start',home],['See what we see →',()=>nav(1)]]},
+ 'hand-golive':{h:'Go-live conversation',p:'The user asked to go live before the trial ended. A CSM callback is logged with the trial numbers; the day-23 popup is suppressed for this tenant.',b:[['Continue to day 23 anyway →',()=>nav(1)],['Back to start',home]]},
  'hand-pr':{h:'Payment Reco is on go-live',p:'In the trial model the Payment Reco page is locked. The next product moment is the trial-end popup on day 23.',b:[['Go to day 23 →',()=>nav(1)]]},
 };
 let P='dm',i=0,done=new Set();
