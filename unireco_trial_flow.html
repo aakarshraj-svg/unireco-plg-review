@@ -45,7 +45,7 @@
   <p>Every screen is the real mock, loaded live from this site. Click the same buttons a user would; the flow moves on its own. The left rail shows where you are and lets you jump.</p>
   <div class="personas">
     <div class="pc" onclick="start('admin')"><div class="k">Path A</div><h2>Uniware Admin — not the DM/POC</h2><p>Sees the trigger, has no trial access, hands it to the decision maker.</p><ol><li>Uniware Smart Dashboard · strip</li><li>No-trial-access · the ad + one question</li><li>Demo requested · DM on the invite</li><li>The DM/POC's inbox</li><li>→ hands over to Path B</li></ol><span class="go">Start Path A →</span></div>
-    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>Return To Stock · step 1</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>Syncing · "claims ready" email</li><li>SPF Claims · Raise Claim</li><li>Dashboard · all done</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
+    <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware Smart Dashboard · strip</li><li>The ad · start the trial</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>Return To Stock · step 1</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>Syncing · "claims ready" email</li><li>SPF Claims · Raise Claim</li><li>Dashboard · all done</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
   </div>
 </div></div>
 
@@ -71,6 +71,7 @@ const F={
  ],
  dm:[
   {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
+  {t:'The ad · start the trial',d:'Same ad as the admin sees · the action is Start my 30-day trial',src:'unireco_intervention_mocks.html?embed=1#i1b',on:{'start-trial':1,'dismiss':'hand-dismiss'}},
   {t:'Trial start gate',d:'Dashboard behind a blur · accept · Start My Trial · Show me my leakage',src:'unireco_trial_start_5.html?embed=1',on:{'trial-started':1}},
   {t:'Trial dashboard',d:'Tour starts on arrival: the number, R2S live, SPF/PR, then step 1 — Open Return To Stock',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&creds=0&tour=1',on:{'r2s-card':1,'spf-card':2}},
   {t:'Return To Stock',d:'Tour on arrival: the Restock Monitor, why OFD is empty, then Connect a marketplace',src:'unireco_c2_journey_mocks_5.html?embed=1&tour=1#s3',on:{'spf-card':1}},
