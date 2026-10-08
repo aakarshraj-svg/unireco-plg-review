@@ -270,7 +270,8 @@ textarea { min-height: 72px; resize: vertical; }
 .ad2 .logos { display:flex; gap: var(--gap-16); align-items:center; justify-content:flex-end; }
 .ad2 .logos img { height: 16px; width:auto; display:block; opacity:.85; }
 .ad2 .askrow { display:flex; align-items:center; gap: var(--gap-16); }
-.ad2 .askrow .q { font-size: 16px; font-weight: 600; color: var(--text-primary); white-space:nowrap; margin-right:auto; }
+.ad2 .askrow .q { font-size: 16px; font-weight: 600; color: var(--text-primary); white-space:nowrap; }
+.ad2 .askrow .q + .note { margin-right:auto; }
 .ad2 .btns { display:flex; gap: var(--gap-8); margin-left:auto; }
 .ad2 .btns .btn { white-space:nowrap; height: 40px; padding: 0 var(--gap-20); }
 .ad2 .conf { display:none; }
@@ -317,11 +318,11 @@ textarea { min-height: 72px; resize: vertical; }
         <div class="askrow"><div class="q">See this on your own data?</div><div class="btns"><button class="btn " onclick="flowNav('dismiss')">Not now</button><button class="btn primary" onclick="askStep2(this)">Yes, set up a demo →</button></div></div>
       </div>
       <div class="bottom conf" id="ask-conf">
-        <div class="askrow"><div class="q">Should your decision maker join?</div><label class="dm"><input type="checkbox" checked><span class="who"><b>Rahul Sharma</b><em>DM/POC on record</em></span></label></div>
-        <div class="askrow"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div><div class="fld wide"><label class="text-caption-sm">Anyone else to invite? <span class="opt">optional · comma-separated emails</span></label><input class="text-body-sm" type="text" placeholder="finance@…, ops@…"></div></div>
+        <div class="askrow"><div class="q">Who should be on the demo?</div><div class="note">Your decision maker is already on the invite. Add anyone else, comma-separated.</div></div>
+        <div class="askrow"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div><div class="fld wide"><label class="text-caption-sm">Invitees</label><input class="text-body-sm" type="text" value="rahul.sharma@accessoriesmasters.com, "></div></div>
         <div class="askrow"><div class="note">We'll send the invite to everyone above and call you to fix a time.</div><div class="btns"><button class="btn " onclick="askBack(this)">Back</button><button class="btn primary" onclick="show(this,'i1_demo')">Set up the demo →</button></div></div>
       </div>
-      <div class="success" data-s="i1_demo"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Demo requested.</div><p class="s-body text-body-sm">A CSM will call you within 24 hours to fix a time. Everyone you added is on the invite.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A confirmation goes to you, your decision maker and anyone you added, now.</li><li>A CSM calls the number you gave to fix a 20-minute slot.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:i1_demo'); reset(this)">Done</button></div></div>
+      <div class="success" data-s="i1_demo"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Demo requested.</div><p class="s-body text-body-sm">A CSM will call you within 24 hours to fix a time. Everyone you added is on the invite.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A confirmation goes to everyone on the invite, now.</li><li>A CSM calls the number you gave to fix a 20-minute slot.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:i1_demo'); reset(this)">Done</button></div></div>
     </div></div>
   </div>
 </section>
