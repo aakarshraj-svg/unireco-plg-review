@@ -67,7 +67,7 @@ const F={
  admin:[
   {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
   {t:'No trial access · the ad',d:'Five things UniReco does + this tenant\'s numbers · Yes, set up a demo → decision maker on the invite',src:'unireco_intervention_mocks.html?embed=1#i1',on:{'done:i1_demo':1,'dismiss':'hand-dismiss'}},
-  {t:'The DM/POC is on the demo invite',d:'Confirmation email, DM cc\'d · the CSM demo is the handover to Path B',src:'unireco_dm_invite_email_preview.html?embed=1',on:{'email-cta':'hand-dm'}},
+  {t:'The DM/POC gets the demo request',d:'Confirm the 20-minute demo, or skip it and open the trial',src:'unireco_dm_invite_email_preview.html?embed=1',on:{'email-cta':'hand-dm'}},
  ],
  dm:[
   {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
@@ -86,7 +86,7 @@ const F={
   {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
  ]};
 const HAND={
- 'hand-dm':{h:'Handover',p:'The demo happens with the CSM and the DM/POC. After it — or from the invite link — the DM continues as Path B: the gate, the dashboard, and everything after.',b:[['Continue as the DM/POC →',()=>start('dm',1)],['Back to start',home]]},
+ 'hand-dm':{h:'Handover',p:'Confirm → a CSM runs the demo on their data, then the DM opens the trial. Skip → the DM opens the trial now. Either way, from here it is Path B.',b:[['Continue as the DM/POC →',()=>start('dm',1)],['Back to start',home]]},
  'hand-csm':{h:'CSM takes it from here',p:'A callback is logged. The next thing this user sees is a phone call within 24 hours — nothing further in product.',b:[['Back to start',home],['Continue anyway',()=>nav(1)]]},
  'hand-dismiss':{h:'Dismissed',p:'The user closed the popup. Nothing is sent; the strip stays on the Uniware dashboard and the popup fires again on the next click.',b:[['Try again',()=>load(1)],['Back to start',home]]},
  'hand-expired':{h:'The user leaves',p:'Nothing further in product. The trial record stays Expired in the funnel; the CSM queue still has the day-23 record if one was created.',b:[['Back to start',home],['See what we see →',()=>nav(1)]]},
