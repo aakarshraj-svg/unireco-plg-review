@@ -284,6 +284,7 @@ textarea { min-height: 72px; resize: vertical; }
 .ad2 .dm .who { display:flex; flex-direction:column; line-height:1.2; }
 .ad2 .dm .who b { color: var(--text-primary); font-size: 13px; font-weight: 600; }
 .ad2 .dm .who em { color: var(--text-tertiary); font-size: 11px; font-style:normal; }
+.ad2 .askrow .note { font-size: 12px; color: var(--text-tertiary); }
 .ad2 .askrow .fld { display:flex; flex-direction:column; gap: var(--gap-4); width: 220px; margin:0; }
 .ad2 .askrow .fld input { height: 40px; }
 .modal.ad2 .success { padding: var(--gap-24) 0 0; }
@@ -326,9 +327,9 @@ textarea { min-height: 72px; resize: vertical; }
       </div>
       <div class="bottom conf" id="ask-conf">
         <div class="askrow"><div class="q">Should your decision maker join?</div><label class="dm"><input type="checkbox" checked><span class="who"><b>Rahul Sharma</b><em>DM/POC on record</em></span></label></div>
-        <div class="askrow"><div class="fld"><label class="text-caption-sm">Your name</label><input class="text-body-sm" type="text" placeholder="Priya Mehta"></div><div class="fld"><label class="text-caption-sm">Phone</label><input class="text-body-sm" type="tel" placeholder="+91 …"></div><div class="btns"><button class="btn " onclick="askBack(this)">Back</button><button class="btn primary" onclick="show(this,'i1_demo')">Set up the demo →</button></div></div>
+        <div class="askrow"><div class="note">We'll email you both to fix a time — nothing else to fill in.</div><div class="btns"><button class="btn " onclick="askBack(this)">Back</button><button class="btn primary" onclick="show(this,'i1_demo')">Set up the demo →</button></div></div>
       </div>
-      <div class="success" data-s="i1_demo"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Demo requested.</div><p class="s-body text-body-sm">A CSM will reach out within 24 hours to fix a time. Your decision maker is on the invite.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>You and your decision maker get a confirmation email now.</li><li>A CSM calls the number you gave to fix a time.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:i1_demo'); reset(this)">Done</button></div></div>
+      <div class="success" data-s="i1_demo"><div class="s-ic"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="s-title text-heading-h3">Demo requested.</div><p class="s-body text-body-sm">We'll email you and your decision maker within 24 hours to fix a time.</p><div class="s-next"><div class="h text-caption-sm">What happens next</div><ol class="text-body-sm"><li>A confirmation goes to both of you now.</li><li>A CSM follows up by email with a 20-minute slot.</li><li>Nothing more for you to do.</li></ol></div><div class="s-foot"><button class="btn primary" onclick="flowNav('done:i1_demo'); reset(this)">Done</button></div></div>
     </div></div>
   </div>
 </section>
