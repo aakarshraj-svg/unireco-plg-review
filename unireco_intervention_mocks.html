@@ -288,7 +288,7 @@ textarea { min-height: 72px; resize: vertical; }
 .ad2 .askrow .fld { display:flex; flex-direction:column; gap: var(--gap-4); width: 220px; margin:0; }
 .ad2 .askrow .fld input { height: 40px; }
 .modal.ad2 .success { padding: var(--gap-24) 0 0; }
-.modal.ad2.done > :not(.success) { display:none; }
+.modal.ad2.done > :not(.success) { display:none !important; }
 </style><style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="nav"><span class="brand text-label-md">UniReco PLG · Intervention mocks <span style="opacity:.6">(PRD 4)</span></span>
@@ -436,6 +436,6 @@ function done(btn,keys){ const m=btn.closest('.modal'); const opts=[...m.querySe
   show(btn,k); }
 function askStep2(b){ const m=b.closest('.modal'); m.querySelector('#ask-main').style.display='none'; m.querySelector('#ask-conf').style.display='flex'; m.querySelector('#ask-conf').style.flexDirection='column'; }
 function askBack(b){ const m=b.closest('.modal'); m.querySelector('#ask-conf').style.display='none'; m.querySelector('#ask-main').style.display=''; }
-function reset(btn){ const m=btn.closest('.modal'); m.classList.remove('done'); const c=m.querySelector('#ask-conf'); if(c){ c.style.display='none'; m.querySelector('#ask-main').style.display=''; } m.querySelectorAll('.success').forEach(x=>x.style.display='none'); m.querySelectorAll('.opt input').forEach(o=>o.checked=false); }
+function reset(btn){ const m=btn.closest('.modal'); m.classList.remove('done'); const c=m.querySelector('#ask-conf'); if(c){ c.style.display='none'; c.style.flexDirection=''; m.querySelector('#ask-main').style.display=''; } m.querySelectorAll('.success').forEach(x=>x.style.display='none'); m.querySelectorAll('.opt input').forEach(o=>o.checked=false); }
 </script>
 </body></html>
