@@ -73,7 +73,7 @@ const F={
   {t:'Uniware Smart Dashboard',d:'Strip in the tab row · click Start free trial',src:'unireco_uniware_entry_points_v2.html?embed=1#ov',on:{'trigger-cta':1}},
   {t:'The ad · start the trial',d:'Same ad as the admin sees · the action is Start my 30-day trial',src:'unireco_intervention_mocks.html?embed=1#i1b',on:{'start-trial':1,'dismiss':'hand-dismiss'}},
   {t:'Trial start gate',d:'Dashboard behind a blur · accept · Start My Trial · Show me my leakage',src:'unireco_trial_start_5.html?embed=1',on:{'trial-started':1}},
-  {t:'Trial dashboard',d:'Tour starts on arrival: the number, R2S live, SPF/PR, then step 1 — Open Return To Stock',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&creds=0&tour=1',on:{'r2s-card':1,'spf-card':2}},
+  {t:'Trial dashboard',d:'Tour on arrival · try Sales / Payments / Profitability or Payment Reco for the not-in-trial screen',src:'unireco_landing_dashboard_trial_spf_only.html?embed=1&creds=0&tour=1',on:{'r2s-card':1,'spf-card':2,'sample:Payments':'hand-sample','sample:Sales':'hand-sample','sample:Profitability':'hand-sample','sample:Payment Reco':'hand-sample','sample:Reports':'hand-sample','csm:Payments':'hand-csmpage','csm:Sales':'hand-csmpage','csm:Profitability':'hand-csmpage','csm:Payment Reco':'hand-csmpage','csm:Reports':'hand-csmpage'}},
   {t:'Return To Stock',d:'Tour on arrival: the Restock Monitor, why OFD is empty, then Connect a marketplace',src:'unireco_c2_journey_mocks_5.html?embed=1&tour=1#s3',on:{'spf-card':1}},
   {t:'Connect credentials',d:'Connect it now, or Ask an admin',src:'unireco_intervention_mocks.html?embed=1#i4',on:{'connectors':2,'done:i4_admin':1,'done:i4_csm':'hand-csm','dismiss':-1}},
   {t:'The admin receives the request',d:'What the Uniware Admin sees · click Open Connectors',src:'unireco_creds_request_email_preview.html?embed=1',on:{'email-cta':1}},
@@ -87,6 +87,8 @@ const F={
   {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
  ]};
 const HAND={
+ 'hand-sample':{h:'Sample data mode',p:'The page opens with example records only — nothing from the tenant is loaded — under a persistent orange banner. The same screen, same actions, dummy numbers.',b:[['Back to the dashboard',()=>load(i)]]},
+ 'hand-csmpage':{h:'CSM notified',p:'A request to switch the page on is logged against the trial with the page name. The CSM reaches out within one working day; nothing else changes for the user.',b:[['Back to the dashboard',()=>load(i)]]},
  'hand-dm':{h:'Handover',p:'Approve → a CSM books the 20-minute demo on their data. Open the trial → Path B starts now; the demo still happens. From here it is Path B.',b:[['Continue as the DM/POC →',()=>start('dm',1)],['Back to start',home]]},
  'hand-csm':{h:'CSM takes it from here',p:'A callback is logged. The next thing this user sees is a phone call within 24 hours — nothing further in product.',b:[['Back to start',home],['Continue anyway',()=>nav(1)]]},
  'hand-dismiss':{h:'Dismissed',p:'The user closed the popup. Nothing is sent; the strip stays on the Uniware dashboard and the popup fires again on the next click.',b:[['Try again',()=>load(1)],['Back to start',home]]},
