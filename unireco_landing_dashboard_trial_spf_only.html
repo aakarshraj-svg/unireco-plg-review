@@ -884,6 +884,37 @@ a { color: var(--text-brand-base); text-decoration: none; }
 .guide.compact .n{width:22px;height:22px;font-size:11px}.guide.compact .a{font-size:12px}.guide.compact .w{display:none}.guide.compact .p{display:none}.guide.compact .go,.guide.compact .show{height:26px;font-size:11px;padding:0 10px}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
+<style id="nit-css">
+/* ── Trial chip ── */
+.trial-chip { display:inline-flex; align-items:center; height: var(--gap-28, 28px); padding: 0 var(--gap-12); margin-left: var(--gap-12); background: #3f8a62; color: #fff; border-radius: var(--radius-sm); font-size: 12px; font-weight: 500; white-space:nowrap; }
+/* ── Dashboard tabs (trial: Overview + Returns live; Sales, Payments, Profitability not in trial) ── */
+.dtabs { display:flex; gap: var(--gap-4); padding: var(--gap-12) 0 0; }
+.dtab { padding: var(--gap-8) var(--gap-16); border-radius: var(--radius-md); color: var(--text-secondary); cursor:pointer; }
+.dtab.active { background: var(--bg-tertiary); color: var(--text-primary); }
+.dtab:hover { color: var(--text-primary); }
+/* ── Not-in-trial screen ── */
+.nit { position:fixed; inset:0; z-index: 850; display:none; background: var(--bg-primary); }
+.nit.on { display:block; }
+.nit .skel { position:absolute; inset: 0; padding: var(--gap-32); opacity:.5; filter: blur(2px); }
+.nit .skel i { display:block; background: var(--bg-tertiary); border-radius: var(--radius-sm); }
+.nit .skel .row { display:flex; gap: var(--gap-16); margin-bottom: var(--gap-16); }
+.nit .veil { position:absolute; inset:0; display:grid; place-items:center; background: rgba(255,255,255,.55); }
+.nit .card { width: 600px; max-width: 92vw; background: var(--bg-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-high); padding: var(--gap-40, 40px) var(--gap-32); text-align:center; }
+.nit .ico { width: 88px; height: 72px; margin: 0 auto var(--gap-16); position:relative; }
+.nit .ico .cloud { position:absolute; inset:0; background: var(--bg-tertiary); border-radius: 40px 40px 30px 30px; }
+.nit .ico .lock { position:absolute; left: 32px; top: 30px; width: 26px; height: 32px; background: var(--bg-brand-base); border-radius: 6px 6px 8px 8px; }
+.nit .ico .lock::before { content:''; position:absolute; left: 4px; top: -12px; width: 12px; height: 16px; border: 3px solid var(--bg-brand-base); border-bottom:0; border-radius: 10px 10px 0 0; }
+.nit .t { color: var(--text-primary); margin-bottom: var(--gap-8); }
+.nit .b { color: var(--text-secondary); margin-bottom: var(--gap-20); }
+.nit .acts { display:flex; justify-content:center; gap: var(--gap-12); margin-bottom: var(--gap-16); }
+.nit .acts button { height: 44px; padding: 0 var(--gap-20); border-radius: var(--radius-md); font-family: inherit; cursor:pointer; display:inline-flex; align-items:center; gap: var(--gap-8); }
+.nit .acts .sample { background: var(--bg-inverse); color: var(--text-primary-inverse); border: none; }
+.nit .acts .csm { background: var(--bg-primary); color: var(--text-primary); border: var(--stroke-regular) solid var(--border-secondary); }
+.nit .note { display:inline-flex; align-items:center; gap: var(--gap-8); padding: var(--gap-8) var(--gap-16); background: var(--bg-secondary); border-radius: var(--radius-md); color: var(--text-secondary); }
+.nit .note i { width: 8px; height: 8px; border-radius: var(--radius-full); background: var(--bg-warning-base); }
+.nit .back { position:absolute; top: var(--gap-16); left: var(--gap-16); background: transparent; border:none; color: var(--text-secondary); font-family:inherit; cursor:pointer; }
+.nit .sent { display:none; color: var(--text-success-base); margin-top: var(--gap-12); }
+</style>
 <style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap, body[data-embed] .journey-nav, body[data-embed] .screen-caption, body[data-embed] .app-topbar, body[data-embed] .mock-nav-wrap { display:none !important; } body[data-embed] .iframe-wrap { height: 100vh !important; }</style></head>
 <body>
 <div class="shell">
@@ -899,7 +930,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
       </div>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-item" title="Payment Reco">
+      <div class="sidebar-item" title="Payment Reco" onclick="notInTrial('Payment Reco')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4m6 0h2"/></svg>
       </div>
       <div class="sidebar-item" title="Return To Stock">
@@ -910,7 +941,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
       </div>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-item" title="Reports">
+      <div class="sidebar-item" title="Reports" onclick="notInTrial('Reports')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>
       </div>
     </div>
@@ -930,6 +961,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
         <span class="sep">/</span>
         <strong>Overview</strong>
       </div>
+      <span class="trial-chip" id="trial-chip">Trial Active · 24 days left</span>
       <div class="spacer"></div>
       <button class="cm-btn text-label-sm" id="cm-restart" onclick="startTour()" title="Show me around this page"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Show me around</button>
       <button class="icon-btn" title="Toggle theme" onclick="toggleTheme()">
@@ -961,6 +993,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
       <div class="content-pane">
 
         <!-- ─── TRIAL CHECKLIST: what to do next ─── -->
+        <div class="dtabs text-label-md" id="dtabs"><span class="dtab active">Overview</span><span class="dtab" onclick="notInTrial('Sales')">Sales</span><span class="dtab" onclick="flowNav('r2s-card')">Returns</span><span class="dtab" onclick="notInTrial('Payments')">Payments</span><span class="dtab" onclick="notInTrial('Profitability')">Profitability</span></div>
         <div class="guide" id="guide"><span class="n">1</span><div class="tx"><div class="a">Open Return To Stock</div><div class="w">This is where your ₹ at risk comes from — returns stuck between pickup and the shelf. Nothing to set up; it's live from Uniware.</div></div><span class="p">Step 1 of 3 · Day 6 of 30</span><button class="show" onclick="showStep(0)">Show me</button><button class="go" onclick="flowNav('r2s-card')">Open Return To Stock →</button></div>
         <div class="tc done-all" id="tc-done" style="display:none">
           <div class="day"><b class="text-label-md">Day 6 of 30</b><span class="text-caption-md">24 days left</span></div>
@@ -987,7 +1020,7 @@ a { color: var(--text-brand-base); text-decoration: none; }
           </div>
 
           <!-- Payment Reco — locked for the trial period, available on go-live -->
-          <div class="module-card trial-locked" onclick="showToast('Payment Reco is available when you go live on UniReco', false)">
+          <div class="module-card trial-locked" onclick="notInTrial('Payment Reco')">
             <div class="module-card-head">
               <div class="module-card-title text-h3">
                 <div class="module-card-icon">
@@ -1416,6 +1449,26 @@ function _oldSetDone(n){ const ids=['tc-step1','tc-step2']; const labels=['Open 
 function noCreds(){ document.querySelectorAll('[data-creds-hide]').forEach(x=>x.style.display='none'); document.querySelectorAll('[data-creds-show]').forEach(x=>x.style.display=''); document.getElementById('kpi-total').textContent='₹8.42 L'; document.getElementById('kpi-total-sub').textContent='Return To Stock · no marketplace connected yet'; const t=document.getElementById('spf-tag'); if(t) t.innerHTML=t.innerHTML.replace('Credentials of 4 channels missing →','Connect a marketplace to see your claims →'); document.querySelectorAll('table.data-tbl tbody tr').forEach(tr=>{ if(tr.textContent.includes('Amazon India')){ tr.style.opacity='.55'; tr.querySelectorAll('td').forEach((td,i)=>{ if(i>0) td.textContent='—'; }); } }); document.querySelectorAll('.card-foot-note span').forEach(sp=>{ if(sp.textContent.includes('4 channels')) sp.textContent='No marketplace connected yet'; }); }
 window.addEventListener('load',()=>{ const q=new URLSearchParams(location.search); const d=parseInt(q.get('done')||'0',10); if(q.get('tour')==='1'){ firstVisit=false; setTimeout(startTour, 600); } if(q.get('creds')==='0'||q.get('sync')==='1') noCreds(); if(q.get('sync')==='1'){ setDone(1); document.querySelectorAll('[data-sync-hide]').forEach(x=>x.style.display='none'); document.querySelectorAll('[data-sync-show]').forEach(x=>x.style.display=''); const lines=['Syncing · usually ~15 min','Settlements pulled…','1,204 returns matched…','Checking eligibility…']; let li=0; setInterval(()=>{ li=(li+1)%lines.length; document.getElementById('sync-line').textContent=lines[li]; }, 2200); } else if(d===1){ setDone(1); } if(d===3){ document.getElementById('guide').style.display='none'; document.getElementById('tc-done').style.display='flex'; } if(q.get('tour')==='1'){ setTimeout(startTour, 400); } else if(firstVisit){ setTimeout(()=>document.getElementById('cm-ask').classList.add('on'), 700); } });
 window.addEventListener('resize',()=>{ if(document.getElementById('cm-ov').classList.contains('on')) showStop(); });
+</script>
+
+<div class="nit" id="nit">
+  <div class="skel"><div class="row"><i style="width:220px;height:28px"></i></div><div class="row"><i style="flex:1;height:96px"></i><i style="flex:1;height:96px"></i><i style="flex:1;height:96px"></i><i style="flex:1;height:96px"></i></div><div class="row"><i style="flex:1;height:260px"></i><i style="flex:1;height:260px"></i></div></div>
+  <div class="veil"><div class="card">
+    <button class="back text-body-sm" onclick="nitClose()">← Back to Overview</button>
+    <div class="ico"><div class="cloud"></div><div class="lock"></div></div>
+    <div class="t text-heading-h2"><span id="nit-page">Payments</span> isn't part of the trial yet</div>
+    <div class="b text-body-md">It's included when you go live. Look around with sample data, or ask your Customer Success Manager to switch it on for your account.</div>
+    <div class="acts"><button class="sample text-label-md" onclick="nitSample()"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>Explore with sample data</button><button class="csm text-label-md" onclick="nitCsm(this)"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>Contact Customer Success</button></div>
+    <div class="note text-caption-md"><i></i>Sample data mode shows example records only — nothing from your account is loaded</div>
+    <div class="sent text-body-sm" id="nit-sent">✓ Request sent — your Customer Success Manager will reach out within one working day.</div>
+  </div></div>
+</div>
+<script>
+let nitPage='';
+function notInTrial(page){ nitPage=page; document.getElementById('nit-page').textContent=page; document.getElementById('nit-sent').style.display='none'; document.getElementById('nit').classList.add('on'); try{ endTour(); }catch(e){} }
+function nitClose(){ document.getElementById('nit').classList.remove('on'); }
+function nitSample(){ nitClose(); flowNav('sample:'+nitPage); showToast('Sample data mode · '+nitPage+' — example records only', true); }
+function nitCsm(b){ document.getElementById('nit-sent').style.display='block'; b.disabled=true; flowNav('csm:'+nitPage); }
 </script>
 </body>
 </html>
