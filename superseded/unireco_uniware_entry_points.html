@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Uniware Smart Dashboard · UniReco trial entry points (PRD 2c)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family-primary);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+
+body { background: var(--bg-secondary); }
+/* ── mock chrome ── */
+.mock-nav { position: sticky; top:0; z-index: 20; background: var(--bg-inverse); padding: var(--gap-12) var(--gap-24); display:flex; align-items:center; gap: var(--gap-16); flex-wrap:wrap; }
+.mock-nav .brand { color: var(--text-primary-inverse); }
+.mtab { padding: var(--gap-8) var(--gap-12); background: transparent; color: var(--text-primary-inverse); border: var(--stroke-regular) solid transparent; border-radius: var(--radius-md); font-family: inherit; cursor:pointer; opacity:.7; }
+.mtab.active { opacity:1; background: var(--bg-brand-subtle); border-color: var(--border-brand-subtle); }
+.mock-nav .chip { margin-left:auto; display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary-inverse); }
+.mock-nav .chip label { display:flex; align-items:center; gap: var(--gap-4); cursor:pointer; }
+.cap { padding: var(--gap-12) var(--gap-24); color: var(--text-secondary); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.cap strong { color: var(--text-primary); }
+.screen { display:none; } .screen.active { display:block; }
+
+/* ── Uniware Smart Dashboard chrome (matches screenshots) ── */
+.sd-top { display:flex; align-items:center; gap: var(--gap-24); padding: var(--gap-12) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.sd-grid-ic { width: var(--gap-24); height: var(--gap-24); color: var(--icon-brand-base); }
+.sd-ea { padding: var(--gap-4) var(--gap-12); border: var(--stroke-medium) solid var(--border-brand-base); color: var(--text-brand-base); border-radius: var(--radius-full); letter-spacing:.08em; }
+.sd-tabs { display:flex; gap: var(--gap-4); padding: var(--gap-4); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); background: var(--bg-primary); }
+.sd-tab { padding: var(--gap-8) var(--gap-20); border-radius: var(--radius-md); color: var(--text-primary); border: var(--stroke-regular) solid transparent; }
+.sd-tab.active { color: var(--text-brand-base); border-color: var(--border-brand-subtle); }
+.sd-tab .new { background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); padding: var(--gap-4) var(--gap-8); margin-left: var(--gap-8); }
+.sd-right { margin-left:auto; display:flex; align-items:center; gap: var(--gap-12); }
+.sd-tenant { display:flex; align-items:center; gap: var(--gap-12); padding: var(--gap-8) var(--gap-16); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); min-width: 420px; color: var(--text-primary); }
+.sd-fb { padding: var(--gap-8) var(--gap-20); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); }
+.sd-wrap { padding: var(--gap-24); }
+
+/* Overview */
+.sd-panel { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-24); }
+.sd-panel-h { display:flex; align-items:center; gap: var(--gap-12); margin-bottom: var(--gap-16); }
+.sd-dot { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--bg-brand-base); }
+.sd-cols { display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap-24); align-items:start; }
+.sd-col { display:flex; flex-direction:column; gap: var(--gap-24); }
+.al { border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-20) var(--gap-24); background: var(--bg-primary); }
+.al.grey { background: var(--bg-secondary); }
+.al-h { display:flex; justify-content:space-between; align-items:center; margin-bottom: var(--gap-12); }
+.al-h .t { letter-spacing:.06em; text-transform:uppercase; color: var(--text-primary); }
+.pill { padding: var(--gap-4) var(--gap-12); border-radius: var(--radius-full); }
+.pill.bad { background: var(--bg-danger-subtle); color: var(--text-danger-base); } .pill.ok { background: var(--bg-success-subtle); color: var(--text-success-base); }
+.row { display:flex; align-items:center; gap: var(--gap-12); padding: var(--gap-12) 0; color: var(--text-tertiary); }
+.row.on { color: var(--text-primary); } .row .d { width: var(--gap-8); height: var(--gap-8); border-radius: var(--radius-full); background: var(--border-secondary); flex-shrink:0; }
+.row.on .d { background: var(--bg-brand-base); } .row .d.warn { background: var(--bg-warning-base); }
+.row .n { margin-left:auto; } .row .ch { color: var(--icon-tertiary); width: var(--gap-16); }
+.row a { color: var(--text-brand-base); }
+
+/* ── UniReco entry card (Overview) ── */
+.ur-card { border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-20) var(--gap-24); background: var(--bg-primary); position:relative; }
+.ur-card .row { cursor:pointer; } .ur-card .row:hover { background: var(--bg-secondary); margin: 0 calc(-1 * var(--gap-12)); padding-left: var(--gap-12); padding-right: var(--gap-12); border-radius: var(--radius-sm); }
+.ur-card .row.off { color: var(--text-tertiary); } .ur-card .row.off .d { background: transparent; border: var(--stroke-regular) solid var(--border-secondary); }
+.ur-foot { display:flex; justify-content:space-between; align-items:center; margin-top: var(--gap-12); padding-top: var(--gap-12); border-top: var(--stroke-regular) solid var(--border-primary); color: var(--text-tertiary); }
+.ur-foot .cta { color: var(--text-brand-base); cursor:pointer; }
+.ur-x { position:absolute; top: var(--gap-12); right: var(--gap-12); background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-24); height: var(--gap-24); border-radius: var(--radius-sm); }
+.ur-x:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.ur-fly { display:none; position:absolute; top: var(--gap-40); right: var(--gap-12); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); box-shadow: var(--shadow-medium); padding: var(--gap-8); z-index:5; min-width: 220px; }
+.ur-fly button { display:block; width:100%; text-align:left; padding: var(--gap-8) var(--gap-12); background:transparent; border:none; font-family:inherit; cursor:pointer; color: var(--text-primary); border-radius: var(--radius-sm); }
+.ur-fly button:hover { background: var(--bg-tertiary); } .ur-fly button.muted { color: var(--text-tertiary); }
+.ur-card.open .ur-fly { display:block; }
+.ur-card .pill.bad { margin-right: var(--gap-32); }
+.ur-gone { display:none; border: var(--stroke-regular) dashed var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-16) var(--gap-24); color: var(--text-tertiary); }
+.ur-gone .undo { color: var(--text-brand-base); cursor:pointer; margin-left: var(--gap-8); }
+
+/* ── UniReco ad-style banner (compact) ── */
+.ur-ad { display:grid; grid-template-columns: auto 1fr auto; align-items:center; gap: var(--gap-16); padding: var(--gap-12) var(--gap-20); background: var(--bg-brand-subtler); border: var(--stroke-regular) solid var(--border-brand-subtle); border-radius: var(--radius-lg); position:relative; margin-bottom: var(--gap-24); }
+.ur-ad .badge { padding: var(--gap-4) var(--gap-8); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); letter-spacing:.06em; text-transform:uppercase; white-space:nowrap; }
+.ur-ad .txt { min-width:0; }
+.ur-ad .h { color: var(--text-primary); }
+.ur-ad .h b { color: var(--text-danger-base); }
+.ur-ad .b { color: var(--text-secondary); margin-top: var(--gap-4); }
+.ur-ad .act { display:flex; align-items:center; gap: var(--gap-12); padding-right: var(--gap-24); }
+.ur-ad .cta { padding: var(--gap-8) var(--gap-16); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-md); border:none; font-family:inherit; cursor:pointer; white-space:nowrap; }
+.ur-ad .learn { color: var(--text-brand-base); cursor:pointer; white-space:nowrap; }
+.ur-ad .ur-x { top: 50%; transform: translateY(-50%); }
+.ur-ad.open .ur-fly { display:block; }
+.ur-ad .ur-fly { top: var(--gap-40); }
+/* ── UniReco slim strip (single line, sits in existing white space) ── */
+.ur-strip { display:flex; width:100%; height: var(--gap-40); box-sizing:border-box; align-items:center; gap: var(--gap-12); padding: var(--gap-4) var(--gap-4) var(--gap-4) var(--gap-16); background: var(--bg-brand-subtler); border: var(--stroke-regular) solid var(--border-brand-subtle); border-radius: var(--radius-full); position:relative; }
+.ur-strip .badge { padding: var(--gap-4) var(--gap-8); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); letter-spacing:.06em; text-transform:uppercase; }
+.ur-strip .h { color: var(--text-primary); white-space:nowrap; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+.ur-strip .badge, .ur-strip .cta, .ur-strip .x { flex-shrink:0; }
+.ur-strip .h b { color: var(--text-danger-base); }
+.ur-strip .cta { height: var(--gap-32); padding: 0 var(--gap-16); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); border:none; font-family:inherit; cursor:pointer; white-space:nowrap; }
+.ur-strip .x { background:transparent; border:none; color: var(--icon-tertiary); cursor:pointer; width: var(--gap-32); height: var(--gap-32); border-radius: var(--radius-full); }
+.ur-strip .x:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.ur-strip .ur-fly { top: var(--gap-32); right: 0; }
+.ur-strip.open .ur-fly { display:block; }
+.sd-panel-h { justify-content:space-between; }
+.sd-panel-h .lhs { display:flex; align-items:center; gap: var(--gap-12); }
+.sd-panel-h .rhs { width: calc(50% - var(--gap-12)); display:flex; justify-content:flex-end; }
+.sd-slot { flex:1; display:flex; justify-content:flex-end; padding-left: var(--gap-24); }
+.sd-slot .ur-strip { max-width: 620px; }
+/* Returns tab */
+.fbar { display:flex; gap: var(--gap-32); align-items:flex-end; padding: var(--gap-20) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.f { display:flex; flex-direction:column; gap: var(--gap-8); } .f .l { letter-spacing:.08em; text-transform:uppercase; color: var(--text-secondary); }
+.f .v { padding: var(--gap-12) var(--gap-20); background: var(--bg-secondary); border-radius: var(--radius-md); color: var(--text-primary); min-width: 200px; display:flex; justify-content:space-between; }
+.f .v.sm { min-width: 160px; } .chk { display:flex; gap: var(--gap-16); align-items:center; padding: var(--gap-12) 0; color: var(--text-primary); }
+.chk i { width: var(--gap-20); height: var(--gap-20); border-radius: var(--radius-sm); background: var(--bg-brand-base); display:inline-block; vertical-align:middle; margin-right: var(--gap-8); }
+.apply { padding: var(--gap-12) var(--gap-24); background: var(--bg-inverse); color: var(--text-primary-inverse); border-radius: var(--radius-md); }
+.kpis { display:grid; grid-template-columns: repeat(4,1fr); gap: var(--gap-24); margin-bottom: var(--gap-24); }
+.kpi { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-24); box-shadow: var(--shadow-low); }
+.kpi .t { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary); margin-bottom: var(--gap-12); } .kpi .v { color: var(--text-primary); margin-bottom: var(--gap-12); } .kpi .as { color: var(--text-tertiary); }
+.info { width: var(--gap-20); height: var(--gap-20); border-radius: var(--radius-full); border: var(--stroke-regular) solid var(--border-secondary); color: var(--text-tertiary); display:inline-grid; place-items:center; }
+.wgrid { display:grid; grid-template-columns: 1fr 1fr; gap: var(--gap-24); }
+.w { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-24); box-shadow: var(--shadow-low); }
+.w .t { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary); margin-bottom: var(--gap-12); } .w .t .h { color: var(--icon-tertiary); letter-spacing:-2px; }
+.w .nd { color: var(--text-secondary); margin-bottom: var(--gap-12); } .w .as { color: var(--text-tertiary); }
+
+/* ── UniReco widget (Returns) ── */
+.w.ur { position:relative; }
+.w.ur .t .sub { color: var(--text-tertiary); margin-left: var(--gap-8); }
+.ur-stats { display:grid; grid-template-columns: 1.2fr 1fr 1fr; gap: var(--gap-16); margin: var(--gap-4) 0 var(--gap-16); }
+.ur-stat { padding: var(--gap-12) var(--gap-16); border-radius: var(--radius-md); }
+.ur-stat.risk { background: var(--bg-danger-subtler); } .ur-stat.sla { background: var(--bg-warning-subtler); } .ur-stat.wait { background: var(--bg-brand-subtler); }
+.ur-stat .v { color: var(--text-primary); } .ur-stat.risk .v { color: var(--text-danger-base); } .ur-stat .l { color: var(--text-secondary); margin-top: var(--gap-4); }
+.ur-w-foot { display:flex; align-items:center; justify-content:space-between; }
+.ur-btn { padding: var(--gap-8) var(--gap-16); background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-md); border:none; font-family:inherit; cursor:pointer; }
+.ur-scope { color: var(--text-tertiary); }
+</style></head>
+<body>
+<div class="mock-nav"><span class="brand text-label-md">UniReco PLG · Uniware Smart Dashboard entry points <span style="opacity:.6">(PRD 2c)</span></span>
+  <button class="mtab active text-label-sm" data-t="ov">1 · Overview — header strip</button><button class="mtab text-label-sm" data-t="rt">2 · Returns — top-bar strip</button>
+  <div class="chip text-caption-md"><label><input type="checkbox" id="nodata"> No-data fallback</label></div>
+</div>
+
+<!-- ═══ OVERVIEW ═══ -->
+<section id="ov" class="screen active">
+  <div class="cap text-caption-md"><strong>Overview · single-line strip in the panel header</strong> · uses the empty right half of the "Operational summary" row, above Pending B2C Orders. Badge · one line with the ₹ figure · pill CTA · ×. 40px tall, fills the empty half of the row. C4 leakage-reveal copy; generic copy in the no-data case. Snooze per PRD 2c. <code>source_trigger=uniware_overview</code>.</div>
+  <div class="sd-top"><span class="sd-grid-ic">▦</span><span class="sd-ea text-caption-sm">EARLY ACCESS</span>
+    <div class="sd-tabs text-label-md"><span class="sd-tab active">Overview</span><span class="sd-tab">Sales</span><span class="sd-tab">Inventory</span><span class="sd-tab">Returns</span><span class="sd-tab">Trends</span><span class="sd-tab">Fulfillment<span class="new text-caption-sm">NEW</span></span></div>
+    <div class="sd-right"><div class="sd-tenant text-label-md">⌂ <span>Q1k</span><span style="margin-left:auto;color:var(--icon-tertiary)">⌄</span></div><span class="sd-fb text-label-md">Feedback</span></div>
+  </div>
+  <div class="sd-wrap">
+  <div class="sd-panel">
+    <div class="sd-panel-h"><div class="lhs"><span class="sd-dot"></span><span class="text-heading-h4">Operational summary</span><span class="text-body-sm" style="color:var(--text-tertiary)">live · selected facility</span></div><div class="rhs"><div class="ur-strip" id="ura"><span class="badge text-caption-sm">UniReco</span><span class="h text-body-md" data-live><b>₹8.42 L</b> at risk in returns this month · <b>47</b> past SLA</span><span class="h text-body-md" data-nodata style="display:none">See what your returns are costing</span><button class="cta text-label-sm" onclick="go('uniware_overview')">Start free trial →</button><button class="x" onclick="document.getElementById('ura').classList.toggle('open')" title="Dismiss">×</button><div class="ur-fly"><button class="text-body-sm" onclick="gone('ura','urag','Hidden for 30 days')">Hide for 30 days</button><button class="text-body-sm muted" onclick="gone('ura','urag','Won\'t show again')">Not interested, don't show again</button></div></div><span class="ur-gone text-caption-md" id="urag" style="border:none;padding:0"></span></div></div>
+    <div class="sd-cols">
+      <div class="sd-col">
+        <div class="al grey"><div class="al-h"><span class="t text-label-sm">B2C Order Alerts</span><span class="pill bad text-caption-sm">1 issue</span></div>
+          <div class="row on text-body-md"><span class="d"></span>Failed Notification Count<span class="n">326</span><span class="ch">›</span></div>
+          <div class="row text-body-md"><span class="d"></span>Unverified Orders<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>Pending Orders<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>SLA Breach<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>Near SLA Breach<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>Shipment Errors<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>Channel Pendency<span class="n">0</span></div>
+          <div class="row text-body-md"><span class="d"></span>Dispatched Today<span class="n">0</span></div>
+        </div>
+
+      </div>
+      <div class="sd-col">
+        <div class="al grey"><div class="al-h"><span class="t text-label-sm">Pending B2C Orders</span><span class="pill ok text-caption-sm">healthy</span></div>
+          <div class="row text-body-md"><span class="d"></span>Pending Verification Orders<span class="n">0</span></div><div class="row text-body-md"><span class="d"></span>Yet To Be Packed Shipments<span class="n">0</span></div><div class="row text-body-md"><span class="d"></span>Label Generated Shipments<span class="n">0</span></div></div>
+        <div class="al"><div class="al-h"><span class="t text-label-sm">Inventory Alerts</span><span class="pill bad text-caption-sm">2 issues</span></div>
+          <div class="row on text-body-md"><span class="d"></span>Disabled Inventory<span class="n">201</span><span class="ch">›</span></div><div class="row on text-body-md"><span class="d warn"></span>Failed Inventory<span class="n">210</span><span class="ch">›</span></div><div class="row text-body-md"><span class="d"></span>Putaway Cancelled<span class="n">0</span></div></div>
+        <div class="al"><div class="al-h"><span class="t text-label-sm">Channel Alerts</span><span class="pill bad text-caption-sm">2 issues</span></div>
+          <div class="row on text-body-md"><span class="d warn"></span><a href="#">Broken Connectors</a><span class="n">88</span><span class="ch">›</span></div><div class="row on text-body-md"><span class="d"></span>Pending Channel Configuration<span class="n">27</span><span class="ch">›</span></div></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══ RETURNS ═══ -->
+<section id="rt" class="screen">
+  <div class="cap text-caption-md"><strong>Returns · same strip in the top bar</strong> · sits in the empty slot between the tab group and ✦ / Feedback — the space the Overview uses for the tenant selector and Returns leaves blank. Same 40px height and position as the Overview strip; the filter bar is untouched. C3 copy. <code>source_trigger=uniware_returns</code>.</div>
+  <div class="sd-top"><span class="sd-grid-ic">▦</span><span class="sd-ea text-caption-sm">EARLY ACCESS</span>
+    <div class="sd-tabs text-label-md"><span class="sd-tab">Overview</span><span class="sd-tab">Sales</span><span class="sd-tab">Inventory</span><span class="sd-tab active">Returns</span><span class="sd-tab">Trends</span><span class="sd-tab">Fulfillment<span class="new text-caption-sm">NEW</span></span></div>
+    <div class="sd-slot"><div class="ur-strip" id="urb"><span class="badge text-caption-sm">UniReco</span><span class="h text-body-md" data-live><b>47</b> past SLA · <b>₹8.42 L</b> at risk</span><span class="h text-body-md" data-nodata style="display:none">See what your returns are costing</span><button class="cta text-label-sm" onclick="go('uniware_returns')">Start free trial →</button><button class="x" onclick="document.getElementById('urb').classList.toggle('open')" title="Dismiss">×</button><div class="ur-fly"><button class="text-body-sm" onclick="gone('urb','urbg','Hidden for 30 days')">Hide for 30 days</button><button class="text-body-sm muted" onclick="gone('urb','urbg','Won\'t show again')">Not interested, don't show again</button></div></div><span class="ur-gone text-caption-md" id="urbg" style="border:none;padding:0"></span></div>
+    <div class="sd-right"><span class="sd-fb text-label-md">Feedback</span></div>
+  </div>
+  <div class="fbar">
+    <div class="f"><span class="l text-caption-sm">Date range</span><span class="v sm text-body-md">Last 7 days <span>⌄</span></span></div>
+    <div class="f"><span class="l text-caption-sm">Channel type</span><span class="v sm text-body-md">All <span>⌄</span></span></div>
+    <div class="f"><span class="l text-caption-sm">Channel source</span><span class="v text-body-md">All sources <span>▾</span></span></div>
+    <div class="f"><span class="l text-caption-sm">Channel</span><span class="v text-body-md">All channels <span>▾</span></span></div>
+    <div class="f"><span class="l text-caption-sm">Facility</span><span class="v text-body-md">All facilities <span>▾</span></span></div>
+    <div class="f"><span class="l text-caption-sm">Return type</span><span class="chk text-body-md"><span><i></i>RTO</span><span><i></i>CIR</span><span class="apply text-label-md">Apply</span></span></div>
+
+  </div>
+  <div class="sd-wrap">
+    <div class="kpis">
+      <div class="kpi"><div class="t text-body-md">Return Items <span class="info text-caption-sm">i</span></div><div class="v text-heading-h1">0</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="kpi"><div class="t text-body-md">Value of Return Items <span class="info text-caption-sm">i</span></div><div class="v text-heading-h1">₹ 0</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="kpi"><div class="t text-body-md">RTO % — Return to Origin <span class="info text-caption-sm">i</span></div><div class="v text-heading-h1">-</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="kpi"><div class="t text-body-md">CIR % — Customer Returns <span class="info text-caption-sm">i</span></div><div class="v text-heading-h1">-</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+    </div>
+    <div class="wgrid">
+      <div class="w"><div class="t text-heading-h4"><span class="h">⠿</span>Return Items by Courier <span class="info text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="w"><div class="t text-heading-h4"><span class="h">⠿</span>Return Items by Date <span class="info text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="w"><div class="t text-heading-h4"><span class="h">⠿</span>Return Rate: COD vs Prepaid <span class="info text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="w"><div class="t text-heading-h4"><span class="h">⠿</span>Pending Items Heading to High-return Pincodes <span class="info text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+      <div class="w"><div class="t text-heading-h4"><span class="h">⠿</span>Return Items by SKU <span class="info text-caption-sm">i</span></div><div class="nd text-body-md">No data for these filters.</div><div class="as text-caption-md">as of 12:29 IST</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.mtab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.mtab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));t.classList.add('active');document.getElementById(t.dataset.t).classList.add('active');}));
+document.getElementById('nodata').addEventListener('change',e=>{const nd=e.target.checked;document.querySelectorAll('[data-live]').forEach(x=>x.style.display=nd?'none':'');document.querySelectorAll('[data-nodata]').forEach(x=>x.style.display=nd?'':'none');});
+function go(src){ alert('Opens the UniReco trial start gate (PRD 3a) with source_trigger='+src+'. If the user has no trial access → PRD 4 I.1 popup instead.'); }
+function gone(card,msg,txt){ const c=document.getElementById(card); c.style.display='none'; c.classList.remove('open'); const m=document.getElementById(msg); m.innerHTML=txt+' <span class="undo" onclick="undo(\''+card+'\',\''+msg+'\')">Undo</span>'; m.style.display='block'; }
+function undo(card,msg){ document.getElementById(card).style.display=''; document.getElementById(msg).style.display='none'; }
+</script>
+</body></html>
