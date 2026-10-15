@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Uniware DNA v3 · UniReco trial entry points (PRD 2c)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   UNIWARE DESIGN TOKENS  —  bound per skill /tokens.md
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* Primitives — never used directly by components */
+  --primitive-neutral-0: #FFFFFF;
+  --primitive-neutral-50: #FAFAFA;
+  --primitive-neutral-100: #F3F4F5;
+  --primitive-neutral-200: #DADCDE;
+  --primitive-neutral-300: #BCBEC2;
+  --primitive-neutral-400: #979A9F;
+  --primitive-neutral-500: #76797E;
+  --primitive-neutral-600: #57595D;
+  --primitive-neutral-700: #3A3C3D;
+  --primitive-neutral-750: #363636;
+  --primitive-neutral-800: #1B1C1D;
+  --primitive-neutral-900: #0F0F0F;
+  --primitive-blue-50: #E2EDFD;
+  --primitive-blue-100: #A8C9FA;
+  --primitive-blue-500: #1B72F3;
+  --primitive-blue-600: #0C61DF;
+  --primitive-blue-700: #0A52BD;
+  --primitive-green-500: #3F9C6E;
+  --primitive-green-600: #2F7E56;
+  --primitive-green-700: #22603F;
+  --primitive-red-500: #E73333;
+  --primitive-red-600: #C62828;
+  --primitive-amber-500: #EF8424;
+  --primitive-amber-600: #C96A15;
+
+  /* Scales — single mode */
+  --gap-none: 0; --gap-4: 4px; --gap-8: 8px; --gap-12: 12px; --gap-16: 16px;
+  --gap-20: 20px; --gap-24: 24px; --gap-32: 32px; --gap-40: 40px; --gap-48: 48px; --gap-64: 64px;
+  --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+  --radius-xl: 20px; --radius-2xl: 28px; --radius-full: 999px;
+  --icon-size-12: 12px; --icon-size-16: 16px; --icon-size-20: 20px; --icon-size-24: 24px;
+  --stroke-none: 0; --stroke-thin: 0.5px; --stroke-regular: 1px; --stroke-medium: 2px;
+
+  --shadow-subtle: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-high: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-focus-ring: 0 0 0 3px #1B72F32E;
+
+  --font-family-primary: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-weight-regular: 400; --font-weight-medium: 500; --font-weight-semibold: 600;
+
+  /* Semantic (Light) — surfaces */
+  --bg-primary: var(--primitive-neutral-0);
+  --bg-secondary: var(--primitive-neutral-50);
+  --bg-tertiary: var(--primitive-neutral-100);
+  --bg-quaternary: var(--primitive-neutral-200);
+  --bg-inverse: var(--primitive-neutral-900);
+  --bg-overlay: #0F0F0F73;
+  --bg-brand-subtler: #1B72F314;
+  --bg-brand-subtle: #1B72F329;
+  --bg-brand-base: var(--primitive-blue-500);
+  --bg-brand-bold: var(--primitive-blue-700);
+  --bg-info-subtler: #1B72F314;
+  --bg-info-subtle: #1B72F329;
+  --bg-info-base: var(--primitive-blue-500);
+  --bg-success-subtler: #3F9C6E14;
+  --bg-success-subtle: #3F9C6E29;
+  --bg-success-base: var(--primitive-green-500);
+  --bg-warning-subtler: #EF842414;
+  --bg-warning-subtle: #EF842429;
+  --bg-warning-base: var(--primitive-amber-500);
+  --bg-danger-subtler: #E7333314;
+  --bg-danger-subtle: #E7333329;
+  --bg-danger-base: var(--primitive-red-500);
+  --bg-danger-bold: var(--primitive-red-700);
+
+  /* Text (Light) */
+  --text-primary: var(--primitive-neutral-800);
+  --text-secondary: var(--primitive-neutral-600);
+  --text-tertiary: var(--primitive-neutral-500);
+  --text-disabled: var(--primitive-neutral-400);
+  --text-on-fill: var(--primitive-neutral-0);
+  --text-primary-inverse: var(--primitive-neutral-0);
+  --text-brand-base: var(--primitive-blue-600);
+  --text-brand-bold: var(--primitive-blue-700);
+  --text-success-base: var(--primitive-green-600);
+  --text-warning-base: var(--primitive-amber-600);
+  --text-danger-base: var(--primitive-red-600);
+
+  /* Icon (Light) */
+  --icon-primary: var(--primitive-neutral-800);
+  --icon-secondary: var(--primitive-neutral-600);
+  --icon-tertiary: var(--primitive-neutral-500);
+  --icon-on-fill: var(--primitive-neutral-0);
+  --icon-brand-base: var(--primitive-blue-600);
+  --icon-warning-base: var(--primitive-amber-600);
+  --icon-danger-base: var(--primitive-red-600);
+
+  /* Border (Light) */
+  --border-primary: var(--primitive-neutral-200);
+  --border-secondary: var(--primitive-neutral-300);
+  --border-tertiary: var(--primitive-neutral-400);
+  --border-focus: var(--primitive-neutral-900);
+  --border-brand-base: var(--primitive-blue-500);
+  --border-brand-subtle: #1B72F34C;
+  --border-warning-subtle: #EF84244C;
+  --border-danger-subtle: #E733334C;
+
+  /* Chart */
+  --chart-1: var(--primitive-blue-500);
+  --chart-2: var(--primitive-red-500);
+}
+
+[data-theme="dark"] {
+  --bg-primary: var(--primitive-neutral-900);
+  --bg-secondary: var(--primitive-neutral-800);
+  --bg-tertiary: var(--primitive-neutral-750);
+  --bg-quaternary: var(--primitive-neutral-700);
+  --bg-inverse: var(--primitive-neutral-100);
+  --bg-brand-base: var(--primitive-blue-600);
+  --bg-success-base: var(--primitive-green-600);
+  --bg-warning-base: var(--primitive-amber-600);
+  --bg-danger-base: var(--primitive-red-600);
+  --text-primary: var(--primitive-neutral-100);
+  --text-secondary: var(--primitive-neutral-300);
+  --text-tertiary: var(--primitive-neutral-400);
+  --text-primary-inverse: var(--primitive-neutral-900);
+  --text-brand-base: var(--primitive-blue-100);
+  --text-brand-bold: var(--primitive-blue-100);
+  --text-success-base: var(--primitive-green-500);
+  --text-warning-base: var(--primitive-amber-500);
+  --text-danger-base: var(--primitive-red-500);
+  --icon-primary: var(--primitive-neutral-100);
+  --icon-secondary: var(--primitive-neutral-300);
+  --icon-tertiary: var(--primitive-neutral-400);
+  --icon-brand-base: var(--primitive-blue-100);
+  --icon-warning-base: var(--primitive-amber-500);
+  --icon-danger-base: var(--primitive-red-500);
+  --border-primary: var(--primitive-neutral-700);
+  --border-secondary: var(--primitive-neutral-600);
+  --border-focus: var(--primitive-neutral-100);
+  --border-brand-base: var(--primitive-blue-600);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+.text-heading-h1 { font-size: 24px; line-height: 30px; font-weight: 600; letter-spacing: -0.025em; }
+.text-heading-h2 { font-size: 18px; line-height: 26px; font-weight: 600; letter-spacing: -0.018em; }
+.text-heading-h3 { font-size: 15px; line-height: 22px; font-weight: 600; letter-spacing: -0.012em; }
+.text-heading-h4 { font-size: 13px; line-height: 20px; font-weight: 600; letter-spacing: -0.006em; }
+.text-label-lg { font-size: 14px; line-height: 20px; font-weight: 500; letter-spacing: -0.006em; }
+.text-label-md { font-size: 13px; line-height: 20px; font-weight: 500; letter-spacing: -0.003em; }
+.text-label-sm { font-size: 12px; line-height: 16px; font-weight: 500; }
+.text-body-lg { font-size: 15px; line-height: 24px; font-weight: 400; letter-spacing: -0.004em; }
+.text-body-md { font-size: 14px; line-height: 22px; font-weight: 400; letter-spacing: -0.003em; }
+.text-body-sm { font-size: 13px; line-height: 20px; font-weight: 400; }
+.text-caption-md { font-size: 12px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-caption-sm { font-size: 11px; line-height: 16px; font-weight: 400; letter-spacing: 0.01em; }
+.text-numeric-lg { font-size: 24px; line-height: 24px; font-weight: 600; letter-spacing: -0.03em; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   GLOBAL
+   ═══════════════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-family-primary); background: var(--bg-secondary); color: var(--text-primary); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+svg { display:block; }
+
+/* ── mock chrome (hidden in embed) ── */
+.mock-nav { position: sticky; top:0; z-index: 40; background: var(--bg-inverse); padding: var(--gap-12) var(--gap-24); display:flex; align-items:center; gap: var(--gap-16); flex-wrap:wrap; }
+.mock-nav .brand { color: var(--text-primary-inverse); }
+.mock-nav .chip { margin-left:auto; display:flex; align-items:center; gap: var(--gap-16); color: var(--text-primary-inverse); }
+.mock-nav .chip label { display:flex; align-items:center; gap: var(--gap-4); cursor:pointer; }
+.cap { padding: var(--gap-12) var(--gap-24); color: var(--text-secondary); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.cap strong { color: var(--text-primary); }
+
+/* ── Uniware top bar ── */
+.top { display:flex; align-items:center; gap: var(--gap-24); padding: var(--gap-16) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); height: 72px; }
+.top .apps { color: var(--icon-secondary); display:grid; grid-template-columns: repeat(3,5px); gap: 3px; }
+.top .apps i { width:5px; height:5px; border-radius:1px; background: currentColor; display:block; }
+.top .logo { color: var(--text-brand-base); font-size: 26px; font-weight: 700; letter-spacing: -0.03em; display:flex; align-items:center; gap: var(--gap-12); }
+.top .logo .sku { font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--text-secondary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-sm); padding: 2px var(--gap-8); }
+.top .search { flex:1; max-width: 580px; margin: 0 auto; height: 40px; display:flex; align-items:center; gap: var(--gap-8); padding: 0 var(--gap-16); border: var(--stroke-regular) solid var(--border-secondary); border-radius: var(--radius-md); color: var(--text-tertiary); }
+.top .ic { color: var(--icon-secondary); position:relative; display:grid; place-items:center; width: 28px; height: 28px; }
+.top .ic .n { position:absolute; top:-4px; right:-4px; background: var(--bg-danger-base); color: var(--text-on-fill); border-radius: var(--radius-full); min-width:16px; height:16px; font-size:10px; font-weight:600; display:grid; place-items:center; }
+.top .ic .dot { position:absolute; top:0; right:0; width:6px; height:6px; border-radius: var(--radius-full); background: var(--bg-success-base); }
+
+/* ── shell ── */
+.shell { display:grid; grid-template-columns: 72px 1fr; min-height: calc(100vh - 72px); }
+.rail { background: var(--bg-primary); border-right: var(--stroke-regular) solid var(--border-primary); display:flex; flex-direction:column; align-items:center; padding: var(--gap-16) 0 var(--gap-12); gap: var(--gap-4); }
+.rail .ri { width: 52px; height: 52px; border-radius: var(--radius-md); display:grid; place-items:center; color: var(--icon-secondary); position:relative; cursor:default; }
+.rail .ri.active { background: var(--bg-tertiary); color: var(--icon-primary); box-shadow: inset 3px 0 0 var(--bg-brand-base); }
+.rail .ri .n { position:absolute; top:4px; right:6px; background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-full); min-width:16px; height:16px; font-size:10px; font-weight:600; display:grid; place-items:center; padding:0 3px; }
+.rail .ri .gd { position:absolute; top:10px; right:10px; width:6px; height:6px; border-radius: var(--radius-full); background: var(--bg-success-base); }
+.rail .gap { flex:1; }
+.rail .avatar { width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--bg-tertiary); color: var(--text-secondary); display:grid; place-items:center; }
+
+/* ── ENTRY POINT 2 · rail icon ── */
+.rail .ri.ur { cursor:pointer; }
+.rail .ri.ur:hover { background: var(--bg-brand-subtler); }
+.rail .ri.ur .pulse { position:absolute; top:9px; right:9px; width:8px; height:8px; border-radius: var(--radius-full); background: var(--bg-brand-base); box-shadow: 0 0 0 0 #1B72F366; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 #1B72F366; } 70% { box-shadow: 0 0 0 8px #1B72F300; } 100% { box-shadow: 0 0 0 0 #1B72F300; } }
+.rail .ri.ur .tip { display:none; position:absolute; left: 60px; top: 50%; transform: translateY(-50%); background: var(--bg-inverse); color: var(--text-primary-inverse); padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-md); white-space:nowrap; box-shadow: var(--shadow-medium); z-index: 30; }
+.rail .ri.ur .tip b { display:block; color: var(--text-primary-inverse); font-weight: 600; }
+.rail .ri.ur .tip span { color: var(--primitive-neutral-300); }
+.rail .ri.ur .tip::before { content:''; position:absolute; left:-5px; top:50%; transform: translateY(-50%) rotate(45deg); width:10px; height:10px; background: var(--bg-inverse); }
+.rail .ri.ur:hover .tip { display:block; }
+
+/* ── DNA page ── */
+.main { display:grid; grid-template-columns: 1fr 412px; min-width: 0; position:relative; }
+.page { min-width:0; }
+.dna-head { display:flex; align-items:center; gap: var(--gap-16); padding: var(--gap-16) var(--gap-24) 0; background: var(--bg-primary); }
+.dna-head .title { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+.ea { padding: var(--gap-4) var(--gap-12); background: var(--bg-warning-subtle); color: var(--text-warning-base); border-radius: var(--radius-sm); }
+.fb { display:flex; align-items:center; gap: var(--gap-8); color: var(--text-primary); }
+.seg { margin-left:auto; display:flex; gap: var(--gap-4); padding: var(--gap-4); background: var(--bg-tertiary); border-radius: var(--radius-md); }
+.seg span { padding: var(--gap-4) var(--gap-12); border-radius: var(--radius-sm); color: var(--text-secondary); }
+.seg span.on { background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow-low); }
+.tabrow { display:flex; align-items:center; gap: var(--gap-4); padding: var(--gap-12) var(--gap-24); background: var(--bg-primary); border-bottom: var(--stroke-regular) solid var(--border-primary); }
+.tab { padding: var(--gap-8) var(--gap-12); border-radius: var(--radius-md); color: var(--text-secondary); }
+.tab.active { background: var(--bg-tertiary); color: var(--text-primary); }
+.tab .new { background: var(--bg-brand-base); color: var(--text-on-fill); border-radius: var(--radius-sm); padding: 2px var(--gap-8); margin-left: var(--gap-8); }
+.content { padding: var(--gap-24); display:flex; flex-direction:column; gap: var(--gap-24); }
+.today-h { display:flex; align-items:center; gap: var(--gap-16); }
+.today-h .t { font-size: 24px; font-weight: 600; letter-spacing: -0.025em; }
+.today-h .upd { color: var(--text-tertiary); }
+.today-h .by { margin-left:auto; color: var(--text-tertiary); display:flex; align-items:center; gap: var(--gap-12); }
+.today-h .by i { width: 32px; height: 28px; border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-sm); display:grid; place-items:center; color: var(--icon-secondary); font-style:normal; }
+.ai-p { font-size: 17px; line-height: 28px; letter-spacing: -0.01em; color: var(--text-primary); }
+.ai-p u { text-decoration-color: var(--border-secondary); text-underline-offset: 4px; }
+.sec-h { display:flex; align-items:center; gap: var(--gap-16); }
+.live { display:inline-flex; align-items:center; gap: var(--gap-8); padding: var(--gap-4) var(--gap-12); border: var(--stroke-regular) solid var(--border-primary); color: var(--text-success-base); border-radius: var(--radius-full); }
+.live i { width:6px; height:6px; border-radius: var(--radius-full); background: var(--bg-success-base); }
+.g3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: var(--gap-16); }
+.card { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-lg); padding: var(--gap-20); display:flex; flex-direction:column; gap: var(--gap-8); }
+.card .cap-t { color: var(--text-tertiary); }
+.card .lbl { color: var(--text-secondary); margin-top: var(--gap-8); }
+.card .big { display:flex; align-items:center; gap: var(--gap-12); font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 32px; }
+.chg { font-size: 13px; font-weight: 500; letter-spacing: 0; padding: 2px var(--gap-8); border-radius: var(--radius-sm); }
+.chg.dn { background: var(--bg-danger-subtle); color: var(--text-danger-base); } .chg.up { background: var(--bg-success-subtle); color: var(--text-success-base); }
+.card .sub { color: var(--text-tertiary); }
+.hr { height: var(--stroke-regular); background: var(--border-primary); margin: var(--gap-12) 0; }
+.hbar { display:grid; grid-template-columns: 70px 1fr 48px; align-items:center; gap: var(--gap-12); color: var(--text-primary); }
+.hbar .bar { height: 14px; border-radius: var(--radius-sm); background: var(--chart-1); }
+.hbar .bar.y { background: #A8B4E6; }
+.hbar .v { text-align:right; }
+.bars { display:flex; align-items:flex-end; gap: var(--gap-8); height: 56px; margin-top: var(--gap-8); }
+.bars i { flex:1; background: #5C6BC0; border-radius: 2px 2px 0 0; display:block; }
+.bars.o i { background: #E99A4B; }
+.bars.ghost i { background: var(--bg-quaternary); }
+.axis { display:flex; justify-content:space-between; color: var(--text-tertiary); }
+.legend { display:flex; gap: var(--gap-16); color: var(--text-tertiary); }
+.legend i { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right: var(--gap-4); }
+.prog { height: 8px; border-radius: var(--radius-full); background: var(--bg-quaternary); overflow:hidden; margin-top: var(--gap-8); }
+.prog i { display:block; height:100%; width: 14.9%; background: var(--bg-warning-base); }
+.date-row { display:flex; align-items:center; gap: var(--gap-12); color: var(--text-secondary); }
+.date-row .dd { padding: var(--gap-8) var(--gap-12); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); color: var(--text-primary); display:flex; align-items:center; gap: var(--gap-8); }
+.date-row b { color: var(--text-primary); font-weight: 500; }
+.line { height: 56px; margin-top: var(--gap-8); }
+
+/* ── right insights panel ── */
+.side { background: var(--bg-primary); border-left: var(--stroke-regular) solid var(--border-primary); min-width: 0; }
+.side-h { background: #1B5FD0; color: var(--text-on-fill); padding: var(--gap-20) var(--gap-20) 0; }
+.side-h .row { display:flex; align-items:center; justify-content:space-between; }
+.side-h .stabs { display:flex; margin-top: var(--gap-16); }
+.side-h .stabs > span { flex:1; text-align:center; padding: var(--gap-8) 0 var(--gap-12); opacity:.85; display:flex; align-items:center; justify-content:center; gap: var(--gap-8); }
+.side-h .stabs > span.on { opacity:1; border-bottom: var(--stroke-medium) solid var(--primitive-neutral-0); }
+.side-h .stabs .n { background: var(--primitive-neutral-0); color: #1B5FD0; border-radius: var(--radius-sm); padding: 0 var(--gap-4); font-size: 11px; font-weight: 600; }
+.side-body { padding: var(--gap-16); display:flex; flex-direction:column; gap: var(--gap-16); background: var(--bg-secondary); min-height: calc(100vh - 72px - 110px); }
+.stat3 { display:grid; grid-template-columns: repeat(3,1fr); background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); }
+.stat3 > div { padding: var(--gap-12); border-right: var(--stroke-regular) solid var(--border-primary); }
+.stat3 > div:first-child { background: var(--bg-tertiary); }
+.stat3 > div:last-child { border-right: none; }
+.stat3 .k { color: var(--text-secondary); }
+.stat3 .v { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin: var(--gap-4) 0; }
+.stat3 .s { color: var(--text-tertiary); }
+.ins { background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); padding: var(--gap-16); display:flex; flex-direction:column; gap: var(--gap-8); }
+.ins .h { display:flex; gap: var(--gap-8); align-items:flex-start; }
+.ins .h .sp { color: var(--icon-brand-base); flex-shrink:0; margin-top:2px; }
+.ins .h .t { flex:1; font-weight: 500; }
+.ins .h .when { color: var(--text-tertiary); white-space:nowrap; display:flex; align-items:center; gap: var(--gap-4); }
+.ins .h .when i { width:6px; height:6px; border-radius: var(--radius-full); background: var(--bg-brand-base); }
+.ins .d { color: var(--text-secondary); padding-left: 24px; }
+.ins .kv { display:grid; grid-template-columns: 1fr 1fr; border-top: var(--stroke-regular) solid var(--border-primary); margin-top: var(--gap-8); padding-top: var(--gap-12); }
+.ins .kv > div + div { border-left: var(--stroke-regular) solid var(--border-primary); padding-left: var(--gap-16); }
+.ins .kv b { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; display:block; }
+.ins .kv span { color: var(--text-secondary); }
+.ins .kv u { text-decoration-color: var(--border-secondary); text-underline-offset: 3px; }
+
+/* ── ENTRY POINT 1 · bottom-right UniReco notification ── */
+.ur-pop { position:fixed; right: var(--gap-16); bottom: var(--gap-16); width: 460px; background: var(--bg-primary); border-radius: var(--radius-xl); box-shadow: var(--shadow-high), 0 0 0 1px #0000000D; overflow:hidden; z-index: 25; }
+.ur-pop .hero { height: 260px; position:relative; background:
+  radial-gradient(60% 70% at 22% 85%, #6FD1C5 0%, #6FD1C500 60%),
+  radial-gradient(55% 60% at 85% 10%, #BFD2F7 0%, #BFD2F700 65%),
+  linear-gradient(135deg, #DCE6F8 0%, #AEC6F0 45%, #9EC4D8 100%); }
+.ur-pop .hero::after { content:''; position:absolute; left:-80px; bottom:-120px; width: 330px; height: 330px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #7CE0CD 0%, #5DBBD6 55%, #5DBBD600 72%); opacity:.9; }
+.ur-pop .pill { position:absolute; display:flex; align-items:center; gap: var(--gap-12); height: 46px; padding: 0 var(--gap-20); background: var(--bg-primary); border-radius: var(--radius-full); box-shadow: var(--shadow-medium); color: var(--text-primary); z-index:2; font-size: 17px; font-weight: 500; letter-spacing: -0.01em; white-space:nowrap; }
+.ur-pop .pill.p1 { right: var(--gap-24); top: 68px; }
+.ur-pop .pill.p2 { right: var(--gap-24); top: 140px; }
+.ur-pop .pill i { width: 22px; height: 22px; border-radius: var(--radius-full); border: 1.5px solid var(--icon-primary); display:grid; place-items:center; font-style:normal; font-size: 12px; font-weight: 600; }
+.ur-pop .bod { padding: var(--gap-20) var(--gap-20) var(--gap-16); position:relative; }
+.ur-pop .bod .t { font-size: 20px; line-height: 28px; font-weight: 600; letter-spacing: -0.02em; padding-right: 40px; }
+.ur-pop .bod .t[data-nodata] { display:none; }
+.ur-pop .bod .p { color: var(--text-secondary); margin-top: var(--gap-8); font-size: 15px; line-height: 23px; }
+.ur-pop .x { position:absolute; right: var(--gap-16); top: var(--gap-20); width: 32px; height: 32px; border-radius: var(--radius-full); border:none; background: transparent; color: var(--icon-secondary); cursor:pointer; display:grid; place-items:center; }
+.ur-pop .x:hover { background: var(--bg-tertiary); color: var(--icon-primary); }
+.ur-pop .ft { display:flex; align-items:center; justify-content:space-between; padding: var(--gap-12) var(--gap-20) var(--gap-20); border-top: var(--stroke-regular) solid var(--border-primary); }
+.ur-pop .ft .note { color: var(--text-secondary); }
+.ur-pop .cta { height: 44px; padding: 0 var(--gap-24); background: var(--bg-inverse); color: var(--text-primary-inverse); border:none; border-radius: var(--radius-md); font-family:inherit; font-size: 15px; font-weight: 500; cursor:pointer; }
+.ur-pop .cta:hover { background: var(--primitive-neutral-700); }
+.ur-fly { display:none; position:absolute; right: var(--gap-16); top: 56px; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); box-shadow: var(--shadow-medium); padding: var(--gap-8); z-index:5; min-width: 240px; }
+.ur-fly button { display:block; width:100%; text-align:left; padding: var(--gap-8) var(--gap-12); background:transparent; border:none; font-family:inherit; cursor:pointer; color: var(--text-primary); border-radius: var(--radius-sm); }
+.ur-fly button:hover { background: var(--bg-tertiary); } .ur-fly button.muted { color: var(--text-tertiary); }
+.ur-pop.open .ur-fly { display:block; }
+.ur-gone { display:none; position:fixed; right: var(--gap-24); bottom: var(--gap-24); z-index: 25; background: var(--bg-primary); border: var(--stroke-regular) solid var(--border-primary); border-radius: var(--radius-md); padding: var(--gap-8) var(--gap-12); color: var(--text-tertiary); box-shadow: var(--shadow-low); }
+.ur-gone .undo { color: var(--text-brand-base); cursor:pointer; margin-left: var(--gap-8); }
+body[data-pop="0"] .ur-pop { display:none; }
+</style><style id="embed-css">body[data-embed] .mock-nav, body[data-embed] .cap { display:none !important; } body[data-embed] .shell { min-height: 100vh; }</style></head>
+<body>
+<div class="mock-nav"><span class="brand text-label-md">UniReco PLG · Uniware DNA <b>v3</b> entry points <span style="opacity:.6">(PRD 2c)</span></span><div class="chip text-caption-md"><label><input type="checkbox" id="nodata"> No-data fallback</label><label><input type="checkbox" id="poptg" checked> Notification open</label></div></div>
+<div class="cap text-caption-md"><strong>Two entry points on the DNA dashboard</strong> · <strong>1</strong> the UniReco notification card, bottom-right, opens on first DNA visit of the day (C4 leakage-reveal copy); × = PRD 2c snooze (30 days / never). <strong>2</strong> the UniReco icon in the left rail — permanent, survives the snooze; hover shows the same number, click goes to the same place. Both CTAs → trial gate, or the PRD 4 I.1 popup when the user has no trial access. Uncheck “Notification open” to see the rail entry alone.</div>
+
+<div class="top"><span class="apps"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="logo">uniware<span class="sku">ITEM_SKU</span></span><span class="search text-body-md"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4v16M7 4 4 7M7 4l3 3M17 20V4M17 20l3-3M17 20l-3-3"/></svg><span class="dot"></span></span><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="n">3</span></span></div>
+
+<div class="shell">
+<aside class="rail">
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h8l-1 8 10-12h-8z"/></svg><span class="n">3</span></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.2 15.9A10 10 0 1 1 8 2.8"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></span>
+  <span class="ri active"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 16V8M8 12l4-4 4 4"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12l4 4 4-4"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 12 10 5 10-5"/><path d="m2 17 10 5 10-5"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/></svg></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+  <span class="ri"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#D9E8A8"/><path d="M8 15c0-4 3-7 8-7-1 4-3 7-8 7z" fill="#5B8C2A"/><path d="M8 15c2-2 4-3 6-5" stroke="#3D6B1A" stroke-width="1.2" stroke-linecap="round"/></svg><span class="gd"></span></span>
+  <!-- ENTRY POINT 2 · UniReco rail icon — last item before the gap -->
+  <span class="ri ur" id="ur-rail" onclick="go('uniware_v3_rail')" title="">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#1F3A2E"/><path d="M12 5a7 7 0 1 0 7 7" stroke="#8FE1B5" stroke-width="2.6" stroke-linecap="round"/><path d="M16 5.5a7 7 0 0 1 3 6.5" stroke="#3F9C6E" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="12" r="2.2" fill="#8FE1B5"/></svg>
+    <span class="pulse"></span>
+    <span class="tip text-caption-md"><b class="text-label-sm">UniReco · Free 30-day trial</b><span data-live><b style="display:inline;color:#FFB4B4">₹8.42 L</b> at risk in returns this month</span><span data-nodata style="display:none">See what your returns are costing</span></span>
+  </span>
+  <span class="gap"></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg><span class="gd"></span></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="gd"></span></span>
+  <span class="ri"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg><span class="gd"></span></span>
+  <span class="ri"><span class="avatar text-label-sm">RS</span></span>
+</aside>
+
+<div class="main">
+<div class="page">
+  <div class="dna-head"><span class="title">DNA</span><span class="ea text-label-sm">Early Access</span><span class="fb text-label-md"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Give feedback</span><div class="seg text-label-md"><span class="on">All</span><span>B2C</span><span>B2B</span></div></div>
+  <div class="tabrow text-label-lg"><span class="tab active">Overview</span><span class="tab">Sales</span><span class="tab">Inventory</span><span class="tab">Returns</span><span class="tab">Trends</span><span class="tab">Fulfillment<span class="new text-caption-sm">New</span></span></div>
+
+  <div class="content">
+    <div>
+      <div class="today-h"><span class="t">Today’s DNA</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--icon-tertiary)"><path d="m6 15 6-6 6 6"/></svg><span class="upd text-body-sm">Updated 12 minutes ago</span><span class="by text-body-sm">Written by AI · check before acting on it <i>👍</i><i>👎</i></span></div>
+      <p class="ai-p" style="margin-top:var(--gap-16)">✦ <u>Amazon</u> added <u>₹1.4L</u> of this month’s <u>₹1.8L growth</u>. <u>Myntra</u> and <u>Flipkart</u> are at last month’s level, and <u>14 of your top 50 SKUs</u> are out of stock. Overall, <u>4 of 6 metrics</u> moved, all of them favourably; units sold and average order value held level.</p>
+    </div>
+
+    <div class="sec-h"><span class="text-heading-h3">Business summary</span><span class="live text-caption-md"><i></i>Live</span></div>
+    <div class="g3">
+      <div class="card">
+        <span class="cap-t text-body-sm">Today · 5 Oct</span>
+        <span class="lbl text-body-sm">Revenue</span>
+        <span class="big">₹1.5L <span class="chg dn">52.4%</span></span>
+        <span class="sub text-body-sm">Yesterday to 1:00 PM · ₹3.2L</span>
+        <div class="hr"></div>
+        <div class="hbar text-body-sm"><span>Today</span><span class="bar" style="width:32%"></span><span class="v">₹1.5L</span></div>
+        <div class="hbar text-body-sm" style="margin-top:var(--gap-8)"><span>Yesterday</span><span class="bar y" style="width:68%"></span><span class="v">₹3.2L</span></div>
+        <span class="sub text-body-sm" style="margin-top:var(--gap-8)">₹1.7L behind yesterday at the same time</span>
+        <div class="hr"></div>
+        <span class="lbl text-body-sm" style="margin-top:0">Order items</span>
+        <span class="big">204 <span class="chg dn">46.5%</span></span>
+        <span class="sub text-body-sm">Yesterday to 1:00 PM · 381</span>
+      </div>
+      <div class="card">
+        <span class="cap-t text-body-sm">This month · 1–5 Oct</span>
+        <span class="lbl text-body-sm">Sales</span>
+        <span class="big">₹20L <span class="chg up">10.1%</span></span>
+        <span class="sub text-body-sm">vs ₹18.2L in 1–5 Sep</span>
+        <div class="legend text-caption-md" style="margin-top:var(--gap-12)"><span><i style="background:#5C6BC0"></i>This month</span><span><i style="background:var(--bg-quaternary)"></i>Gap to last month</span></div>
+        <div class="bars"><i style="height:88%"></i><i style="height:92%"></i><i style="height:86%"></i><i style="height:100%"></i><i style="height:90%"></i></div>
+        <div class="axis text-caption-md"><span>1 Oct</span><span>5 Oct · 1–5 Sep was ₹18.2L</span></div>
+        <div class="hr"></div>
+        <span class="lbl text-body-sm" style="margin-top:0">Order items</span>
+        <span class="big">2,187 <span class="chg up">9.5%</span></span>
+        <span class="sub text-body-sm">vs 1,997 in 1–5 Sep</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:var(--gap-16)">
+        <div class="card">
+          <span class="cap-t text-body-sm">Stock status</span>
+          <span class="lbl text-body-sm">Out of stock</span>
+          <span class="big">186</span>
+          <span class="sub text-body-sm">14.9% of 1,248 tracked SKUs</span>
+          <div class="prog"><i></i></div>
+          <div class="legend text-caption-md" style="margin-top:var(--gap-8)"><span><i style="background:var(--bg-warning-base)"></i>Out of stock&nbsp; <b style="color:var(--text-primary)">186</b></span><span><i style="background:var(--bg-quaternary)"></i>In stock&nbsp; <b style="color:var(--text-primary)">1,062</b></span></div>
+        </div>
+        <div class="card">
+          <span class="cap-t text-body-sm">Total inventory</span>
+          <span class="lbl text-body-sm">Units Available</span>
+          <span class="big">48,620</span>
+          <span class="sub text-body-sm">Stock value ₹2.1Cr at cost</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="date-row text-body-sm">Date range <span class="dd"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Month to yesterday ⌄</span> vs <b>1–5 Sept 2026</b></div>
+    <div class="g3">
+      <div class="card">
+        <span class="lbl text-body-sm" style="margin-top:0">Units sold</span>
+        <span class="big">2,351 <span class="chg up">1.0%</span></span>
+        <span class="sub text-body-sm">1.59 units per order</span>
+        <div class="bars"><i style="height:80%"></i><i style="height:84%"></i><i style="height:80%"></i><i style="height:100%"></i><i style="height:82%"></i></div>
+        <div class="axis text-caption-md"><span>1 Oct</span><span>5 Oct</span></div>
+      </div>
+      <div class="card">
+        <span class="lbl text-body-sm" style="margin-top:0">SLA adherence</span>
+        <span class="big">93.4% <span class="chg up">1.0%</span></span>
+        <span class="sub text-body-sm">97 of 1,476 orders breached</span>
+        <svg class="line" viewBox="0 0 300 56" preserveAspectRatio="none"><path d="M0 30 H300" stroke="var(--border-primary)" stroke-dasharray="4 4" fill="none"/><path d="M0 12 L75 22 L150 44 L225 28 L300 20" fill="none" stroke="var(--primitive-green-500)" stroke-width="2"/></svg>
+        <div class="axis text-caption-md"><span>1 Oct</span><span>5 Oct · 92.5% last period</span></div>
+      </div>
+      <div class="card">
+        <span class="lbl text-body-sm" style="margin-top:0">Return items</span>
+        <span class="big">186 <span class="chg up">5.2%</span></span>
+        <span class="sub text-body-sm">13.4% of 1,392 items shipped</span>
+        <div class="bars o"><i style="height:78%"></i><i style="height:80%"></i><i style="height:100%"></i><i style="height:76%"></i><i style="height:72%"></i></div>
+        <div class="axis text-caption-md"><span>1 Oct</span><span>5 Oct</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside class="side">
+  <div class="side-h"><div class="row text-body-md"><span>3 insights · 2 need action</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div><div class="stabs text-label-lg"><span class="on">Insights <span class="n">3</span></span><span>Talk to dashboard</span></div></div>
+  <div class="side-body">
+    <div class="stat3"><div><span class="k text-body-sm">Sell more</span><span class="v" style="display:block">₹47.0L</span><span class="s text-caption-md">GMV to act on</span></div><div><span class="k text-body-sm">Fulfil better</span><span class="v" style="display:block">+0.7%</span><span class="s text-caption-md">SLA possible today</span></div><div><span class="k text-body-sm">Be efficient</span><span class="v" style="display:block">0.4%</span><span class="s text-caption-md">more returns this week</span></div></div>
+    <div class="ins text-body-md"><div class="h"><span class="sp">✦</span><span class="t">4 SKUs run out within 10 days at Mumbai Warehouse</span><span class="when text-caption-md"><i></i>Just now</span></div><div class="d text-body-sm">3 are already at zero — start there.</div><div class="kv"><div><b>₹39.3L</b><span class="text-body-sm">sales you can save</span></div><div><b>6</b><span class="text-body-sm"><u>SKUs at zero stock</u></span></div></div></div>
+    <div class="ins text-body-md"><div class="h"><span class="sp">✦</span><span class="t">4 SKUs run out within 10 days at Mumbai Warehouse</span><span class="when text-caption-md">3h ago</span></div><div class="d text-body-sm">3 are already at zero — start there.</div><div class="kv"><div><b>₹39.3L</b><span class="text-body-sm">sales you can save</span></div><div><b>6</b><span class="text-body-sm"><u>SKUs at zero stock</u></span></div></div></div>
+    <div class="ins text-body-md"><div class="h"><span class="sp">✦</span><span class="t">SLA slips on Flipkart from Delhi Warehouse</span><span class="when text-caption-md">Yesterday</span></div><div class="d text-body-sm">9 orders breach today unless they ship by 4 PM.</div><div class="kv"><div><b>+0.7%</b><span class="text-body-sm">SLA possible today</span></div><div><b>9</b><span class="text-body-sm"><u>orders at risk</u></span></div></div></div>
+  </div>
+</aside>
+
+<!-- ENTRY POINT 1 · UniReco notification, bottom-right -->
+<div class="ur-pop" id="urp">
+  <div class="hero">
+    <span class="pill p1"><i>₹</i><span data-live><b>₹8.42 L</b> at risk in returns</span><span data-nodata style="display:none">Money leaks in your returns</span></span>
+    <span class="pill p2"><i>◔</i>Settlements matched to your rate card</span>
+  </div>
+  <div class="bod">
+    <div class="t" data-live>₹8.42 L is at risk in your returns this month</div>
+    <div class="t" data-nodata>See what your returns are costing you</div>
+    <div class="p">UniReco finds the money that leaks between delivery and claim, and gets it back.</div>
+    <button class="x" onclick="document.getElementById('urp').classList.toggle('open')" title="Dismiss"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div class="ur-fly"><button class="text-body-sm" onclick="gone('Hidden for 30 days')">Hide for 30 days</button><button class="text-body-sm muted" onclick="gone('Won\'t show again')">Not interested, don’t show again</button></div>
+  </div>
+  <div class="ft"><span class="note text-body-sm">Free 30-day trial · no card needed</span><button class="cta" onclick="go('uniware_v3_popup')">Try</button></div>
+</div>
+<span class="ur-gone text-caption-md" id="urg"></span>
+</div>
+</div>
+
+<script>
+(function(){ const q=new URLSearchParams(location.search); if(q.get('embed')==='1') document.body.dataset.embed='1'; if(q.get('pop')==='0') { document.body.dataset.pop='0'; const t=document.getElementById('poptg'); if(t) t.checked=false; } })();
+document.getElementById('nodata').addEventListener('change',e=>{const nd=e.target.checked;document.querySelectorAll('[data-live]').forEach(x=>x.style.display=nd?'none':'');document.querySelectorAll('[data-nodata]').forEach(x=>x.style.display=nd?'':'none');});
+document.getElementById('poptg').addEventListener('change',e=>{ document.body.dataset.pop=e.target.checked?'1':'0'; if(e.target.checked){ undo(); } });
+function flowNav(to){ try{ window.parent.postMessage({type:'unireco-nav', to:to}, '*'); }catch(e){} }
+function go(src){ flowNav('trigger-cta:'+src); }
+function gone(txt){ const c=document.getElementById('urp'); c.style.display='none'; c.classList.remove('open'); const m=document.getElementById('urg'); m.innerHTML=txt+' <span class="undo" onclick="undo()">Undo</span>'; m.style.display='inline-block'; }
+function undo(){ document.getElementById('urp').style.display=''; document.getElementById('urg').style.display='none'; }
+</script></body></html>
