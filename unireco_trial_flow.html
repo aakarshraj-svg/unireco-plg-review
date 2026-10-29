@@ -11,7 +11,7 @@
 .land{min-height:100%;display:grid;place-items:center;padding:40px}
 .land .box{max-width:860px;width:100%}
 .land h1{font-size:26px;font-weight:700;margin-bottom:6px}.land p{color:var(--ink2);margin-bottom:28px;font-size:15px}
-.personas{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.personas{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
 .pc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04)}.pc:hover{border-color:var(--brand);box-shadow:0 8px 30px rgba(29,78,216,.10)}
 .pc .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}.pc h2{font-size:18px;margin-bottom:8px}.pc p{font-size:13px;color:var(--ink2);margin:0 0 16px}.pc ol{padding-left:18px;font-size:12px;color:var(--ink2);line-height:1.7}
 .pc .go{display:inline-block;margin-top:16px;padding:9px 16px;background:var(--brand);color:#fff;border-radius:8px;font-weight:600;font-size:13px}
@@ -46,6 +46,7 @@
   <div class="personas">
     <div class="pc" onclick="start('admin')"><div class="k">Path A</div><h2>Uniware Admin — not the DM/POC</h2><p>Sees the trigger, has no trial access, hands it to the decision maker.</p><ol><li>Uniware DNA · notification + rail icon</li><li>No-trial-access · the ad + one question</li><li>Demo requested · DM on the invite</li><li>The DM/POC's inbox</li><li>→ hands over to Path B</li></ol><span class="go">Start Path A →</span></div>
     <div class="pc" onclick="start('dm')"><div class="k">Path B</div><h2>DM/POC — has trial access</h2><p>Sees the trigger, starts the trial, connects a marketplace, raises a claim, gets the trial-end ask.</p><ol><li>Uniware DNA · notification + rail icon</li><li>The ad · start the trial</li><li>Trial start gate</li><li>Trial dashboard · checklist + tour</li><li>Return To Stock · step 1</li><li>No-credentials popup</li><li>Admin email · Connectors</li><li>Syncing · "claims ready" email</li><li>SPF Claims · Raise Claim</li><li>Dashboard · all done</li><li>Day 23 · trial-end popup</li><li>Day 31 · trial ended</li><li>What we see (BI)</li></ol><span class="go">Start Path B →</span></div>
+    <div class="pc" onclick="start('inline')"><div class="k">Path C · variant B</div><h2>DM/POC — activation inside Uniware</h2><p>Gaurav’s input: the ad, the confirm step and activation all happen on the DNA dashboard. One window change, after the trial is live.</p><ol><li>Uniware DNA · notification + rail icon → in-place stepper</li><li>Open UniReco · lands on the live trial dashboard</li><li>→ continues as Path B from Return To Stock</li></ol><span class="go">Start Path C →</span></div>
   </div>
 </div></div>
 
@@ -69,6 +70,9 @@ const F={
   {t:'No trial access · the ad',d:'Five things UniReco does + this tenant\'s numbers · Yes, set up a demo → decision maker on the invite',src:'unireco_intervention_mocks.html?embed=1#i1',on:{'done:i1_demo':1,'dismiss':'hand-dismiss'}},
   {t:'The DM/POC gets the demo request',d:'Approve the demo · open the trial meanwhile',src:'unireco_dm_invite_email_preview.html?embed=1',on:{'email-cta':'hand-dm'}},
  ],
+ inline:[
+  {t:'Uniware DNA dashboard · in-place activation',d:'Click Try or the rail icon · the ad, confirm and activate run on this screen · then Open UniReco',src:'unireco_uniware_inline_activation_v4.html?embed=1#ov',on:{'trial-started':1}},
+ ],
  dm:[
   {t:'Uniware DNA dashboard',d:'Notification bottom-right · click Try, or click the UniReco icon in the left rail',src:'unireco_uniware_entry_points_v3.html?embed=1#ov',on:{'trigger-cta':1}},
   {t:'The ad · start the trial',d:'Same ad as the admin sees · the action is Start my 30-day trial',src:'unireco_intervention_mocks.html?embed=1#i1b',on:{'start-trial':1,'dismiss':'hand-dismiss'}},
@@ -86,6 +90,7 @@ const F={
   {t:'Day 31 · trial ended',d:'User opens UniReco after the trial · read-only dashboard behind a gate · go live or leave',src:'unireco_trial_expired.html?embed=1',on:{'expired:booked':1,'expired:leave':'hand-expired'}},
   {t:'What we see',d:'Funnel and trial-day grid',src:'unireco_plg_bi_wireframe.html',on:{}},
  ]};
+F.inline=F.inline.concat(F.dm.slice(3));
 const HAND={
  'hand-sample':{h:'Sample data mode',p:'The page opens with example records only — nothing from the tenant is loaded — under a persistent orange banner. The same screen, same actions, dummy numbers.',b:[['Back to the dashboard',()=>load(i)]]},
  'hand-csmpage':{h:'CSM notified',p:'A request to switch the page on is logged against the trial with the page name. The CSM reaches out within one working day; nothing else changes for the user.',b:[['Back to the dashboard',()=>load(i)]]},
@@ -97,7 +102,7 @@ const HAND={
  'hand-pr':{h:'Payment Reco is on go-live',p:'In the trial model the Payment Reco page is locked. The next product moment is the trial-end popup on day 23.',b:[['Go to day 23 →',()=>nav(1)]]},
 };
 let P='dm',i=0,done=new Set();
-function start(p,at=0){ P=p; i=at; done=new Set([...Array(at).keys()]); document.getElementById('land').style.display='none'; const pl=document.getElementById('player'); pl.classList.add('on'); document.getElementById('rp').textContent=p==='admin'?'Path A':'Path B'; document.getElementById('rt').textContent=p==='admin'?'Uniware Admin — not the DM/POC':'DM/POC — has trial access'; load(i); }
+function start(p,at=0){ P=p; i=at; done=new Set([...Array(at).keys()]); document.getElementById('land').style.display='none'; const pl=document.getElementById('player'); pl.classList.add('on'); document.getElementById('rp').textContent=p==='admin'?'Path A':p==='inline'?'Path C · variant B':'Path B'; document.getElementById('rt').textContent=p==='admin'?'Uniware Admin — not the DM/POC':p==='inline'?'DM/POC — activation inside Uniware':'DM/POC — has trial access'; load(i); }
 function home(){ document.getElementById('player').classList.remove('on'); document.getElementById('land').style.display='grid'; document.getElementById('hand').classList.remove('on'); }
 function rail(){ document.getElementById('steps').innerHTML=F[P].map((s,k)=>`<div class="st ${k===i?'cur':done.has(k)?'done':''}" onclick="load(${k})"><span class="n">${done.has(k)&&k!==i?'✓':k+1}</span><div><div class="t">${s.t}</div><div class="d">${s.d}</div></div></div>`).join(''); }
 function load(k){ i=Math.max(0,Math.min(F[P].length-1,k)); document.getElementById('hand').classList.remove('on'); document.getElementById('fr').src=F[P][i].src; rail(); }
